@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/observation",
+  "title": "Observation",
+  "description": "Vital sign, lab result, body condition score, imaging finding, wearable telemetry.",
+  "type": "object",
+  "required": ["resourceType", "id", "status", "code", "subject"],
+  "properties": {
+    "resourceType": { "const": "Observation" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$" },
+    "meta":         { "$ref": "animal.json#/$defs/Meta" },
+    "extensions":   { "type": "object", "additionalProperties": true },
+
+    "status": { "enum": ["registered", "preliminary", "final", "amended", "corrected", "cancelled", "entered-in-error"] },
+
+    "category": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["vital-signs", "laboratory", "imaging", "exam", "activity", "telemetry", "survey"] }
+    },
+
+    "code": {
+      "description": "What was measured — VHIR vitals catalog or LOINC",
+      "type": "object",
+      "required": ["code"],
+      "properties": {
+        "system":  { "type": "string" },
+        "code":    { "type": "string" },
+        "display": { "type": "string" }
+      }
+    },
+
+    "subject":   { "$ref": "animal.json#/$defs/Reference" },
+    "encounter": { "$ref": "animal.json#/$defs/Reference" },
+    "device":    { "$ref": "animal.json#/$defs/Reference" },
+    "performer": {
+      "type": "array",
+      "items": { "$ref": "animal.json#/$defs/Reference" }
+    },
+
+    "effectiveDateTime": { "type": "string", "format": "date-time" },
+    "effectivePeriod": {
+      "type": "object",
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end":   { "type": "string", "format": "date-time" }
+      }
+    },
+    "issued": { "type": "string", "format": "date-time" },
+
+    "valueQuantity": {
+      "type": "object",
+      "required": ["value", "unit"],
+      "properties": {
+        "value":  { "type": "number" },
+        "unit":   { "type": "string" },
+        "system": { "type": "string", "default": "http://unitsofmeasure.org" },
+        "code":   { "type": "string" }
+      }
+    },
+    "valueString":  { "type": "string" },
+    "valueBoolean": { "type": "boolean" },
+    "valueInteger": { "type": "integer" },
+    "valueCoding": {
+      "type": "object",
+      "properties": {
+        "system":  { "type": "string" },
+        "code":    { "type": "string" },
+        "display": { "type": "string" }
+      }
+    },
+
+    "component": {
+      "type": "array",
+      "description": "Sub-observations for panels (e.g. vital signs)",
+      "items": {
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code":          { "$ref": "#/properties/code" },
+          "valueQuantity": { "$ref": "#/properties/valueQuantity" },
+          "valueString":   { "type": "string" },
+          "valueCoding":   { "$ref": "#/properties/valueCoding" }
+        }
+      }
+    },
+
+    "sampledData": {
+      "type": "object",
+      "description": "High-frequency timeseries from wearables/CGM",
+      "required": ["origin", "periodMs", "data"],
+      "properties": {
+        "origin": {
+          "type": "object",
+          "required": ["value", "unit"],
+          "properties": {
+            "value": { "type": "number" },
+            "unit":  { "type": "string" }
+          }
+        },
+        "periodMs":   { "type": "number", "description": "Milliseconds between samples" },
+        "factor":     { "type": "number", "default": 1 },
+        "dimensions": { "type": "integer", "minimum": 1, "default": 1 },
+        "data":       { "type": "string", "description": "Space-separated sample values; 'E' = error, 'L' = limit reached" }
+      }
+    },
+
+    "referenceRange": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "low":      { "type": "number" },
+          "high":     { "type": "number" },
+          "unit":     { "type": "string" },
+          "text":     { "type": "string" },
+          "appliesTo": { "type": "string", "description": "Species/breed/age qualifier" }
+        }
+      }
+    },
+
+    "interpretation": {
+      "type": "string",
+      "enum": ["normal", "abnormal", "high", "low", "critical-high", "critical-low", "indeterminate"]
+    },
+
+    "note": { "type": "string" }
+  },
+  "additionalProperties": false
+}

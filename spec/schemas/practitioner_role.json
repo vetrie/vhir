@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/practitioner-role",
+  "title": "PractitionerRole",
+  "description": "A practitioner's role within a specific organization — drives RBAC.",
+  "type": "object",
+  "required": ["resourceType", "id", "practitioner", "organization", "role"],
+  "properties": {
+    "resourceType": { "const": "PractitionerRole" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$" },
+    "meta":         { "$ref": "animal.json#/$defs/Meta" },
+    "extensions":   { "type": "object", "additionalProperties": true },
+
+    "practitioner": { "$ref": "animal.json#/$defs/Reference" },
+    "organization": { "$ref": "animal.json#/$defs/Reference" },
+
+    "role": {
+      "type": "string",
+      "enum": [
+        "veterinarian",
+        "specialist",
+        "intern",
+        "resident",
+        "technician",
+        "technician-specialist",
+        "assistant",
+        "kennel-attendant",
+        "practice-manager",
+        "receptionist",
+        "inventory-manager",
+        "referring-vet",
+        "administrator"
+      ]
+    },
+
+    "specialties": {
+      "type": "array",
+      "description": "Board-certified specialties (DACVIM, DACVECC, etc.)",
+      "items": { "type": "string" }
+    },
+
+    "permissions": {
+      "type": "array",
+      "description": "Explicit permission grants beyond role defaults",
+      "items": {
+        "type": "string",
+        "examples": ["controlled-substances.write", "billing.write", "records.delete", "reports.read"]
+      }
+    },
+
+    "denyPermissions": {
+      "type": "array",
+      "description": "Explicit permission denials (overrides role defaults)",
+      "items": { "type": "string" }
+    },
+
+    "period": {
+      "type": "object",
+      "properties": {
+        "start": { "type": "string", "format": "date" },
+        "end":   { "type": "string", "format": "date" }
+      }
+    },
+
+    "availableTime": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "daysOfWeek": {
+            "type": "array",
+            "items": { "enum": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] }
+          },
+          "availableStartTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$" },
+          "availableEndTime":   { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$" }
+        }
+      }
+    },
+
+    "active": { "type": "boolean", "default": true }
+  },
+  "additionalProperties": false
+}

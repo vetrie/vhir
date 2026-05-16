@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/condition",
+  "title": "Condition",
+  "description": "A clinical diagnosis, problem, or finding. Bound to AAHA Diagnostic Terms + SNOMED CT-VET.",
+  "type": "object",
+  "required": ["resourceType", "id", "status", "code", "subject"],
+  "properties": {
+    "resourceType": { "const": "Condition" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$" },
+    "meta":         { "$ref": "animal.json#/$defs/Meta" },
+    "extensions":   { "type": "object", "additionalProperties": true },
+
+    "status": { "enum": ["active", "recurrence", "relapse", "inactive", "remission", "resolved", "unknown"] },
+    "verificationStatus": { "enum": ["unconfirmed", "provisional", "differential", "confirmed", "refuted", "entered-in-error"] },
+
+    "code": {
+      "type": "object",
+      "required": ["code"],
+      "description": "Diagnosis code — preferably AAHA or SNOMED CT-VET",
+      "properties": {
+        "system":  { "type": "string", "examples": ["urn:aaha:diagnostic-terms", "http://snomed.info/sct"] },
+        "code":    { "type": "string" },
+        "display": { "type": "string" },
+        "text":    { "type": "string", "description": "Free-text description when no coded term fits" }
+      }
+    },
+
+    "subject":   { "$ref": "animal.json#/$defs/Reference" },
+    "encounter": { "$ref": "animal.json#/$defs/Reference" },
+    "recorder":  { "$ref": "animal.json#/$defs/Reference" },
+    "asserter":  { "$ref": "animal.json#/$defs/Reference" },
+
+    "onsetDateTime":  { "type": "string", "format": "date-time" },
+    "onsetDate":      { "type": "string", "format": "date" },
+    "onsetString":    { "type": "string", "description": "e.g. 'approximately 3 weeks ago'" },
+    "abatementDate":  { "type": "string", "format": "date" },
+    "recordedDate":   { "type": "string", "format": "date-time" },
+
+    "severity": { "enum": ["mild", "moderate", "severe", "critical"] },
+
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code":   { "$ref": "encounter.json#/$defs/Coding" },
+          "detail": { "$ref": "animal.json#/$defs/Reference" }
+        }
+      }
+    },
+
+    "note": { "type": "string" }
+  },
+  "additionalProperties": false
+}

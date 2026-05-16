@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/organization",
+  "title": "Organization",
+  "description": "A structured entity — clinic, hospital, lab, pharmacy, microchip registry, insurer, or farm.",
+  "type": "object",
+  "required": ["resourceType", "id", "name"],
+  "properties": {
+    "resourceType": { "const": "Organization" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$" },
+    "meta":         { "$ref": "animal.json#/$defs/Meta" },
+    "extensions":   { "type": "object", "additionalProperties": true },
+
+    "name": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "clinic",
+        "referral-hospital",
+        "emergency-hospital",
+        "reference-lab",
+        "imaging-center",
+        "pharmacy",
+        "microchip-registry",
+        "insurer",
+        "farm",
+        "kennel",
+        "rescue",
+        "government-agency",
+        "other"
+      ]
+    },
+
+    "identifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "value"],
+        "properties": {
+          "type":  { "enum": ["aaha-membership", "avma-membership", "npi", "dea-site", "usda-premises", "rcvs-accreditation", "other"] },
+          "value": { "type": "string" }
+        }
+      }
+    },
+
+    "telecom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["system", "value"],
+        "properties": {
+          "system": { "enum": ["phone", "email", "fax", "url"] },
+          "value":  { "type": "string" },
+          "use":    { "enum": ["work", "billing", "emergency"] }
+        }
+      }
+    },
+
+    "address": {
+      "type": "object",
+      "properties": {
+        "line":       { "type": "array", "items": { "type": "string" } },
+        "city":       { "type": "string" },
+        "state":      { "type": "string" },
+        "postalCode": { "type": "string" },
+        "country":    { "type": "string" }
+      }
+    },
+
+    "timezone":   { "type": "string", "description": "IANA tz database name, e.g. America/New_York" },
+    "partOf":     { "$ref": "animal.json#/$defs/Reference" },
+    "active":     { "type": "boolean", "default": true }
+  },
+  "additionalProperties": false
+}

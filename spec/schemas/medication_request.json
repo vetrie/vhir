@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/medication-request",
+  "title": "MedicationRequest",
+  "description": "A prescription order for a drug or feed supplement. Includes food-animal withdrawal periods and VFD support.",
+  "type": "object",
+  "required": ["resourceType", "id", "status", "intent", "medication", "subject", "requester"],
+  "properties": {
+    "resourceType": { "const": "MedicationRequest" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$" },
+    "meta":         { "$ref": "animal.json#/$defs/Meta" },
+    "extensions":   { "type": "object", "additionalProperties": true },
+
+    "status": { "enum": ["active", "on-hold", "cancelled", "completed", "entered-in-error", "stopped", "draft", "unknown"] },
+    "intent":  { "enum": ["proposal", "plan", "order", "original-order", "reflex-order", "filler-order", "instance-order", "option"] },
+
+    "medication": {
+      "type": "object",
+      "description": "Drug ordered. Free-text name; code optional (no RxNorm required).",
+      "properties": {
+        "name":   { "type": "string" },
+        "code":   { "type": "string" },
+        "system": { "type": "string" },
+        "form":   { "type": "string", "description": "Tablet, injectable, ointment, premix, etc." },
+        "brand":  { "type": "string" }
+      }
+    },
+
+    "subject":    { "$ref": "animal.json#/$defs/Reference" },
+    "encounter":  { "$ref": "animal.json#/$defs/Reference" },
+    "requester":  { "$ref": "animal.json#/$defs/Reference" },
+    "dispenser":  { "$ref": "animal.json#/$defs/Reference" },
+
+    "dosageInstruction": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text":          { "type": "string" },
+          "route":         { "type": "string", "description": "Oral, SC, IM, IV, topical, ophthalmic, etc." },
+          "doseQuantity":  {
+            "type": "object",
+            "properties": {
+              "value": { "type": "number" },
+              "unit":  { "type": "string" }
+            }
+          },
+          "frequency":     { "type": "string", "description": "e.g. 'BID', 'q8h', 'once'" },
+          "duration":      { "type": "string", "description": "e.g. '10 days'" },
+          "maxDosePerDay": {
+            "type": "object",
+            "properties": {
+              "value": { "type": "number" },
+              "unit":  { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "dispenseRequest": {
+      "type": "object",
+      "properties": {
+        "quantity": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "number" },
+            "unit":  { "type": "string" }
+          }
+        },
+        "numberOfRefillsAllowed": { "type": "integer", "minimum": 0 },
+        "externalPharmacy": {
+          "type": "boolean",
+          "description": "True if dispensed by external pharmacy (client takes written Rx)"
+        }
+      }
+    },
+
+    "controlled": {
+      "type": "object",
+      "description": "DEA schedule information for controlled substances",
+      "properties": {
+        "schedule": { "enum": ["II", "III", "III-N", "IV", "V", null] },
+        "deaOrderFormNumber": { "type": "string", "description": "DEA 222 form number for Schedule II" }
+      }
+    },
+
+    "vfd": {
+      "type": "boolean",
+      "default": false,
+      "description": "Veterinary Feed Directive — medically important antibiotic in animal feed"
+    },
+
+    "withdrawal": {
+      "type": "object",
+      "description": "Withdrawal periods for food animals. In hours.",
+      "properties": {
+        "milkHours": { "type": "number", "minimum": 0 },
+        "meatHours": { "type": "number", "minimum": 0 },
+        "eggsHours": { "type": "number", "minimum": 0 },
+        "notes":     { "type": "string" }
+      }
+    },
+
+    "extraLabel": {
+      "type": "boolean",
+      "default": false,
+      "description": "Extra-label drug use (ELDU) — required to document under AMDUCA"
+    },
+
+    "authoredOn":  { "type": "string", "format": "date-time" },
+    "expiresOn":   { "type": "string", "format": "date" },
+
+    "note": { "type": "string" }
+  },
+  "additionalProperties": false
+}

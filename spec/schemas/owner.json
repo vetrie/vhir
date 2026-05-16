@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/owner",
+  "title": "Owner",
+  "description": "A human client — person or organization that owns or is responsible for one or more animals.",
+  "type": "object",
+  "required": ["resourceType", "id"],
+  "properties": {
+    "resourceType": { "const": "Owner" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$" },
+    "meta":         { "$ref": "animal.json#/$defs/Meta" },
+    "extensions":   { "type": "object", "additionalProperties": true },
+
+    "name": {
+      "type": "object",
+      "properties": {
+        "given":  { "type": "string" },
+        "family": { "type": "string" },
+        "full":   { "type": "string", "description": "Preferred for organization names" }
+      }
+    },
+    "ownerType": {
+      "enum": ["individual", "organization", "farm", "breeder", "rescue"],
+      "default": "individual"
+    },
+
+    "telecom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["system", "value"],
+        "properties": {
+          "system": { "enum": ["phone", "email", "sms", "fax"] },
+          "value":  { "type": "string" },
+          "use":    { "enum": ["home", "work", "mobile", "temp"] },
+          "preferred": { "type": "boolean" }
+        }
+      }
+    },
+
+    "address": {
+      "type": "object",
+      "properties": {
+        "line":       { "type": "array", "items": { "type": "string" } },
+        "city":       { "type": "string" },
+        "state":      { "type": "string" },
+        "postalCode": { "type": "string" },
+        "country":    { "type": "string", "description": "ISO 3166-1 alpha-2" }
+      }
+    },
+
+    "identifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "value"],
+        "properties": {
+          "type":  { "enum": ["government-id", "driver-license", "practice-internal", "other"] },
+          "value": { "type": "string" }
+        }
+      }
+    },
+
+    "preferredLanguage": { "type": "string", "description": "BCP 47 language tag" },
+    "communicationPreferences": {
+      "type": "object",
+      "properties": {
+        "reminders":     { "enum": ["email", "sms", "push", "none"] },
+        "invoices":      { "enum": ["email", "print", "both"] },
+        "newsletter":    { "type": "boolean" }
+      }
+    },
+
+    "managingOrganization": { "$ref": "animal.json#/$defs/Reference" },
+
+    "active": { "type": "boolean", "default": true },
+    "note":   { "type": "string" }
+  },
+  "additionalProperties": false
+}

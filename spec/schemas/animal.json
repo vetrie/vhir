@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/animal",
+  "title": "Animal",
+  "description": "An individual animal — the primary patient in VHIR. Analogous to FHIR Patient but vet-first.",
+  "type": "object",
+  "required": ["resourceType", "id", "species"],
+  "properties": {
+    "resourceType": { "const": "Animal" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$", "description": "ULID assigned by server" },
+    "meta": { "$ref": "#/$defs/Meta" },
+    "extensions": { "type": "object", "additionalProperties": true },
+
+    "name":   { "type": "string", "description": "Animal's name (call name)" },
+    "species": {
+      "type": "string",
+      "description": "NCBI Taxonomy ID or VHIR species code (e.g. 'canis-familiaris', '9615')"
+    },
+    "breed": { "type": "string", "description": "Breed name or code from species-specific ValueSet" },
+    "sex": { "enum": ["male", "female", "unknown"] },
+    "neuterStatus": { "enum": ["intact", "neutered", "spayed", "unknown"] },
+    "birthDate":    { "type": "string", "format": "date" },
+    "birthDateEstimated": { "type": "boolean", "default": false },
+    "deathDate":    { "type": "string", "format": "date" },
+    "deceased":     { "type": "boolean", "default": false },
+    "color":        { "type": "string" },
+    "markings":     { "type": "string" },
+    "weightKg":     { "type": "number", "exclusiveMinimum": 0 },
+
+    "identifiers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Identifier" }
+    },
+
+    "owners": {
+      "type": "array",
+      "description": "Ordered list of owners/custodians. First primary-role entry is data-controller.",
+      "items": { "$ref": "#/$defs/OwnerLink" }
+    },
+
+    "managingOrganization": { "$ref": "#/$defs/Reference" },
+
+    "photo": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to animal photo"
+    },
+
+    "note": { "type": "string" }
+  },
+  "additionalProperties": false,
+
+  "$defs": {
+    "Meta": {
+      "type": "object",
+      "properties": {
+        "version":     { "type": "integer", "minimum": 1 },
+        "lastUpdated": { "type": "string", "format": "date-time" },
+        "profiles":    { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "Reference": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref":     { "type": "string", "description": "ResourceType/id (e.g. 'Owner/01ABC')" },
+        "display": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "Identifier": {
+      "type": "object",
+      "required": ["type", "value"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "microchip-iso",
+            "microchip-legacy-125khz",
+            "microchip-legacy-128khz",
+            "usda-840",
+            "premises-id",
+            "herd-animal-id",
+            "tattoo",
+            "leg-band",
+            "pedigree",
+            "practice-internal",
+            "other"
+          ]
+        },
+        "system":  { "type": "string", "format": "uri" },
+        "value":   { "type": "string" },
+        "issuer":  { "$ref": "#/$defs/Reference" },
+        "period": {
+          "type": "object",
+          "properties": {
+            "start": { "type": "string", "format": "date" },
+            "end":   { "type": "string", "format": "date" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "OwnerLink": {
+      "type": "object",
+      "required": ["ref", "role"],
+      "properties": {
+        "ref":  { "type": "string", "description": "Owner/id" },
+        "role": {
+          "type": "string",
+          "enum": ["primary", "co-owner", "breeder", "trainer", "farm-staff", "guardian"]
+        },
+        "grantedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

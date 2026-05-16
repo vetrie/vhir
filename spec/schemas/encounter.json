@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/encounter",
+  "title": "Encounter",
+  "description": "A clinical interaction — GP visit, ER, inpatient stay, telemedicine, ambulatory farm call.",
+  "type": "object",
+  "required": ["resourceType", "id", "status", "class", "subject"],
+  "properties": {
+    "resourceType": { "const": "Encounter" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$" },
+    "meta":         { "$ref": "animal.json#/$defs/Meta" },
+    "extensions":   { "type": "object", "additionalProperties": true },
+
+    "status": {
+      "enum": ["planned", "arrived", "triaged", "in-progress", "on-hold", "discharged", "completed", "cancelled", "entered-in-error"]
+    },
+    "class": {
+      "enum": ["outpatient", "inpatient", "emergency", "ambulatory", "telemedicine", "home-visit", "boarding"]
+    },
+
+    "subject": {
+      "$ref": "animal.json#/$defs/Reference",
+      "description": "Animal/id or Group/id (herd encounter)"
+    },
+
+    "owner": { "$ref": "animal.json#/$defs/Reference" },
+    "serviceProvider": { "$ref": "animal.json#/$defs/Reference" },
+    "location":     { "$ref": "animal.json#/$defs/Reference" },
+
+    "practitioners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["practitioner", "role"],
+        "properties": {
+          "practitioner": { "$ref": "animal.json#/$defs/Reference" },
+          "role": { "enum": ["attending", "consulting", "supervising", "admitting", "technician", "intern", "resident"] }
+        }
+      }
+    },
+
+    "period": {
+      "type": "object",
+      "properties": {
+        "start": { "type": "string", "format": "date-time" },
+        "end":   { "type": "string", "format": "date-time" }
+      }
+    },
+
+    "reasonCode": {
+      "type": "array",
+      "description": "Chief complaint(s) — SNOMED CT-VET or free text",
+      "items": { "$ref": "#/$defs/Coding" }
+    },
+    "reasonText": { "type": "string" },
+
+    "diagnosis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["condition"],
+        "properties": {
+          "condition": { "$ref": "animal.json#/$defs/Reference" },
+          "use":       { "enum": ["admission", "billing", "discharge-summary"] },
+          "rank":      { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+
+    "referredFrom": { "$ref": "animal.json#/$defs/Reference" },
+
+    "admission": {
+      "type": "object",
+      "description": "Only for inpatient/emergency class",
+      "properties": {
+        "origin":      { "$ref": "animal.json#/$defs/Reference" },
+        "admitSource": { "enum": ["emergency", "referral", "gp", "owner-walk-in", "transfer"] },
+        "dischargeDisposition": {
+          "enum": ["home", "deceased", "transferred", "euthanized", "against-advice", "other"]
+        }
+      }
+    },
+
+    "reportable": {
+      "type": "boolean",
+      "default": false,
+      "description": "Mandated-reporter flag — exempts this encounter from owner-read scope"
+    },
+
+    "note": { "type": "string" }
+  },
+  "additionalProperties": false,
+
+  "$defs": {
+    "Coding": {
+      "type": "object",
+      "required": ["code"],
+      "properties": {
+        "system":  { "type": "string" },
+        "code":    { "type": "string" },
+        "display": { "type": "string" }
+      }
+    }
+  }
+}

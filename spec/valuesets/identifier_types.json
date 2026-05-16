@@ -1,0 +1,19 @@
+{
+  "id": "vhir-identifier-types",
+  "title": "VHIR Animal Identifier Types",
+  "url": "https://vhir.dev/valuesets/identifier-types",
+  "version": "0.1.0",
+  "concepts": [
+    { "code": "microchip-iso",           "display": "ISO 11784/11785 Microchip (134.2 kHz, 15-digit, FDX-B/HDX)",  "notes": "Global standard. 15-digit ID: 3-digit country/manufacturer + 12-digit unique." },
+    { "code": "microchip-legacy-125khz", "display": "Legacy 125 kHz Microchip (Avid, pre-ISO HomeAgain)",           "notes": "Non-ISO; 9 or 10-digit IDs. May require Avid-universal scanner." },
+    { "code": "microchip-legacy-128khz", "display": "Legacy 128 kHz Microchip (Trovan)",                           "notes": "Non-ISO Trovan chips. Rare; requires Trovan-compatible scanner." },
+    { "code": "usda-840",                "display": "USDA 840 Electronic ID Tag",                                   "notes": "15-digit, starts with 840 (USA country code). Required for interstate cattle/bison movement as of Nov 2024." },
+    { "code": "premises-id",             "display": "Premises Identification Number (PIN)",                         "notes": "USDA PIN (US) or EU holding number. Links animals to a farm/facility." },
+    { "code": "herd-animal-id",          "display": "Farm/Herd-Assigned Animal ID",                                "notes": "Local management number assigned by the producer (e.g., cow #42)." },
+    { "code": "tattoo",                  "display": "Tattoo",                                                       "notes": "Ink tattoo on ear, inner lip, or groin. Used for rabbits, racing dogs, cattle, horses." },
+    { "code": "leg-band",                "display": "Leg Band / Ring",                                              "notes": "Aluminum or plastic band on bird leg. May be numbered or color-coded." },
+    { "code": "pedigree",                "display": "Breed Registry / Pedigree Number",                            "notes": "AKC, CKC, FCI, AQHA, Jockey Club, etc. Registration number in breed registry." },
+    { "code": "practice-internal",       "display": "Practice-Assigned Internal ID",                               "notes": "Local EMR record number. Unique within the issuing practice only." },
+    { "code": "other",                   "display": "Other Identifier",                                             "notes": "Describe in system field." }
+  ]
+}

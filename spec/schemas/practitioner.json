@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vhir.dev/schemas/practitioner",
+  "title": "Practitioner",
+  "description": "A person providing veterinary or administrative services.",
+  "type": "object",
+  "required": ["resourceType", "id"],
+  "properties": {
+    "resourceType": { "const": "Practitioner" },
+    "id":           { "type": "string", "pattern": "^[0-9A-Z]{26}$" },
+    "meta":         { "$ref": "animal.json#/$defs/Meta" },
+    "extensions":   { "type": "object", "additionalProperties": true },
+
+    "name": {
+      "type": "object",
+      "required": ["family"],
+      "properties": {
+        "given":  { "type": "string" },
+        "family": { "type": "string" },
+        "prefix": { "type": "string", "description": "Dr., Mr., Ms." },
+        "suffix": { "type": "string", "description": "DVM, VMD, RVT" }
+      }
+    },
+
+    "telecom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["system", "value"],
+        "properties": {
+          "system": { "enum": ["phone", "email", "fax", "pager"] },
+          "value":  { "type": "string" },
+          "use":    { "enum": ["work", "home", "mobile"] }
+        }
+      }
+    },
+
+    "qualifications": {
+      "type": "array",
+      "description": "Professional credentials and licenses",
+      "items": {
+        "type": "object",
+        "required": ["code"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Qualification code from vhir/qualifications ValueSet",
+            "examples": ["DVM", "VMD", "RVT", "LVT", "CVT", "RVN", "DACVIM", "DACVECC", "DACVS", "DACVR", "DACVD"]
+          },
+          "display":       { "type": "string" },
+          "licenseNumber": { "type": "string" },
+          "jurisdiction":  { "type": "string", "description": "ISO 3166-2 state/country code, e.g. US-CA" },
+          "issuer":        { "$ref": "animal.json#/$defs/Reference" },
+          "period": {
+            "type": "object",
+            "properties": {
+              "start": { "type": "string", "format": "date" },
+              "end":   { "type": "string", "format": "date" }
+            }
+          }
+        }
+      }
+    },
+
+    "deaNumber":    { "type": "string", "description": "DEA registration number for controlled substances" },
+    "npiNumber":    { "type": "string", "description": "NPI (US only)" },
+    "usda AccreditationNumber": { "type": "string" },
+
+    "active": { "type": "boolean", "default": true }
+  },
+  "additionalProperties": false
+}
