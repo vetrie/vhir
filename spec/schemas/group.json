@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/group.json",
+  "title": "Group",
+  "description": "Herd, flock, litter, or colony of animals treated as a unit.",
+  "type": "object",
+  "required": ["resourceType"],
+  "properties": {
+    "resourceType": { "const": "Group" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "name": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": ["animal", "person"],
+      "default": "animal"
+    },
+    "productionPurpose": {
+      "type": "string",
+      "enum": ["dairy", "beef", "feedlot", "layer", "broiler", "breeding", "companion-litter", "other"]
+    },
+    "premisesId": {
+      "type": "string",
+      "description": "USDA PIN or EU holding number identifying the premises."
+    },
+    "managingOrganization": { "$ref": "common.json#/$defs/Reference" },
+    "active": { "type": "boolean", "default": true },
+    "quantity": { "type": "integer", "minimum": 0 },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ref"],
+        "properties": {
+          "ref": { "type": "string" },
+          "inactive": { "type": "boolean", "default": false },
+          "period": { "$ref": "common.json#/$defs/Period" }
+        }
+      }
+    },
+    "note": { "type": "string" },
+    "extensions": { "type": "object" }
+  }
+}

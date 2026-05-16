@@ -36,6 +36,8 @@ _RESOURCE_TYPES = [
     "appointment",
     "schedule",
     "slot",
+    # M2
+    "insurance_claim",
 ]
 
 
@@ -75,6 +77,9 @@ medication_administration = _resource_table("medication_administration")
 appointment             = _resource_table("appointment")
 schedule_table          = _resource_table("schedule")
 slot                    = _resource_table("slot")
+
+# M2 tables
+insurance_claim         = _resource_table("insurance_claim")
 
 # History table for all resources (append-only)
 resource_history = Table(

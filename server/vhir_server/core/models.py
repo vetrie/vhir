@@ -691,3 +691,85 @@ class SlotCreate(BaseModel):
 class Slot(SlotCreate):
     id: str
     meta: Meta = Field(default_factory=Meta)
+
+
+# ── InsuranceClaim (M2) ────────────────────────────────────────────────────────
+
+class ClaimDiagnosis(BaseModel):
+    condition: Reference
+    sequence: int = 1
+
+
+class ClaimProcedure(BaseModel):
+    procedure: Reference
+    sequence: int = 1
+
+
+class ClaimItem(BaseModel):
+    sequence: int
+    serviceDate: date | None = None
+    code: Coding | None = None
+    quantity: Quantity | None = None
+    unitPrice: float | None = None
+    net: float | None = None
+
+
+class PreAuthorization(BaseModel):
+    requestedAt: datetime | None = None
+    estimatedAmount: float | None = None
+    currency: str = "USD"
+    status: str | None = None
+    authNumber: str | None = None
+    respondedAt: datetime | None = None
+    approvedAmount: float | None = None
+    expiresAt: datetime | None = None
+    notes: str | None = None
+
+
+class ClaimSubmission(BaseModel):
+    submittedAt: datetime | None = None
+    claimedAmount: float | None = None
+    currency: str = "USD"
+    invoiceNumber: str | None = None
+    paymentType: str | None = None
+
+
+class ClaimAdjudication(BaseModel):
+    adjudicatedAt: datetime | None = None
+    outcome: str | None = None
+    approvedAmount: float | None = None
+    currency: str = "USD"
+    deductibleApplied: float | None = None
+    coinsuranceApplied: float | None = None
+    paidAmount: float | None = None
+    denialReason: str | None = None
+    eobNumber: str | None = None
+    notes: str | None = None
+
+
+class InsuranceClaimCreate(BaseModel):
+    resourceType: Literal["InsuranceClaim"] = "InsuranceClaim"
+    status: str
+    type: str = "professional"
+    subject: Reference
+    encounter: Reference | None = None
+    insurer: Reference | None = None
+    policyNumber: str | None = None
+    groupNumber: str | None = None
+    claimType: str | None = None
+    priority: str = "normal"
+    diagnosis: list[ClaimDiagnosis] = Field(default_factory=list)
+    procedure: list[ClaimProcedure] = Field(default_factory=list)
+    item: list[ClaimItem] = Field(default_factory=list)
+    totalAmount: float | None = None
+    currency: str = "USD"
+    preAuth: PreAuthorization | None = None
+    submission: ClaimSubmission | None = None
+    adjudication: ClaimAdjudication | None = None
+    note: str | None = None
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class InsuranceClaim(InsuranceClaimCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/immunization.json",
+  "title": "Immunization",
+  "description": "Vaccination event for an individual animal.",
+  "type": "object",
+  "required": ["resourceType", "status", "vaccineCode", "subject"],
+  "properties": {
+    "resourceType": { "const": "Immunization" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "status": { "type": "string", "enum": ["completed", "entered-in-error", "not-done"] },
+    "vaccineCode": { "$ref": "common.json#/$defs/Coding" },
+    "subject": { "$ref": "common.json#/$defs/Reference" },
+    "encounter": { "$ref": "common.json#/$defs/Reference" },
+    "occurrenceDateTime": { "type": "string", "format": "date-time" },
+    "primarySource": { "type": "boolean", "default": true },
+    "site": { "type": "string" },
+    "route": { "type": "string" },
+    "doseQuantity": { "$ref": "common.json#/$defs/Quantity" },
+    "performer": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["practitioner"],
+        "properties": {
+          "practitioner": { "$ref": "common.json#/$defs/Reference" },
+          "role": { "type": "string" }
+        }
+      }
+    },
+    "lotNumber": { "type": "string" },
+    "expirationDate": { "type": "string", "format": "date" },
+    "nextDueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "When the next dose or booster is due — used for reminder generation."
+    },
+    "note": { "type": "string" },
+    "extensions": { "type": "object" }
+  }
+}

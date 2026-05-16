@@ -1,5 +1,6 @@
-"""Resource routers for M1 types: Group, Location, Device, DeviceMetric, Procedure,
-Immunization, MedicationDispense, MedicationAdministration, Appointment, Schedule, Slot."""
+"""Resource routers for M1/M2 types: Group, Location, Device, DeviceMetric, Procedure,
+Immunization, MedicationDispense, MedicationAdministration, Appointment, Schedule, Slot,
+InsuranceClaim."""
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,6 +12,7 @@ from vhir_server.core.models import (
     DeviceMetricCreate,
     GroupCreate,
     ImmunizationCreate,
+    InsuranceClaimCreate,
     LocationCreate,
     MedicationAdministrationCreate,
     MedicationDispenseCreate,
@@ -77,3 +79,6 @@ medication_administration_router = _make_router("MedicationAdministration", "/Me
 appointment_router = _make_router("Appointment", "/Appointment", AppointmentCreate, "Appointment")
 schedule_router = _make_router("Schedule", "/Schedule", ScheduleCreate, "Schedule")
 slot_router = _make_router("Slot", "/Slot", SlotCreate, "Slot")
+
+# M2
+insurance_claim_router = _make_router("InsuranceClaim", "/InsuranceClaim", InsuranceClaimCreate, "InsuranceClaim")

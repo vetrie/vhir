@@ -12,6 +12,7 @@ from vhir_server.api.m1_resources import (
     device_router,
     group_router,
     immunization_router,
+    insurance_claim_router,
     location_router,
     medication_administration_router,
     medication_dispense_router,
@@ -91,6 +92,7 @@ app.include_router(medication_administration_router,prefix=prefix)
 app.include_router(appointment_router,              prefix=prefix)
 app.include_router(schedule_router,                 prefix=prefix)
 app.include_router(slot_router,                     prefix=prefix)
+app.include_router(insurance_claim_router,          prefix=prefix)
 app.include_router(microchip_router,                prefix=prefix)
 
 

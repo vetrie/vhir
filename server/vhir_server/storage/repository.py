@@ -34,6 +34,8 @@ _TABLE_MAP: dict[str, Table] = {
     "Appointment":               tables.appointment,
     "Schedule":                  tables.schedule_table,
     "Slot":                      tables.slot,
+    # M2
+    "InsuranceClaim":            tables.insurance_claim,
 }
 
 

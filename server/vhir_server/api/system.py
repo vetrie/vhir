@@ -79,6 +79,8 @@ async def capability_statement() -> dict[str, Any]:
                     _cap_resource("Appointment",               ["read", "create", "update", "delete", "search"]),
                     _cap_resource("Schedule",                  ["read", "create", "update", "delete", "search"]),
                     _cap_resource("Slot",                      ["read", "create", "update", "delete", "search"]),
+                    # M2
+                    _cap_resource("InsuranceClaim",            ["read", "create", "update", "delete", "search"]),
                 ],
                 "operation": [
                     {"name": "lookup-microchip", "definition": "POST /v1/$lookup-microchip"},

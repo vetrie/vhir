@@ -143,6 +143,14 @@ _SEARCH_PARAMS: dict[str, dict[str, tuple[str, str]]] = {
         "date":     ("date",     "start"),
         "_id":      ("token",    "id"),
     },
+    # M2
+    "InsuranceClaim": {
+        "status":   ("token",    "status"),
+        "subject":  ("reference","subject"),
+        "encounter":("reference","encounter"),
+        "insurer":  ("reference","insurer"),
+        "_id":      ("token",    "id"),
+    },
 }
 
 _DEFAULT_LIMIT = 20
@@ -164,6 +172,7 @@ def build_query(table: Table, raw_params: dict[str, Any]) -> tuple[Select, Selec
         "immunization": "Immunization", "medication_dispense": "MedicationDispense",
         "medication_administration": "MedicationAdministration",
         "appointment": "Appointment", "schedule": "Schedule", "slot": "Slot",
+        "insurance_claim": "InsuranceClaim",
     }
     resource_type = _name_map.get(table.name, resource_type)
     param_defs = _SEARCH_PARAMS.get(resource_type, {})

@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/insurance_claim.json",
+  "title": "InsuranceClaim",
+  "description": "Pet insurance claim supporting Trupanion VetDirectPay pre-authorization and post-service reimbursement (Nationwide, Pets Best, Hartville).",
+  "type": "object",
+  "required": ["resourceType", "status", "subject"],
+  "properties": {
+    "resourceType": { "const": "InsuranceClaim" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "submitted", "pending", "completed", "cancelled", "entered-in-error"]
+    },
+    "type": { "type": "string", "default": "professional" },
+    "subject": { "$ref": "common.json#/$defs/Reference" },
+    "encounter": { "$ref": "common.json#/$defs/Reference" },
+    "insurer": { "$ref": "common.json#/$defs/Reference" },
+    "policyNumber": { "type": "string" },
+    "groupNumber": { "type": "string" },
+    "claimType": { "type": "string", "enum": ["pre-auth", "post-service"] },
+    "priority": { "type": "string", "default": "normal" },
+    "diagnosis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["condition"],
+        "properties": {
+          "condition": { "$ref": "common.json#/$defs/Reference" },
+          "sequence": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "item": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sequence"],
+        "properties": {
+          "sequence": { "type": "integer" },
+          "serviceDate": { "type": "string", "format": "date" },
+          "code": { "$ref": "common.json#/$defs/Coding" },
+          "net": { "type": "number" }
+        }
+      }
+    },
+    "totalAmount": { "type": "number" },
+    "currency": { "type": "string", "default": "USD" },
+    "preAuth": {
+      "type": "object",
+      "description": "Pre-authorization block — populated for claimType=pre-auth. Models Trupanion VetDirectPay workflow.",
+      "properties": {
+        "requestedAt": { "type": "string", "format": "date-time" },
+        "estimatedAmount": { "type": "number" },
+        "currency": { "type": "string", "default": "USD" },
+        "status": { "type": "string", "enum": ["pending", "approved", "denied", "partial"] },
+        "authNumber": { "type": "string" },
+        "respondedAt": { "type": "string", "format": "date-time" },
+        "approvedAmount": { "type": "number" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" }
+      }
+    },
+    "submission": {
+      "type": "object",
+      "description": "Post-service submission block. Populated when the claim is submitted for reimbursement.",
+      "properties": {
+        "submittedAt": { "type": "string", "format": "date-time" },
+        "claimedAmount": { "type": "number" },
+        "currency": { "type": "string", "default": "USD" },
+        "invoiceNumber": { "type": "string" },
+        "paymentType": { "type": "string", "enum": ["direct-pay", "reimbursement"] }
+      }
+    },
+    "adjudication": {
+      "type": "object",
+      "description": "Insurer adjudication result — populated once the claim is processed.",
+      "properties": {
+        "adjudicatedAt": { "type": "string", "format": "date-time" },
+        "outcome": { "type": "string", "enum": ["approved", "denied", "partial"] },
+        "approvedAmount": { "type": "number" },
+        "currency": { "type": "string", "default": "USD" },
+        "deductibleApplied": { "type": "number" },
+        "coinsuranceApplied": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "denialReason": { "type": "string" },
+        "eobNumber": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "note": { "type": "string" },
+    "extensions": { "type": "object" }
+  }
+}
