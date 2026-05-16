@@ -24,6 +24,18 @@ _RESOURCE_TYPES = [
     "observation",
     "condition",
     "medication_request",
+    # M1
+    "vhir_group",
+    "location",
+    "device",
+    "device_metric",
+    "procedure",
+    "immunization",
+    "medication_dispense",
+    "medication_administration",
+    "appointment",
+    "schedule",
+    "slot",
 ]
 
 
@@ -50,6 +62,20 @@ observation       = _resource_table("observation")
 condition_table   = _resource_table("condition")
 medication_request = _resource_table("medication_request")
 
+# M1 tables
+# "group" is a reserved word in Postgres — use vhir_group
+vhir_group              = _resource_table("vhir_group")
+location_table          = _resource_table("location")
+device                  = _resource_table("device")
+device_metric           = _resource_table("device_metric")
+procedure_table         = _resource_table("procedure")
+immunization            = _resource_table("immunization")
+medication_dispense     = _resource_table("medication_dispense")
+medication_administration = _resource_table("medication_administration")
+appointment             = _resource_table("appointment")
+schedule_table          = _resource_table("schedule")
+slot                    = _resource_table("slot")
+
 # History table for all resources (append-only)
 resource_history = Table(
     "resource_history",
@@ -64,7 +90,10 @@ resource_history = Table(
 )
 
 # GIN indexes for fast JSONB search
-Index("ix_animal_identifiers", animal.c.body["identifiers"], postgresql_using="gin")
-Index("ix_animal_owners",      animal.c.body["owners"],      postgresql_using="gin")
-Index("ix_observation_code",   observation.c.body["code"],   postgresql_using="gin")
-Index("ix_condition_code",     condition_table.c.body["code"], postgresql_using="gin")
+Index("ix_animal_identifiers",      animal.c.body["identifiers"],          postgresql_using="gin")
+Index("ix_animal_owners",           animal.c.body["owners"],               postgresql_using="gin")
+Index("ix_observation_code",        observation.c.body["code"],            postgresql_using="gin")
+Index("ix_condition_code",          condition_table.c.body["code"],        postgresql_using="gin")
+Index("ix_group_members",           vhir_group.c.body["members"],          postgresql_using="gin")
+Index("ix_device_identifiers",      device.c.body["identifiers"],          postgresql_using="gin")
+Index("ix_med_admin_completion",    medication_administration.c.body["memberCompletion"], postgresql_using="gin")

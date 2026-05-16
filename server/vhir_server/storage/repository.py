@@ -13,15 +13,27 @@ from vhir_server.storage import tables
 
 
 _TABLE_MAP: dict[str, Table] = {
-    "Animal":             tables.animal,
-    "Owner":              tables.owner,
-    "Practitioner":       tables.practitioner,
-    "PractitionerRole":   tables.practitioner_role,
-    "Organization":       tables.organization,
-    "Encounter":          tables.encounter,
-    "Observation":        tables.observation,
-    "Condition":          tables.condition_table,
-    "MedicationRequest":  tables.medication_request,
+    "Animal":                    tables.animal,
+    "Owner":                     tables.owner,
+    "Practitioner":              tables.practitioner,
+    "PractitionerRole":          tables.practitioner_role,
+    "Organization":              tables.organization,
+    "Encounter":                 tables.encounter,
+    "Observation":               tables.observation,
+    "Condition":                 tables.condition_table,
+    "MedicationRequest":         tables.medication_request,
+    # M1
+    "Group":                     tables.vhir_group,
+    "Location":                  tables.location_table,
+    "Device":                    tables.device,
+    "DeviceMetric":              tables.device_metric,
+    "Procedure":                 tables.procedure_table,
+    "Immunization":              tables.immunization,
+    "MedicationDispense":        tables.medication_dispense,
+    "MedicationAdministration":  tables.medication_administration,
+    "Appointment":               tables.appointment,
+    "Schedule":                  tables.schedule_table,
+    "Slot":                      tables.slot,
 }
 
 

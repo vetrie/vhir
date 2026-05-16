@@ -6,6 +6,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from vhir_server.api.animal import router as animal_router
+from vhir_server.api.m1_resources import (
+    appointment_router,
+    device_metric_router,
+    device_router,
+    group_router,
+    immunization_router,
+    location_router,
+    medication_administration_router,
+    medication_dispense_router,
+    procedure_router,
+    schedule_router,
+    slot_router,
+)
 from vhir_server.api.resources import (
     condition_router,
     encounter_router,
@@ -17,6 +30,7 @@ from vhir_server.api.resources import (
     practitioner_router,
 )
 from vhir_server.api.system import router as system_router
+from vhir_server.registry.microchip import microchip_router
 from vhir_server.config import settings
 from vhir_server.storage.database import engine
 from vhir_server.storage.tables import metadata
@@ -53,6 +67,8 @@ app.include_router(system_router)
 
 # Resource routes under /v1
 prefix = settings.api_prefix
+
+# M0
 app.include_router(animal_router,            prefix=prefix)
 app.include_router(owner_router,             prefix=prefix)
 app.include_router(practitioner_router,      prefix=prefix)
@@ -62,6 +78,20 @@ app.include_router(encounter_router,         prefix=prefix)
 app.include_router(observation_router,       prefix=prefix)
 app.include_router(condition_router,         prefix=prefix)
 app.include_router(medication_request_router,prefix=prefix)
+
+# M1
+app.include_router(group_router,                    prefix=prefix)
+app.include_router(location_router,                 prefix=prefix)
+app.include_router(device_router,                   prefix=prefix)
+app.include_router(device_metric_router,            prefix=prefix)
+app.include_router(procedure_router,                prefix=prefix)
+app.include_router(immunization_router,             prefix=prefix)
+app.include_router(medication_dispense_router,      prefix=prefix)
+app.include_router(medication_administration_router,prefix=prefix)
+app.include_router(appointment_router,              prefix=prefix)
+app.include_router(schedule_router,                 prefix=prefix)
+app.include_router(slot_router,                     prefix=prefix)
+app.include_router(microchip_router,                prefix=prefix)
 
 
 @app.exception_handler(Exception)

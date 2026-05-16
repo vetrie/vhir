@@ -1,4 +1,4 @@
-"""Pydantic models for all VHIR resources (M0 set)."""
+"""Pydantic models for all VHIR resources (M0 + M1 set)."""
 from __future__ import annotations
 
 from datetime import date, datetime
@@ -417,5 +417,277 @@ class MedicationRequestCreate(BaseModel):
 
 
 class MedicationRequest(MedicationRequestCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── Group (Herd / Flock / Litter) ─────────────────────────────────────────────
+
+class GroupMember(BaseModel):
+    ref: str
+    inactive: bool = False
+    period: Period | None = None
+
+
+class GroupCreate(BaseModel):
+    resourceType: Literal["Group"] = "Group"
+    name: str | None = None
+    type: str = "animal"
+    productionPurpose: str | None = None
+    premisesId: str | None = None
+    managingOrganization: Reference | None = None
+    active: bool = True
+    quantity: int | None = None
+    members: list[GroupMember] = Field(default_factory=list)
+    note: str | None = None
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class Group(GroupCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── Location ───────────────────────────────────────────────────────────────────
+
+class LocationCreate(BaseModel):
+    resourceType: Literal["Location"] = "Location"
+    name: str
+    type: str | None = None
+    mode: str = "instance"
+    description: str | None = None
+    address: Address | None = None
+    managingOrganization: Reference | None = None
+    partOf: Reference | None = None
+    operationalStatus: str | None = None
+    active: bool = True
+    telecom: list[Telecom] = Field(default_factory=list)
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class Location(LocationCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── Device ─────────────────────────────────────────────────────────────────────
+
+class DeviceCreate(BaseModel):
+    resourceType: Literal["Device"] = "Device"
+    type: str
+    status: str = "active"
+    identifiers: list[Identifier] = Field(default_factory=list)
+    subject: Reference | None = None
+    owner: Reference | None = None
+    manufacturer: str | None = None
+    model: str | None = None
+    serialNumber: str | None = None
+    lotNumber: str | None = None
+    manufactureDate: date | None = None
+    expirationDate: date | None = None
+    udi: str | None = None
+    note: str | None = None
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class Device(DeviceCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── DeviceMetric ───────────────────────────────────────────────────────────────
+
+class DeviceMetricCreate(BaseModel):
+    resourceType: Literal["DeviceMetric"] = "DeviceMetric"
+    device: Reference
+    type: Coding
+    unit: Coding | None = None
+    operationalStatus: str | None = None
+    category: str
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class DeviceMetric(DeviceMetricCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── Procedure ─────────────────────────────────────────────────────────────────
+
+class ProcedurePerformer(BaseModel):
+    practitioner: Reference
+    role: str | None = None
+
+
+class ProcedureCreate(BaseModel):
+    resourceType: Literal["Procedure"] = "Procedure"
+    status: str
+    code: Coding
+    subject: Reference
+    encounter: Reference | None = None
+    performer: list[ProcedurePerformer] = Field(default_factory=list)
+    performedDateTime: datetime | None = None
+    performedPeriod: Period | None = None
+    bodySite: str | None = None
+    outcome: str | None = None
+    followUp: str | None = None
+    note: str | None = None
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class Procedure(ProcedureCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── Immunization ───────────────────────────────────────────────────────────────
+
+class ImmunizationPerformer(BaseModel):
+    practitioner: Reference
+    role: str | None = None
+
+
+class ImmunizationCreate(BaseModel):
+    resourceType: Literal["Immunization"] = "Immunization"
+    status: str
+    vaccineCode: Coding
+    subject: Reference
+    encounter: Reference | None = None
+    occurrenceDateTime: datetime | None = None
+    primarySource: bool = True
+    site: str | None = None
+    route: str | None = None
+    doseQuantity: Quantity | None = None
+    performer: list[ImmunizationPerformer] = Field(default_factory=list)
+    lotNumber: str | None = None
+    expirationDate: date | None = None
+    nextDueDate: date | None = None
+    note: str | None = None
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class Immunization(ImmunizationCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── MedicationDispense ────────────────────────────────────────────────────────
+
+class MedicationDispenseCreate(BaseModel):
+    resourceType: Literal["MedicationDispense"] = "MedicationDispense"
+    status: str
+    medication: MedicationInfo
+    subject: Reference
+    authorizingPrescription: Reference | None = None
+    quantity: DoseQuantity | None = None
+    daysSupply: int | None = None
+    whenPrepared: datetime | None = None
+    whenHandedOver: datetime | None = None
+    performer: Reference | None = None
+    note: str | None = None
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class MedicationDispense(MedicationDispenseCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── MedicationAdministration ──────────────────────────────────────────────────
+
+class MemberCompletion(BaseModel):
+    animal: str
+    status: str
+    effectiveDateTime: datetime | None = None
+    note: str | None = None
+
+
+class WithdrawalEnds(BaseModel):
+    meat: date | None = None
+    milk: date | None = None
+    eggs: date | None = None
+
+
+class MedicationAdministrationCreate(BaseModel):
+    resourceType: Literal["MedicationAdministration"] = "MedicationAdministration"
+    status: str
+    medication: MedicationInfo
+    subject: Reference
+    encounter: Reference | None = None
+    performer: list[Reference] = Field(default_factory=list)
+    effectiveDateTime: datetime | None = None
+    effectivePeriod: Period | None = None
+    dosage: DosageInstruction | None = None
+    withdrawalEnds: WithdrawalEnds | None = None
+    memberCompletion: list[MemberCompletion] = Field(default_factory=list)
+    note: str | None = None
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class MedicationAdministration(MedicationAdministrationCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── Appointment ────────────────────────────────────────────────────────────────
+
+class AppointmentParticipant(BaseModel):
+    actor: Reference
+    role: str | None = None
+    status: str = "accepted"
+
+
+class AppointmentCreate(BaseModel):
+    resourceType: Literal["Appointment"] = "Appointment"
+    status: str
+    serviceType: list[Coding] = Field(default_factory=list)
+    subject: Reference
+    practitioners: list[AppointmentParticipant] = Field(default_factory=list)
+    start: datetime | None = None
+    end: datetime | None = None
+    slot: Reference | None = None
+    comment: str | None = None
+    priority: int = 0
+    cancelationReason: str | None = None
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class Appointment(AppointmentCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── Schedule ───────────────────────────────────────────────────────────────────
+
+class ScheduleCreate(BaseModel):
+    resourceType: Literal["Schedule"] = "Schedule"
+    actor: list[Reference] = Field(default_factory=list)
+    planningHorizon: Period | None = None
+    active: bool = True
+    comment: str | None = None
+    serviceType: list[Coding] = Field(default_factory=list)
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class Schedule(ScheduleCreate):
+    id: str
+    meta: Meta = Field(default_factory=Meta)
+
+
+# ── Slot ───────────────────────────────────────────────────────────────────────
+
+class SlotCreate(BaseModel):
+    resourceType: Literal["Slot"] = "Slot"
+    schedule: Reference
+    status: str
+    start: datetime
+    end: datetime
+    serviceType: list[Coding] = Field(default_factory=list)
+    comment: str | None = None
+    overbooked: bool = False
+    extensions: dict[str, Any] = Field(default_factory=dict)
+
+
+class Slot(SlotCreate):
     id: str
     meta: Meta = Field(default_factory=Meta)

@@ -75,6 +75,74 @@ _SEARCH_PARAMS: dict[str, dict[str, tuple[str, str]]] = {
         "vfd":       ("token",    "vfd"),
         "_id":       ("token",    "id"),
     },
+    # M1
+    "Group": {
+        "name":              ("string",    "name"),
+        "type":              ("token",     "type"),
+        "productionPurpose": ("token",     "productionPurpose"),
+        "premisesId":        ("token",     "premisesId"),
+        "active":            ("token",     "active"),
+        "_id":               ("token",     "id"),
+    },
+    "Location": {
+        "name":         ("string",    "name"),
+        "type":         ("token",     "type"),
+        "active":       ("token",     "active"),
+        "_id":          ("token",     "id"),
+    },
+    "Device": {
+        "type":       ("token",     "type"),
+        "status":     ("token",     "status"),
+        "subject":    ("reference", "subject"),
+        "identifier": ("identifier","identifiers"),
+        "_id":        ("token",     "id"),
+    },
+    "DeviceMetric": {
+        "device":   ("reference","device"),
+        "category": ("token",    "category"),
+        "_id":      ("token",    "id"),
+    },
+    "Procedure": {
+        "status":   ("token",     "status"),
+        "subject":  ("reference", "subject"),
+        "encounter":("reference", "encounter"),
+        "_id":      ("token",     "id"),
+    },
+    "Immunization": {
+        "status":   ("token",    "status"),
+        "subject":  ("reference","subject"),
+        "encounter":("reference","encounter"),
+        "date":     ("date",     "occurrenceDateTime"),
+        "_id":      ("token",    "id"),
+    },
+    "MedicationDispense": {
+        "status":                  ("token",    "status"),
+        "subject":                 ("reference","subject"),
+        "authorizingPrescription": ("reference","authorizingPrescription"),
+        "_id":                     ("token",    "id"),
+    },
+    "MedicationAdministration": {
+        "status":   ("token",    "status"),
+        "subject":  ("reference","subject"),
+        "encounter":("reference","encounter"),
+        "_id":      ("token",    "id"),
+    },
+    "Appointment": {
+        "status":   ("token",    "status"),
+        "subject":  ("reference","subject"),
+        "date":     ("date",     "start"),
+        "_id":      ("token",    "id"),
+    },
+    "Schedule": {
+        "active": ("token", "active"),
+        "_id":    ("token", "id"),
+    },
+    "Slot": {
+        "schedule": ("reference","schedule"),
+        "status":   ("token",    "status"),
+        "date":     ("date",     "start"),
+        "_id":      ("token",    "id"),
+    },
 }
 
 _DEFAULT_LIMIT = 20
@@ -90,6 +158,12 @@ def build_query(table: Table, raw_params: dict[str, Any]) -> tuple[Select, Selec
         "practitioner_role": "PractitionerRole", "organization": "Organization",
         "encounter": "Encounter", "observation": "Observation",
         "condition": "Condition", "medication_request": "MedicationRequest",
+        # M1
+        "vhir_group": "Group", "location": "Location", "device": "Device",
+        "device_metric": "DeviceMetric", "procedure": "Procedure",
+        "immunization": "Immunization", "medication_dispense": "MedicationDispense",
+        "medication_administration": "MedicationAdministration",
+        "appointment": "Appointment", "schedule": "Schedule", "slot": "Slot",
     }
     resource_type = _name_map.get(table.name, resource_type)
     param_defs = _SEARCH_PARAMS.get(resource_type, {})
