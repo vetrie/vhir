@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VHIR Technical Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* ── Reset & Tokens ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #0f1117;
+  --bg-card:     #161b27;
+  --bg-code:     #0d1117;
+  --bg-aside:    #10141e;
+  --border:      #1e2535;
+  --border-dim:  #161b27;
+  --text:        #e2e8f0;
+  --text-dim:    #8896b3;
+  --text-muted:  #4a5568;
+  --accent:      #3b82f6;
+  --accent-soft: #1e3a5f;
+  --green:       #22c55e;
+  --green-soft:  #14532d;
+  --amber:       #f59e0b;
+  --amber-soft:  #451a03;
+  --red:         #ef4444;
+  --red-soft:    #450a0a;
+  --purple:      #a78bfa;
+  --purple-soft: #2e1065;
+  --teal:        #2dd4bf;
+  --teal-soft:   #042f2e;
+  --sidebar-w:   260px;
+  --content-max: 860px;
+  --font:        'Inter', system-ui, sans-serif;
+  --mono:        'JetBrains Mono', 'Fira Code', monospace;
+  --r:           6px;
+  --r-lg:        10px;
+  --shadow:      0 4px 24px rgba(0,0,0,.4);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+  display: flex;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────────────────────── */
+nav#sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--bg-aside);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 2rem;
+}
+
+nav#sidebar::-webkit-scrollbar { width: 4px; }
+nav#sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.nav-logo {
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: .75rem;
+}
+.nav-logo .wordmark { font-size: 1.2rem; font-weight: 700; color: var(--text); letter-spacing: -.02em; }
+.nav-logo .tagline { font-size: .72rem; color: var(--text-dim); margin-top: .15rem; }
+.nav-logo .badge {
+  display: inline-block; background: var(--accent-soft); color: var(--accent);
+  font-size: .65rem; font-weight: 600; padding: .1rem .4rem; border-radius: 20px;
+  letter-spacing: .05em; margin-left: .4rem;
+}
+
+.nav-section {
+  padding: .5rem 1.25rem .25rem;
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: .5rem;
+}
+
+nav#sidebar a {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .35rem 1.25rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: .82rem;
+  border-radius: 0;
+  transition: background .12s, color .12s;
+}
+nav#sidebar a:hover { background: var(--border-dim); color: var(--text); }
+nav#sidebar a.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+nav#sidebar a .dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  background: currentColor; opacity: .5;
+}
+nav#sidebar a.m0-link .dot { background: var(--accent); }
+nav#sidebar a.m1-link .dot { background: var(--green); }
+nav#sidebar a.m2-link .dot { background: var(--purple); }
+
+/* ── Main ───────────────────────────────────────────────────────────────────── */
+main {
+  flex: 1;
+  min-width: 0;
+  padding: 3rem 3.5rem 6rem;
+  max-width: calc(var(--sidebar-w) + var(--content-max) + 7rem);
+}
+
+/* ── Typography ─────────────────────────────────────────────────────────────── */
+h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -.03em; margin-bottom: .5rem; }
+h2 {
+  font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em;
+  margin: 3rem 0 1rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+h2:first-child { margin-top: 0; }
+h3 { font-size: 1.05rem; font-weight: 600; margin: 2rem 0 .6rem; color: var(--text); }
+h4 { font-size: .9rem; font-weight: 600; margin: 1.5rem 0 .4rem; color: var(--text-dim); letter-spacing: .02em; text-transform: uppercase; font-size: .75rem; }
+p { margin-bottom: .85rem; color: var(--text-dim); }
+p:last-child { margin-bottom: 0; }
+strong { color: var(--text); font-weight: 600; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+ul, ol { padding-left: 1.4rem; margin-bottom: .85rem; color: var(--text-dim); }
+li { margin-bottom: .25rem; }
+li::marker { color: var(--text-muted); }
+
+/* ── Section anchors ───────────────────────────────────────────────────────── */
+section { padding-top: 1rem; }
+
+/* ── Code ───────────────────────────────────────────────────────────────────── */
+code {
+  font-family: var(--mono);
+  font-size: .82em;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  padding: .1em .35em;
+  border-radius: 4px;
+  color: #e2e8f0;
+}
+
+pre {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow-x: auto;
+  margin: 1rem 0 1.25rem;
+  position: relative;
+}
+pre code {
+  display: block;
+  padding: 1.1rem 1.25rem;
+  background: none;
+  border: none;
+  font-size: .815rem;
+  line-height: 1.7;
+  color: #cdd6f4;
+}
+
+.code-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,.02);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+.code-label .lang-badge {
+  background: var(--border);
+  color: var(--text-dim);
+  padding: .1rem .5rem;
+  border-radius: 20px;
+  font-size: .65rem;
+}
+
+/* Syntax coloring (manual, no library needed for our controlled examples) */
+.kw  { color: #cba6f7; }  /* keyword / const */
+.st  { color: #a6e3a1; }  /* string */
+.nm  { color: #fab387; }  /* number */
+.cm  { color: #585b70; }  /* comment */
+.pk  { color: #89b4fa; }  /* property key */
+.mt  { color: #f38ba8; }  /* method / HTTP verb */
+.ur  { color: #89dceb; }  /* URL */
+.hl  { background: rgba(59,130,246,.12); display: block; margin: 0 -1.25rem; padding: 0 1.25rem; }
+
+/* ── Badges & Pills ─────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: .15rem .5rem;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+.badge-blue   { background: var(--accent-soft); color: var(--accent); }
+.badge-green  { background: var(--green-soft);  color: var(--green);  }
+.badge-amber  { background: var(--amber-soft);  color: var(--amber);  }
+.badge-purple { background: var(--purple-soft); color: var(--purple); }
+.badge-teal   { background: var(--teal-soft);   color: var(--teal);   }
+.badge-red    { background: var(--red-soft);     color: var(--red);    }
+
+.method { display: inline-block; width: 52px; text-align: center; font-family: var(--mono); font-size: .72rem; font-weight: 700; border-radius: 4px; padding: .1rem 0; }
+.GET    { background: var(--teal-soft);   color: var(--teal);  }
+.POST   { background: var(--green-soft);  color: var(--green); }
+.PUT    { background: var(--amber-soft);  color: var(--amber); }
+.DELETE { background: var(--red-soft);    color: var(--red);   }
+.PATCH  { background: var(--purple-soft); color: var(--purple);}
+
+/* ── Cards ───────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+.card h3 { margin-top: 0; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: .75rem;
+  margin-bottom: 1.25rem;
+}
+
+.resource-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1rem;
+  transition: border-color .15s;
+}
+.resource-card:hover { border-color: var(--accent); }
+.resource-card .rc-header { display: flex; align-items: center; gap: .6rem; margin-bottom: .4rem; }
+.resource-card .rc-name { font-weight: 600; font-size: .9rem; color: var(--text); }
+.resource-card .rc-desc { font-size: .8rem; color: var(--text-dim); line-height: 1.5; }
+
+/* ── Tables ──────────────────────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; margin: 1rem 0 1.25rem; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .83rem;
+}
+th {
+  text-align: left;
+  padding: .55rem 1rem;
+  background: var(--bg-aside);
+  color: var(--text-muted);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: .55rem 1rem;
+  border-bottom: 1px solid var(--border-dim);
+  color: var(--text-dim);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+td:first-child { color: var(--text); font-family: var(--mono); font-size: .78rem; }
+tr:hover td { background: rgba(255,255,255,.015); }
+
+/* ── Callouts ────────────────────────────────────────────────────────────────── */
+.callout {
+  border-radius: var(--r);
+  padding: .85rem 1rem;
+  margin: 1rem 0;
+  display: flex;
+  gap: .7rem;
+  font-size: .86rem;
+}
+.callout .icon { flex-shrink: 0; font-size: 1rem; line-height: 1.7; }
+.callout-info  { background: #0c1e3b; border: 1px solid #1e3a5f; color: #93c5fd; }
+.callout-vet   { background: #0a2818; border: 1px solid #14532d; color: #86efac; }
+.callout-warn  { background: #1c1008; border: 1px solid #451a03; color: #fcd34d; }
+.callout-tip   { background: #0d1f2d; border: 1px solid #0e4963; color: #67e8f9; }
+
+/* ── Endpoint rows ───────────────────────────────────────────────────────────── */
+.endpoint-list { display: flex; flex-direction: column; gap: .5rem; margin: 1rem 0; }
+.endpoint-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: .55rem .85rem;
+  font-family: var(--mono);
+  font-size: .82rem;
+}
+.endpoint-row .ep-path { color: var(--text); flex: 1; }
+.endpoint-row .ep-desc { color: var(--text-muted); font-family: var(--font); font-size: .78rem; }
+
+/* ── Hero ────────────────────────────────────────────────────────────────────── */
+.hero {
+  border-radius: var(--r-lg);
+  background: linear-gradient(135deg, #0f1f3d 0%, #0a1628 50%, #0f1117 100%);
+  border: 1px solid #1a2b4a;
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+.hero h1 { color: var(--text); margin-bottom: .5rem; }
+.hero .subtitle { font-size: 1.05rem; color: var(--text-dim); margin-bottom: 1.25rem; }
+.hero .tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+/* ── TOC anchor style ────────────────────────────────────────────────────────── */
+[id] { scroll-margin-top: 1.5rem; }
+
+/* ── Divider ─────────────────────────────────────────────────────────────────── */
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+/* ── Schema field table ──────────────────────────────────────────────────────── */
+.req { color: var(--red); font-size: .7rem; font-weight: 600; }
+.opt { color: var(--text-muted); font-size: .7rem; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ SIDEBAR ════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="nav-logo">
+    <div class="wordmark">VHIR <span class="badge">v0.1</span></div>
+    <div class="tagline">Veterinary Health Interoperability Resources</div>
+  </div>
+
+  <div class="nav-section">Getting Started</div>
+  <a href="#intro"><span class="dot"></span>Introduction</a>
+  <a href="#vet-primer"><span class="dot"></span>Vet Med Primer</a>
+  <a href="#quickstart"><span class="dot"></span>Quick Start</a>
+  <a href="#architecture"><span class="dot"></span>Architecture</a>
+
+  <div class="nav-section">API Reference</div>
+  <a href="#conventions"><span class="dot"></span>REST Conventions</a>
+  <a href="#resources-envelope"><span class="dot"></span>Resource Envelope</a>
+  <a href="#auth"><span class="dot"></span>Authentication</a>
+  <a href="#search"><span class="dot"></span>Search & Filtering</a>
+
+  <div class="nav-section">M0 — Core Resources</div>
+  <a href="#animal" class="m0-link"><span class="dot"></span>Animal</a>
+  <a href="#owner" class="m0-link"><span class="dot"></span>Owner</a>
+  <a href="#practitioner" class="m0-link"><span class="dot"></span>Practitioner</a>
+  <a href="#practitioner-role" class="m0-link"><span class="dot"></span>PractitionerRole</a>
+  <a href="#organization" class="m0-link"><span class="dot"></span>Organization</a>
+  <a href="#encounter" class="m0-link"><span class="dot"></span>Encounter</a>
+  <a href="#observation" class="m0-link"><span class="dot"></span>Observation</a>
+  <a href="#condition" class="m0-link"><span class="dot"></span>Condition</a>
+  <a href="#medication-request" class="m0-link"><span class="dot"></span>MedicationRequest</a>
+
+  <div class="nav-section">M1 — Herd & Devices</div>
+  <a href="#group" class="m1-link"><span class="dot"></span>Group</a>
+  <a href="#location" class="m1-link"><span class="dot"></span>Location</a>
+  <a href="#device" class="m1-link"><span class="dot"></span>Device</a>
+  <a href="#device-metric" class="m1-link"><span class="dot"></span>DeviceMetric</a>
+  <a href="#procedure" class="m1-link"><span class="dot"></span>Procedure</a>
+  <a href="#immunization" class="m1-link"><span class="dot"></span>Immunization</a>
+  <a href="#medication-dispense" class="m1-link"><span class="dot"></span>MedicationDispense</a>
+  <a href="#medication-administration" class="m1-link"><span class="dot"></span>MedicationAdministration</a>
+  <a href="#appointment" class="m1-link"><span class="dot"></span>Appointment</a>
+  <a href="#schedule-slot" class="m1-link"><span class="dot"></span>Schedule / Slot</a>
+
+  <div class="nav-section">M2 — Insurance</div>
+  <a href="#insurance-claim" class="m2-link"><span class="dot"></span>InsuranceClaim</a>
+
+  <div class="nav-section">Operations</div>
+  <a href="#microchip-lookup"><span class="dot"></span>$lookup-microchip</a>
+
+  <div class="nav-section">Walkthroughs</div>
+  <a href="#walkthrough-visit"><span class="dot"></span>Companion Visit</a>
+  <a href="#walkthrough-herd"><span class="dot"></span>Herd Treatment</a>
+  <a href="#walkthrough-insurance"><span class="dot"></span>Insurance Claim</a>
+</nav>
+
+<!-- ═══════════════════════════════ MAIN ═══════════════════════════════════════ -->
+<main>
+
+<!-- ── Introduction ───────────────────────────────────────────────────────── -->
+<section id="intro">
+<div class="hero">
+  <h1>VHIR Technical Reference</h1>
+  <p class="subtitle">A FHIR-inspired, standalone interoperability standard for veterinary medicine — JSON + REST, built for clinics, farms, and the systems connecting them.</p>
+  <div class="tags">
+    <span class="badge badge-blue">REST / JSON</span>
+    <span class="badge badge-green">20 Resource Types</span>
+    <span class="badge badge-amber">Herd-First</span>
+    <span class="badge badge-purple">Pet Insurance</span>
+    <span class="badge badge-teal">Microchip Lookup</span>
+  </div>
+</div>
+
+<h2>What is VHIR?</h2>
+<p>Human medicine has <strong>FHIR</strong> (Fast Healthcare Interoperability Resources) — a widely adopted standard for exchanging electronic health records. Veterinary medicine has no equivalent. The ~100 Practice Information Management Systems (PIMS) used by vet clinics worldwide all speak different data formats, making cross-system workflows (referrals, pharmacies, insurance, lost-pet registries) brittle or impossible.</p>
+<p><strong>VHIR</strong> is a standalone JSON + REST standard that solves this. It borrows FHIR's proven architectural ideas — resource-oriented REST, JSON payloads, OAuth2 scopes, search parameters, Bundle envelopes — but strips away human-medicine regulatory baggage (HIPAA Provenance resources, ICD-10/CPT/RxNorm coupling, C-CDA) and adds vet-specific first-class features:</p>
+<ul>
+  <li><strong>Herd / group treatment</strong> — administer drugs to 50 cattle in one record, with per-animal completion tracking</li>
+  <li><strong>Withdrawal periods</strong> — milk, meat, and eggs hold times required by FDA for food-animal drugs</li>
+  <li><strong>Multi-owner support</strong> — primary owner, co-owner, breeder, trainer, farm staff — all with different access scopes</li>
+  <li><strong>Microchip federated lookup</strong> — scan a chip ID, get the registry pointer without exposing owner PII</li>
+  <li><strong>Pet insurance</strong> — pre-authorization and adjudication shapes for Trupanion VetDirectPay and post-service insurers</li>
+</ul>
+
+<div class="callout callout-info">
+  <span class="icon">ℹ️</span>
+  <div><strong>Not a FHIR Implementation Guide.</strong> VHIR is its own standard. It doesn't use FHIR namespaces, resource types, or tooling. If you know FHIR, you'll find VHIR familiar but simpler. If you don't know FHIR, VHIR is designed to be learned on its own.</div>
+</div>
+</section>
+
+<!-- ── Vet Med Primer ──────────────────────────────────────────────────────── -->
+<section id="vet-primer">
+<h2>Veterinary Medicine Primer</h2>
+<p>This section explains vet-specific concepts that appear throughout the API. Skip it if you work with veterinary data daily.</p>
+
+<h3>Practice Types</h3>
+<div class="callout callout-vet">
+  <span class="icon">🐾</span>
+  <div>
+    <strong>Companion animal</strong> (small animal) practice treats dogs, cats, rabbits, birds, and exotic pets. Most urban clinics fall here. Visits are individual animal → owner interactions, similar to a human GP.<br><br>
+    <strong>Large animal / equine</strong> practice treats horses, cattle, pigs, sheep, goats. Vets often travel to farms (ambulatory practice). Horses are treated individually; cattle and pigs are often treated as herds.<br><br>
+    <strong>Mixed practice</strong> treats both. Common in rural areas.
+  </div>
+</div>
+
+<h3>PIMS — Practice Information Management Systems</h3>
+<p>A PIMS is the all-in-one software a clinic uses: medical records, invoicing, scheduling, inventory, reminders. Think of it as the EHR (Electronic Health Record) + practice management software combined. Examples include ezyVet, Vetspire, Cornerstone (IDEXX), Avimark, Provet Cloud. Each has its own proprietary data format — VHIR is the common language between them.</p>
+
+<h3>Food Animal vs Companion Animal Medicine</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Concept</th><th>Companion animal</th><th>Food animal</th></tr></thead>
+<tbody>
+<tr><td>Subject</td><td>Individual pet</td><td>Individual or herd</td></tr>
+<tr><td>Identity</td><td>Name + microchip</td><td>USDA 840 EID tag, tattoo, or brand</td></tr>
+<tr><td>Drug tracking</td><td>Dose, duration, refills</td><td>Withdrawal periods (milk/meat/eggs)</td></tr>
+<tr><td>Owner</td><td>Pet owner / family</td><td>Farm operator (may be a company)</td></tr>
+<tr><td>Key regulator</td><td>State veterinary board</td><td>FDA (AMDUCA), USDA FSIS</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Microchips</h3>
+<p>Pet microchips are passive RFID transponders — they have no battery and don't transmit continuously. A scanner held close to the animal induces a current in the chip, which then broadcasts its ID number for one brief moment. The dominant standard is <strong>ISO 11784/11785</strong> (FDX-B), which defines a 15-digit decimal ID. Older US chips used 125 kHz frequencies (Avid, HomeAgain pre-ISO) and are <em>not</em> compatible with ISO scanners.</p>
+<div class="callout callout-vet">
+  <span class="icon">🔬</span>
+  <div>ISO 11784 chip IDs are 15 decimal digits. The first three digits are the country or manufacturer code — <code>956</code> is the ISO country code for an international/manufacturer allocation. A chip starting with <code>840</code> is USDA-registered (US livestock).</div>
+</div>
+
+<h3>Withdrawal Periods</h3>
+<p>When a food-producing animal (dairy cow, beef cattle, laying hen) is given a drug, there is a mandatory waiting period before its milk, meat, or eggs can enter the food supply. This is the <strong>withdrawal period</strong>. Veterinarians are legally required to record it. VHIR stores this as <code>withdrawal: { milkHours, meatHours, eggsHours }</code> on a MedicationRequest and <code>withdrawalEnds: { milk, meat, eggs }</code> (computed dates) on a MedicationAdministration.</p>
+
+<h3>VFD — Veterinary Feed Directive</h3>
+<p>Medically important antibiotics (e.g., tetracyclines) in animal feed require a written order from a licensed vet — a Veterinary Feed Directive. In VHIR, <code>MedicationRequest.vfd: true</code> flags an order that must be treated as a VFD rather than a standard prescription.</p>
+
+<h3>Controlled Substances (DEA Schedules)</h3>
+<p>Drugs like ketamine (common equine anesthetic), opioids, and barbiturates (euthanasia solutions) are DEA-scheduled. Veterinarians must maintain a DEA number and special records for Schedule II drugs. VHIR carries <code>MedicationRequest.controlled.schedule</code> and <code>deaOrderFormNumber</code> for this purpose.</p>
+
+<h3>Terminology Systems</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>System</th><th>What it codes</th><th>VHIR usage</th></tr></thead>
+<tbody>
+<tr><td>AAHA Diagnostic Terms</td><td>3,500 vet diagnostic concepts</td><td><code>Condition.code</code></td></tr>
+<tr><td>SNOMED CT-VET</td><td>Vet extension to SNOMED CT (Virginia Tech)</td><td><code>Condition.code</code>, <code>Procedure.code</code></td></tr>
+<tr><td>NCBI Taxonomy</td><td>Species IDs (e.g., 9615 = dog)</td><td><code>Animal.species</code> codes</td></tr>
+<tr><td>VHIR vaccine ValueSet</td><td>Curated vaccine codes (rabies, DHPP, FVRCP…)</td><td><code>Immunization.vaccineCode</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- ── Quick Start ─────────────────────────────────────────────────────────── -->
+<section id="quickstart">
+<h2>Quick Start</h2>
+
+<h3>Run the Reference Server</h3>
+<p>The server requires Postgres 16. The included <code>docker-compose.yml</code> handles everything:</p>
+<div class="code-label">shell <span class="lang-badge">bash</span></div>
+<pre><code><span class="cm"># Clone the repo and start Postgres + server</span>
+git clone https://github.com/vhir/vhir
+cd vhir/server
+docker compose up -d postgres
+uv sync
+uv run uvicorn vhir_server.main:app --reload --port 8000</code></pre>
+
+<p>The server starts on <code>http://localhost:8000</code>. Interactive API docs are at <code>/v1/_docs</code>.</p>
+
+<div class="callout callout-tip">
+  <span class="icon">💡</span>
+  <div><strong>Dev token mode is on by default.</strong> Requests without an <code>Authorization</code> header automatically receive <code>system/*.read system/*.write</code> permissions. You can <code>curl</code> the API immediately without setting up OAuth2. Disable with <code>DEV_TOKEN_MODE=false</code>.</div>
+</div>
+
+<h3>Your First API Calls</h3>
+<div class="code-label">Create an animal <span class="lang-badge">bash</span></div>
+<pre><code>curl -s -X POST http://localhost:8000/v1/Animal \
+  -H <span class="st">"Content-Type: application/json"</span> \
+  -d <span class="st">'{
+    "resourceType": "Animal",
+    "name": "Biscuit",
+    "species": "canis-familiaris",
+    "breed": "Labrador Retriever",
+    "sex": "male",
+    "neuterStatus": "neutered",
+    "identifiers": [{"type": "microchip-iso", "value": "956000004287442"}]
+  }'</span> | jq <span class="st">'.'</span></code></pre>
+
+<div class="code-label">Response <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Animal"</span>,
+  <span class="pk">"id"</span>: <span class="st">"01HX7BKZM0ABCDEF123456789"</span>,   <span class="cm">// ULID — server-assigned</span>
+  <span class="pk">"meta"</span>: {
+    <span class="pk">"version"</span>: <span class="nm">1</span>,
+    <span class="pk">"lastUpdated"</span>: <span class="st">"2026-05-17T14:22:10Z"</span>
+  },
+  <span class="pk">"name"</span>: <span class="st">"Biscuit"</span>,
+  <span class="pk">"species"</span>: <span class="st">"canis-familiaris"</span>,
+  <span class="pk">"identifiers"</span>: [{<span class="pk">"type"</span>: <span class="st">"microchip-iso"</span>, <span class="pk">"value"</span>: <span class="st">"956000004287442"</span>}]
+}</code></pre>
+
+<div class="code-label">Search by microchip <span class="lang-badge">bash</span></div>
+<pre><code>curl -s <span class="st">"http://localhost:8000/v1/Animal?identifier=microchip-iso|956000004287442"</span> | jq <span class="st">'.total'</span></code></pre>
+
+<div class="code-label">Look up a lost pet chip <span class="lang-badge">bash</span></div>
+<pre><code>curl -s -X POST http://localhost:8000/v1/\$lookup-microchip \
+  -H <span class="st">"Content-Type: application/json"</span> \
+  -d <span class="st">'{"chipId": "956000004287442"}'</span></code></pre>
+</section>
+
+<!-- ── Architecture ────────────────────────────────────────────────────────── -->
+<section id="architecture">
+<h2>Architecture</h2>
+
+<h3>Repository Layout</h3>
+<div class="code-label">Monorepo structure <span class="lang-badge">text</span></div>
+<pre><code>vhir/
+├── spec/                    <span class="cm"># The standard itself</span>
+│   ├── schemas/             <span class="cm"># JSON Schema 2020-12, one file per resource</span>
+│   └── valuesets/           <span class="cm"># Species, identifier types, vaccine codes</span>
+│
+├── server/                  <span class="cm"># Reference implementation</span>
+│   ├── vhir_server/
+│   │   ├── api/             <span class="cm"># FastAPI routers (one per resource group)</span>
+│   │   ├── core/models.py   <span class="cm"># All Pydantic v2 models</span>
+│   │   ├── storage/         <span class="cm"># Postgres JSONB tables + repository</span>
+│   │   ├── search/engine.py <span class="cm"># Query param → SQL translator</span>
+│   │   ├── auth/smart.py    <span class="cm"># OAuth2 scopes + dev token mode</span>
+│   │   └── registry/        <span class="cm"># Microchip federated lookup broker</span>
+│   └── tests/               <span class="cm"># pytest + httpx, 42 tests</span>
+│
+├── adapters/ezyvet/          <span class="cm"># ezyVet → VHIR sync adapter (planned)</span>
+└── docs/                    <span class="cm"># This file + walkthrough scripts</span></code></pre>
+
+<h3>Server Stack</h3>
+<div class="card-grid">
+  <div class="card">
+    <strong>FastAPI</strong>
+    <p style="margin-top:.4rem">Async Python web framework. Handles routing, request validation (via Pydantic), and auto-generates OpenAPI docs at <code>/v1/_docs</code>.</p>
+  </div>
+  <div class="card">
+    <strong>Pydantic v2</strong>
+    <p style="margin-top:.4rem">Request/response models with runtime validation. All 20 resource types are defined in <code>core/models.py</code>.</p>
+  </div>
+  <div class="card">
+    <strong>SQLAlchemy 2.0 async + asyncpg</strong>
+    <p style="margin-top:.4rem">Async Postgres driver. All DB operations are non-blocking. <code>ResourceRepository</code> wraps all CRUD operations.</p>
+  </div>
+  <div class="card">
+    <strong>Postgres 16 JSONB</strong>
+    <p style="margin-top:.4rem">Each resource type has its own table with a <code>JSONB body</code> column. GIN indexes on frequently-searched array fields (identifiers, owners, members).</p>
+  </div>
+</div>
+
+<h3>Storage Layout</h3>
+<p>One table per resource type keeps indexes natural and avoids type-dispatch overhead. All tables share the same five columns:</p>
+<div class="code-label">SQL <span class="lang-badge">sql</span></div>
+<pre><code>CREATE TABLE animal (
+  id           TEXT PRIMARY KEY,             <span class="cm">-- ULID, server-assigned</span>
+  version      INTEGER NOT NULL,             <span class="cm">-- monotonically increasing</span>
+  last_updated TIMESTAMPTZ NOT NULL,
+  body         JSONB NOT NULL,               <span class="cm">-- full resource JSON</span>
+  deleted      BOOLEAN NOT NULL DEFAULT false <span class="cm">-- soft delete</span>
+);
+
+<span class="cm">-- GIN indexes for array fields frequently searched via JSONB containment</span>
+CREATE INDEX ix_animal_identifiers ON animal USING GIN ((body->'identifiers'));
+CREATE INDEX ix_animal_owners      ON animal USING GIN ((body->'owners'));</code></pre>
+
+<p>A separate <code>resource_history</code> append-only table records every create / update / delete with the full body snapshot, enabling audit trails.</p>
+
+<h3>Resource IDs</h3>
+<p>All resource IDs are <strong>ULIDs</strong> (Universally Unique Lexicographically Sortable Identifiers). ULIDs are 26-character Base32 strings that embed a millisecond timestamp prefix, making them naturally sortable by creation time — useful for pagination. The server always assigns IDs; clients never specify them.</p>
+<div class="code-label">Example ULID</div>
+<pre><code>01HX7BKZM0ABCDEFGHJ12345AB
+└── timestamp ──┘└── random ─┘</code></pre>
+</section>
+
+<!-- ── REST Conventions ────────────────────────────────────────────────────── -->
+<section id="conventions">
+<h2>REST Conventions</h2>
+
+<h3>Endpoints</h3>
+<p>Every resource type exposes a standard five-operation surface:</p>
+<div class="endpoint-list">
+  <div class="endpoint-row"><span class="method POST">POST</span><span class="ep-path">/v1/{Type}</span><span class="ep-desc">Create (server assigns ULID, returns 201)</span></div>
+  <div class="endpoint-row"><span class="method GET">GET</span><span class="ep-path">/v1/{Type}/{id}</span><span class="ep-desc">Read by ID (returns 200 or 404)</span></div>
+  <div class="endpoint-row"><span class="method PUT">PUT</span><span class="ep-path">/v1/{Type}/{id}</span><span class="ep-desc">Full replacement update (returns 200)</span></div>
+  <div class="endpoint-row"><span class="method DELETE">DELETE</span><span class="ep-path">/v1/{Type}/{id}</span><span class="ep-desc">Soft delete — sets deleted=true (returns 204)</span></div>
+  <div class="endpoint-row"><span class="method GET">GET</span><span class="ep-path">/v1/{Type}?param=value</span><span class="ep-desc">Search → Bundle searchset (returns 200)</span></div>
+</div>
+
+<h3>Content Type</h3>
+<p>VHIR uses the MIME type <code>application/vhir+json</code>. The reference server also accepts and returns <code>application/json</code> for compatibility. Always send <code>Content-Type: application/json</code> (or <code>application/vhir+json</code>) on POST / PUT requests.</p>
+
+<h3>Optimistic Concurrency</h3>
+<p>Every response includes an <code>ETag</code> header set to the current version number in quotes (e.g., <code>ETag: "3"</code>). To prevent accidental overwrites, send <code>If-Match: "3"</code> on a PUT request. If the version has changed since you read the resource, the server returns <code>412 Precondition Failed</code>.</p>
+<div class="code-label">Concurrent update example <span class="lang-badge">bash</span></div>
+<pre><code><span class="cm"># Read returns ETag: "2"</span>
+curl -s http://localhost:8000/v1/Animal/01HX...
+
+<span class="cm"># Update — must include If-Match with the version you read</span>
+curl -s -X PUT http://localhost:8000/v1/Animal/01HX... \
+  -H <span class="st">"If-Match: \"2\""</span> \
+  -H <span class="st">"Content-Type: application/json"</span> \
+  -d <span class="st">'{...}'</span>
+
+<span class="cm"># If someone else updated it first, you get 412 Precondition Failed</span></code></pre>
+
+<h3>References</h3>
+<p>References between resources use the format <code>"ResourceType/id"</code> in a <code>ref</code> field:</p>
+<div class="code-label">json</div>
+<pre><code>{
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX7BKZM0ABCDEF123456789"</span> },
+  <span class="pk">"requester"</span>: { <span class="pk">"ref"</span>: <span class="st">"Practitioner/01HX7BKZ..."</span>, <span class="pk">"display"</span>: <span class="st">"Dr. Smith DVM"</span> }
+}</code></pre>
+
+<h3>Soft Deletes</h3>
+<p>DELETE sets <code>deleted = true</code> in the database; the row is never physically removed. A deleted resource returns 404 on GET. The history table retains all versions including the delete event. To restore a deleted resource, you must create a new one — there is no undelete endpoint in v0.</p>
+</section>
+
+<!-- ── Resource Envelope ───────────────────────────────────────────────────── -->
+<section id="resources-envelope">
+<h2>Resource Envelope</h2>
+<p>Every VHIR resource shares a common envelope structure. Fields in <code>meta</code> are server-managed and will be overwritten if you include them in a POST / PUT body.</p>
+<div class="code-label">json</div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Animal"</span>,        <span class="cm">// Always the resource type name</span>
+  <span class="pk">"id"</span>: <span class="st">"01HX7BKZM0ABCDEF123456789"</span>, <span class="cm">// ULID — server-assigned</span>
+  <span class="pk">"meta"</span>: {
+    <span class="pk">"version"</span>: <span class="nm">3</span>,                     <span class="cm">// Increments on every update</span>
+    <span class="pk">"lastUpdated"</span>: <span class="st">"2026-05-17T14:32:11Z"</span>,
+    <span class="pk">"profiles"</span>: [<span class="st">"vhir/Animal-Canine"</span>] <span class="cm">// Optional conformance profiles</span>
+  },
+  <span class="pk">"extensions"</span>: {               <span class="cm">// Vendor-specific data — open-content slot</span>
+    <span class="pk">"com.ezyvet/internalId"</span>: <span class="st">"12345"</span>
+  },
+  <span class="cm">// ... resource-specific fields</span>
+}</code></pre>
+
+<h3>Bundle — Search Response Envelope</h3>
+<p>Search operations return a <code>Bundle</code> with <code>type: "searchset"</code>:</p>
+<div class="code-label">json</div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Bundle"</span>,
+  <span class="pk">"type"</span>: <span class="st">"searchset"</span>,
+  <span class="pk">"total"</span>: <span class="nm">47</span>,              <span class="cm">// Total matching records (not just this page)</span>
+  <span class="pk">"entry"</span>: [
+    { <span class="pk">"resource"</span>: { <span class="cm">/* Animal */</span> } },
+    { <span class="pk">"resource"</span>: { <span class="cm">/* Animal */</span> } }
+  ]
+}</code></pre>
+</section>
+
+<!-- ── Auth ────────────────────────────────────────────────────────────────── -->
+<section id="auth">
+<h2>Authentication</h2>
+
+<h3>Dev Token Mode (Default)</h3>
+<p>When <code>DEV_TOKEN_MODE=true</code> (the default), requests without an <code>Authorization</code> header automatically receive full system-level permissions. This lets you explore the API with plain <code>curl</code> without configuring OAuth2.</p>
+<p>To get a dev JWT token explicitly (for testing auth code paths):</p>
+<div class="code-label">bash</div>
+<pre><code>curl -s -X POST http://localhost:8000/oauth/token \
+  -H <span class="st">"Content-Type: application/json"</span> \
+  -d <span class="st">'{"grant_type":"dev","subject":"vet-user","role":"veterinarian","org_id":"clinic-1"}'</span></code></pre>
+
+<h3>VHIR-SMART Scopes</h3>
+<p>The scope format mirrors SMART-on-FHIR: <code>{context}/{Resource}.{action}</code></p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Scope</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>system/*.read</td><td>Read any resource (server-to-server, admin)</td></tr>
+<tr><td>system/*.write</td><td>Write any resource</td></tr>
+<tr><td>user/Animal.read</td><td>Read animals accessible to the logged-in user</td></tr>
+<tr><td>animal/Observation.read</td><td>Read observations for a specific animal context</td></tr>
+<tr><td>owner/MedicationRequest.read</td><td>Read prescriptions for animals owned by the token owner</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout callout-warn">
+  <span class="icon">⚠️</span>
+  <div>Set <code>DEV_TOKEN_MODE=false</code> and configure a real JWT secret before exposing the server outside localhost. See <code>vhir_server/config.py</code> for all environment variables.</div>
+</div>
+</section>
+
+<!-- ── Search ──────────────────────────────────────────────────────────────── -->
+<section id="search">
+<h2>Search &amp; Filtering</h2>
+
+<h3>Search Parameter Types</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Kind</th><th>Example</th><th>Behaviour</th></tr></thead>
+<tbody>
+<tr><td>token</td><td><code>?species=canis-familiaris</code></td><td>Exact match on a JSONB string field</td></tr>
+<tr><td>string</td><td><code>?name=bis</code></td><td>Case-insensitive prefix match</td></tr>
+<tr><td>date</td><td><code>?birthDate=ge2020-01-01&amp;birthDate=le2024-12-31</code></td><td>Comparators: ge, le, gt, lt, or bare value for exact day</td></tr>
+<tr><td>reference</td><td><code>?subject=Animal/01HX7...</code></td><td>Exact match on <code>ref</code> within a nested object</td></tr>
+<tr><td>identifier</td><td><code>?identifier=microchip-iso|956000004287442</code></td><td>Searches inside an identifiers array; pipe separates type and value</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Pagination</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Parameter</th><th>Default</th><th>Max</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>_count</code></td><td>20</td><td>200</td><td>Number of results per page</td></tr>
+<tr><td><code>_offset</code></td><td>0</td><td>—</td><td>Zero-based offset into the result set</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="code-label">Paginated search <span class="lang-badge">bash</span></div>
+<pre><code><span class="cm"># Page 1: records 1–20</span>
+curl <span class="st">"http://localhost:8000/v1/Animal?species=canis-familiaris&amp;_count=20&amp;_offset=0"</span>
+
+<span class="cm"># Page 2: records 21–40</span>
+curl <span class="st">"http://localhost:8000/v1/Animal?species=canis-familiaris&amp;_count=20&amp;_offset=20"</span></code></pre>
+
+<h3>Identifier Search Syntax</h3>
+<p>The <code>identifier</code> search param searches inside the <code>identifiers[]</code> array. Use pipe notation to match both type and value simultaneously:</p>
+<div class="code-label">bash</div>
+<pre><code><span class="cm"># Match by type AND value (preferred — most precise)</span>
+curl <span class="st">"http://localhost:8000/v1/Animal?identifier=microchip-iso|956000004287442"</span>
+
+<span class="cm"># Match by value only (searches across all identifier types)</span>
+curl <span class="st">"http://localhost:8000/v1/Animal?identifier=956000004287442"</span>
+
+<span class="cm"># USDA 840 livestock EID</span>
+curl <span class="st">"http://localhost:8000/v1/Animal?identifier=usda-840|840000012345678"</span></code></pre>
+</section>
+
+<!-- ═══════════════════ M0 RESOURCES ═══════════════════════════════════════ -->
+
+<section id="animal">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>Animal</h2>
+<p>The central resource — equivalent to FHIR's <code>Patient</code> but renamed to eliminate ambiguity. Every clinical record (Observation, Condition, MedicationRequest) points to an Animal.</p>
+
+<div class="callout callout-vet">
+  <span class="icon">🐕</span>
+  <div>In VHIR, "animal" means any non-human patient: dogs, cats, horses, cattle, birds, reptiles, fish, etc. The <code>species</code> field uses VHIR's curated vocabulary (derived from NCBI Taxonomy). <code>breed</code> is free text in v0; future profiles will bind it to AKC/CKC/FCI registries per species.</div>
+</div>
+
+<h3>Key Fields</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Field</th><th>Type</th><th>Req?</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>species</td><td>string</td><td><span class="req">required</span></td><td>VHIR species code: <code>canis-familiaris</code>, <code>felis-catus</code>, <code>bos-taurus</code>, <code>equus-caballus</code>, etc.</td></tr>
+<tr><td>name</td><td>string</td><td><span class="opt">optional</span></td><td>The animal's name (not required — livestock often have none)</td></tr>
+<tr><td>breed</td><td>string</td><td><span class="opt">optional</span></td><td>Free text breed; will be vocabulary-bound in future profiles</td></tr>
+<tr><td>sex</td><td>string</td><td><span class="opt">optional</span></td><td><code>male</code>, <code>female</code>, <code>unknown</code></td></tr>
+<tr><td>neuterStatus</td><td>string</td><td><span class="opt">optional</span></td><td><code>neutered</code>, <code>spayed</code>, <code>intact</code>, <code>unknown</code></td></tr>
+<tr><td>birthDate</td><td>date</td><td><span class="opt">optional</span></td><td>ISO 8601 date. Use <code>birthDateEstimated: true</code> when approximate.</td></tr>
+<tr><td>weightKg</td><td>number</td><td><span class="opt">optional</span></td><td>Current weight in kilograms</td></tr>
+<tr><td>identifiers</td><td>Identifier[]</td><td><span class="opt">optional</span></td><td>Array of typed identifiers (see below)</td></tr>
+<tr><td>owners</td><td>OwnerLink[]</td><td><span class="opt">optional</span></td><td>List of owners with roles. First <code>primary</code> is the data-controller.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Identifier Types</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>type</th><th>Description</th><th>Format</th></tr></thead>
+<tbody>
+<tr><td>microchip-iso</td><td>ISO 11784 FDX-B chip (standard since 1996)</td><td>15 decimal digits</td></tr>
+<tr><td>microchip-legacy-125khz</td><td>Avid / HomeAgain pre-ISO chip</td><td>10–15 hex digits</td></tr>
+<tr><td>usda-840</td><td>US livestock Electronic ID (NAIS)</td><td>15 decimal digits starting with 840</td></tr>
+<tr><td>premises-id</td><td>USDA Premises ID (PIN) or EU holding number</td><td>7-character alphanumeric</td></tr>
+<tr><td>tattoo</td><td>Physical tattoo (racing greyhounds, lab animals)</td><td>free text</td></tr>
+<tr><td>leg-band</td><td>Poultry, exotic birds, raptors</td><td>free text</td></tr>
+<tr><td>pedigree</td><td>AKC / CKC / FCI / breed registry number</td><td>free text</td></tr>
+<tr><td>practice-internal</td><td>Clinic's own patient ID</td><td>free text</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Example</h3>
+<div class="code-label">POST /v1/Animal <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Animal"</span>,
+  <span class="pk">"name"</span>: <span class="st">"Biscuit"</span>,
+  <span class="pk">"species"</span>: <span class="st">"canis-familiaris"</span>,
+  <span class="pk">"breed"</span>: <span class="st">"Labrador Retriever"</span>,
+  <span class="pk">"sex"</span>: <span class="st">"male"</span>,
+  <span class="pk">"neuterStatus"</span>: <span class="st">"neutered"</span>,
+  <span class="pk">"birthDate"</span>: <span class="st">"2019-03-15"</span>,
+  <span class="pk">"weightKg"</span>: <span class="nm">32.5</span>,
+  <span class="pk">"identifiers"</span>: [
+    { <span class="pk">"type"</span>: <span class="st">"microchip-iso"</span>, <span class="pk">"value"</span>: <span class="st">"956000004287442"</span> },
+    { <span class="pk">"type"</span>: <span class="st">"pedigree"</span>, <span class="pk">"value"</span>: <span class="st">"AKC-SR12345678"</span> }
+  ],
+  <span class="pk">"owners"</span>: [
+    { <span class="pk">"ref"</span>: <span class="st">"Owner/01HX..."</span>, <span class="pk">"role"</span>: <span class="st">"primary"</span> }
+  ]
+}</code></pre>
+
+<h3>Search Parameters</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Param</th><th>Kind</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>name</td><td>string</td><td><code>?name=bis</code></td></tr>
+<tr><td>species</td><td>token</td><td><code>?species=felis-catus</code></td></tr>
+<tr><td>breed</td><td>string</td><td><code>?breed=retriever</code></td></tr>
+<tr><td>sex</td><td>token</td><td><code>?sex=female</code></td></tr>
+<tr><td>neuterStatus</td><td>token</td><td><code>?neuterStatus=spayed</code></td></tr>
+<tr><td>birthDate</td><td>date</td><td><code>?birthDate=ge2020-01-01</code></td></tr>
+<tr><td>identifier</td><td>identifier</td><td><code>?identifier=microchip-iso|956000004287442</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="owner">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>Owner</h2>
+<p>The human client — animal owner, guardian, or responsible party. Intentionally a separate first-class resource (not a FHIR RelatedPerson kludge). One animal can have multiple owners with different roles.</p>
+
+<h3>Owner Roles (on Animal.owners[])</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Role</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>primary</td><td>Legal owner / data-controller. First primary owner is the billing contact.</td></tr>
+<tr><td>co-owner</td><td>Joint legal owner (e.g., divorce settlement, co-breeding arrangement)</td></tr>
+<tr><td>breeder</td><td>Retained interest by the breeder (common in pedigree dogs/horses)</td></tr>
+<tr><td>trainer</td><td>Day-to-day custodian (equine boarding, racing)</td></tr>
+<tr><td>farm-staff</td><td>Worker responsible for a herd subset</td></tr>
+<tr><td>guardian</td><td>Temporary guardian (foster, emergency boarding)</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Example</h3>
+<div class="code-label">POST /v1/Owner <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Owner"</span>,
+  <span class="pk">"name"</span>: { <span class="pk">"given"</span>: <span class="st">"Carlos"</span>, <span class="pk">"family"</span>: <span class="st">"Reyes"</span> },
+  <span class="pk">"telecom"</span>: [
+    { <span class="pk">"system"</span>: <span class="st">"email"</span>, <span class="pk">"value"</span>: <span class="st">"carlos@example.com"</span> },
+    { <span class="pk">"system"</span>: <span class="st">"phone"</span>, <span class="pk">"value"</span>: <span class="st">"+1-555-9999"</span>, <span class="pk">"use"</span>: <span class="st">"mobile"</span> }
+  ]
+}</code></pre>
+</section>
+
+<section id="practitioner">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>Practitioner</h2>
+<p>A licensed veterinary professional: veterinarian (DVM/VMD), technician (RVT/LVT/CVT), or specialist (DACVIM, DACVS, DACVO, etc.).</p>
+
+<h3>Qualifications</h3>
+<p>The <code>qualifications[]</code> array holds one entry per credential. Key fields:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Field</th><th>Description</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>code</td><td>Credential abbreviation</td><td><code>DVM</code>, <code>VMD</code>, <code>RVT</code>, <code>DACVIM</code></td></tr>
+<tr><td>licenseNumber</td><td>State license number</td><td><code>CA-DVM-54321</code></td></tr>
+<tr><td>jurisdiction</td><td>Licensing state/country</td><td><code>US-CA</code>, <code>GB</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>DEA registration (<code>deaNumber</code>) and NPI number (<code>npiNumber</code>) are top-level fields because they are used on every controlled-substance prescription.</p>
+</section>
+
+<section id="practitioner-role">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>PractitionerRole</h2>
+<p>The many-to-many join between a Practitioner and an Organization — with role, permissions, and availability. A DVM might be attending vet at Clinic A on Mon/Wed/Fri and relief vet at Clinic B on Tuesdays.</p>
+
+<h3>Roles & Permissions</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Role value</th><th>Typical permissions</th></tr></thead>
+<tbody>
+<tr><td>veterinarian</td><td>Full clinical write access; can prescribe controlled substances</td></tr>
+<tr><td>technician</td><td>Can record vitals, observations; cannot prescribe</td></tr>
+<tr><td>receptionist</td><td>Scheduling, invoicing; read-only on clinical records</td></tr>
+<tr><td>specialist-consultant</td><td>Limited to referred cases</td></tr>
+<tr><td>intern</td><td>Supervised write access</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="organization">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>Organization</h2>
+<p>Any legal entity in the system: clinic, referral hospital, reference lab, pharmacy, microchip registry, insurer, or farm.</p>
+
+<h3>Organization Types</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>type value</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>clinic</td><td>Primary care GP practice</td></tr>
+<tr><td>referral-hospital</td><td>Specialty / emergency hospital</td></tr>
+<tr><td>reference-lab</td><td>Diagnostic laboratory (IDEXX, Antech, Zoetis)</td></tr>
+<tr><td>pharmacy</td><td>Compounding or dispensing pharmacy</td></tr>
+<tr><td>microchip-registry</td><td>HomeAgain, AKC Reunite, Found Animals, etc.</td></tr>
+<tr><td>insurer</td><td>Trupanion, Nationwide, Pets Best, Hartville</td></tr>
+<tr><td>farm</td><td>Livestock operation with a USDA Premises ID</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="encounter">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>Encounter</h2>
+<p>A visit or case — the clinical event that ties all other records together. Observations, Conditions, Procedures, and MedicationRequests all reference an Encounter.</p>
+
+<div class="callout callout-info">
+  <span class="icon">ℹ️</span>
+  <div><code>class</code> is a reserved word in Python. In the JSON payload, use <code>"class"</code> normally. The Pydantic model exposes it as <code>cls</code> internally but serializes back to <code>"class"</code> — you'll never see this difference through the API.</div>
+</div>
+
+<h3>Encounter Classes</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>class value</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>outpatient</td><td>Standard clinic visit — animal goes home same day</td></tr>
+<tr><td>inpatient</td><td>Hospitalization overnight or longer</td></tr>
+<tr><td>emergency</td><td>Emergency / after-hours presentation</td></tr>
+<tr><td>ambulatory</td><td>Vet travels to the farm or stable (large animal)</td></tr>
+<tr><td>telemedicine</td><td>Remote video consultation</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Example</h3>
+<div class="code-label">POST /v1/Encounter <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Encounter"</span>,
+  <span class="pk">"status"</span>: <span class="st">"completed"</span>,
+  <span class="pk">"class"</span>: <span class="st">"outpatient"</span>,
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+  <span class="pk">"owner"</span>: { <span class="pk">"ref"</span>: <span class="st">"Owner/01HX..."</span> },
+  <span class="pk">"practitioners"</span>: [
+    { <span class="pk">"practitioner"</span>: { <span class="pk">"ref"</span>: <span class="st">"Practitioner/01HX..."</span> }, <span class="pk">"role"</span>: <span class="st">"attending"</span> }
+  ],
+  <span class="pk">"period"</span>: { <span class="pk">"start"</span>: <span class="st">"2026-05-17T14:00:00Z"</span>, <span class="pk">"end"</span>: <span class="st">"2026-05-17T15:00:00Z"</span> },
+  <span class="pk">"reasonText"</span>: <span class="st">"Annual wellness exam"</span>
+}</code></pre>
+</section>
+
+<section id="observation">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>Observation</h2>
+<p>Any measured or observed clinical finding: vital signs, lab results, body condition score (BCS), imaging findings, or wearable device data.</p>
+
+<h3>Panel Observations (component[])</h3>
+<p>A vital signs panel records multiple measurements as a single Observation using <code>component[]</code>. This is preferable to creating five separate Observations for a routine vitals check:</p>
+<div class="code-label">Vital signs panel <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Observation"</span>,
+  <span class="pk">"status"</span>: <span class="st">"final"</span>,
+  <span class="pk">"category"</span>: [<span class="st">"vital-signs"</span>],
+  <span class="pk">"code"</span>: { <span class="pk">"code"</span>: <span class="st">"vitals-panel"</span>, <span class="pk">"display"</span>: <span class="st">"Vital signs panel"</span> },
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+  <span class="pk">"effectiveDateTime"</span>: <span class="st">"2026-05-17T14:10:00Z"</span>,
+  <span class="pk">"component"</span>: [
+    { <span class="pk">"code"</span>: { <span class="pk">"code"</span>: <span class="st">"body-weight"</span> }, <span class="pk">"valueQuantity"</span>: { <span class="pk">"value"</span>: <span class="nm">32.5</span>, <span class="pk">"unit"</span>: <span class="st">"kg"</span> } },
+    { <span class="pk">"code"</span>: { <span class="pk">"code"</span>: <span class="st">"temperature"</span> },  <span class="pk">"valueQuantity"</span>: { <span class="pk">"value"</span>: <span class="nm">38.6</span>, <span class="pk">"unit"</span>: <span class="st">"C"</span>  } },
+    { <span class="pk">"code"</span>: { <span class="pk">"code"</span>: <span class="st">"heart-rate"</span>  },  <span class="pk">"valueQuantity"</span>: { <span class="pk">"value"</span>: <span class="nm">88</span>,   <span class="pk">"unit"</span>: <span class="st">"/min"</span> } }
+  ],
+  <span class="pk">"interpretation"</span>: <span class="st">"normal"</span>
+}</code></pre>
+
+<div class="callout callout-vet">
+  <span class="icon">🌡️</span>
+  <div>Normal vital sign ranges differ by species. A healthy dog's temperature is 38.3–39.2 °C; a horse's is 37.2–38.3 °C; a rabbit's is 38.5–40 °C. <code>interpretation</code> should always be set by the recording clinician against the appropriate species baseline, not derived automatically.</div>
+</div>
+</section>
+
+<section id="condition">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>Condition</h2>
+<p>A diagnosis or problem on the problem list. <code>code</code> is bound to a ValueSet combining AAHA Diagnostic Terms and SNOMED CT-VET.</p>
+<div class="code-label">POST /v1/Condition <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Condition"</span>,
+  <span class="pk">"status"</span>: <span class="st">"active"</span>,
+  <span class="pk">"code"</span>: {
+    <span class="pk">"system"</span>: <span class="st">"urn:aaha:diagnostic-terms"</span>,
+    <span class="pk">"code"</span>: <span class="st">"GI-001"</span>,
+    <span class="pk">"display"</span>: <span class="st">"Gastroenteritis"</span>
+  },
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+  <span class="pk">"encounter"</span>: { <span class="pk">"ref"</span>: <span class="st">"Encounter/01HX..."</span> }
+}</code></pre>
+</section>
+
+<section id="medication-request">
+<h2><span class="badge badge-blue" style="margin-right:.5rem;font-size:.85rem">M0</span>MedicationRequest</h2>
+<p>A prescription or treatment order. This is one of VHIR's most differentiating resources because it models food-animal and controlled-substance requirements that FHIR was never designed for.</p>
+
+<h3>Veterinary-Specific Fields</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Field</th><th>Description</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>withdrawal.milkHours</td><td>Hours before milk can be sold after last dose. Required by FDA for food-animal dairy drugs.</td><td><code>36</code></td></tr>
+<tr><td>withdrawal.meatHours</td><td>Hours before the animal can be slaughtered. Required for any drug used in meat-producing animals.</td><td><code>720</code></td></tr>
+<tr><td>withdrawal.eggsHours</td><td>Hours before eggs can be sold. Relevant for laying hens.</td><td><code>168</code></td></tr>
+<tr><td>vfd</td><td><code>true</code> if this is a Veterinary Feed Directive (antibiotic in feed). Requires special regulatory handling.</td><td><code>false</code></td></tr>
+<tr><td>extraLabel</td><td><code>true</code> if prescribed for a species or dose not on the approved drug label (ELDU — Extra-Label Drug Use). Common in exotic and food animal medicine.</td><td><code>true</code></td></tr>
+<tr><td>controlled.schedule</td><td>DEA schedule if the drug is controlled. <code>"II"</code>–<code>"V"</code> or <code>null</code>.</td><td><code>"III"</code></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Food Animal Example</h3>
+<div class="code-label">POST /v1/MedicationRequest — pirlimycin for dairy cow mastitis <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"MedicationRequest"</span>,
+  <span class="pk">"status"</span>: <span class="st">"active"</span>,
+  <span class="pk">"intent"</span>: <span class="st">"order"</span>,
+  <span class="pk">"medication"</span>: {
+    <span class="pk">"name"</span>: <span class="st">"Pirlimycin HCl 50mg/mL"</span>,
+    <span class="pk">"form"</span>: <span class="st">"intramammary infusion"</span>
+  },
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+  <span class="pk">"requester"</span>: { <span class="pk">"ref"</span>: <span class="st">"Practitioner/01HX..."</span> },
+  <span class="pk">"withdrawal"</span>: {
+    <span class="pk">"milkHours"</span>: <span class="nm">36</span>,    <span class="cm">// milk must not be sold for 36 hours after last dose</span>
+    <span class="pk">"meatHours"</span>: <span class="nm">720</span>    <span class="cm">// 30 days before slaughter</span>
+  },
+  <span class="pk">"extraLabel"</span>: <span class="kw">false</span>,
+  <span class="pk">"dosageInstruction"</span>: [
+    { <span class="pk">"route"</span>: <span class="st">"intramammary"</span>, <span class="pk">"text"</span>: <span class="st">"1 tube per affected quarter, once daily x 2d"</span> }
+  ]
+}</code></pre>
+</section>
+
+<!-- ═══════════════════ M1 RESOURCES ═══════════════════════════════════════ -->
+
+<section id="group">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>Group</h2>
+<p>A herd, flock, litter, or colony — a named collection of animals treated as a unit. <strong>Group is VHIR's biggest differentiator from FHIR.</strong> MedicationAdministration can target a Group directly, with per-member completion tracked in the same record.</p>
+
+<div class="callout callout-vet">
+  <span class="icon">🐄</span>
+  <div>In food animal medicine, a single veterinarian may treat hundreds of cattle in an afternoon. Recording one MedicationAdministration per animal would create thousands of records. The Group model lets you record the treatment at the herd level and track per-animal completion (and refusals) within a single resource — matching how vets actually work and what FDA record-keeping requires.</div>
+</div>
+
+<h3>Example</h3>
+<div class="code-label">POST /v1/Group — dairy herd <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Group"</span>,
+  <span class="pk">"name"</span>: <span class="st">"Pen 4"</span>,
+  <span class="pk">"type"</span>: <span class="st">"animal"</span>,
+  <span class="pk">"productionPurpose"</span>: <span class="st">"dairy"</span>,
+  <span class="pk">"premisesId"</span>: <span class="st">"US-PIN-WI-88888"</span>,
+  <span class="pk">"managingOrganization"</span>: { <span class="pk">"ref"</span>: <span class="st">"Organization/01HX..."</span> },
+  <span class="pk">"members"</span>: [
+    { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+    { <span class="pk">"ref"</span>: <span class="st">"Animal/01HY..."</span> }
+  ]
+}</code></pre>
+
+<h3>Production Purposes</h3>
+<p><code>productionPurpose</code> values: <code>dairy</code>, <code>beef</code>, <code>feedlot</code>, <code>layer</code>, <code>broiler</code>, <code>breeding</code>, <code>companion-litter</code>, <code>other</code></p>
+</section>
+
+<section id="location">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>Location</h2>
+<p>A physical or logical place: exam room, ICU ward, kennel, barn, pasture. Encounters reference Locations to record where care was delivered.</p>
+</section>
+
+<section id="device">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>Device</h2>
+<p>A physical device associated with an animal: microchip, USDA 840 EID ear tag, leg band, wearable activity monitor, or in-clinic monitor. The implant event itself is a Procedure.</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>type value</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>microchip-iso</td><td>ISO 11784 FDX-B passive RFID, 134.2 kHz</td></tr>
+<tr><td>microchip-legacy-125khz</td><td>Pre-ISO Avid / HomeAgain chip</td></tr>
+<tr><td>usda-840-eid</td><td>Official US livestock Electronic ID tag</td></tr>
+<tr><td>ear-tag</td><td>Visual/RFID tag (livestock)</td></tr>
+<tr><td>leg-band</td><td>Aluminum or plastic band (birds)</td></tr>
+<tr><td>wearable</td><td>Activity collar (PetPace, Whistle, FitBark)</td></tr>
+<tr><td>in-clinic-monitor</td><td>Anesthesia monitor, ECG machine, etc.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="code-label">POST /v1/Device — microchip implant record <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Device"</span>,
+  <span class="pk">"type"</span>: <span class="st">"microchip-iso"</span>,
+  <span class="pk">"status"</span>: <span class="st">"active"</span>,
+  <span class="pk">"identifiers"</span>: [{ <span class="pk">"type"</span>: <span class="st">"microchip-iso"</span>, <span class="pk">"value"</span>: <span class="st">"956000004287442"</span> }],
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+  <span class="pk">"manufacturer"</span>: <span class="st">"HomeAgain"</span>,
+  <span class="pk">"model"</span>: <span class="st">"Bio-Bond"</span>,
+  <span class="pk">"udi"</span>: <span class="st">"956000004287442"</span>
+}</code></pre>
+</section>
+
+<section id="device-metric">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>DeviceMetric</h2>
+<p>Describes what a device measures — relevant only for active wearables and in-clinic monitors. A PetPace collar measuring temperature continuously would have a DeviceMetric of category <code>measurement</code> and type <code>body-temperature</code>.</p>
+</section>
+
+<section id="procedure">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>Procedure</h2>
+<p>A clinical procedure: surgery, dental cleaning, radiograph, ultrasound, or chip implant. Codes are bound to SNOMED CT-VET.</p>
+
+<div class="code-label">POST /v1/Procedure — TPLO surgery <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Procedure"</span>,
+  <span class="pk">"status"</span>: <span class="st">"completed"</span>,
+  <span class="pk">"code"</span>: {
+    <span class="pk">"system"</span>: <span class="st">"http://snomed.info/sct"</span>,
+    <span class="pk">"code"</span>: <span class="st">"178294005"</span>,
+    <span class="pk">"display"</span>: <span class="st">"Tibial plateau leveling osteotomy"</span>
+  },
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+  <span class="pk">"encounter"</span>: { <span class="pk">"ref"</span>: <span class="st">"Encounter/01HX..."</span> },
+  <span class="pk">"performer"</span>: [
+    { <span class="pk">"practitioner"</span>: { <span class="pk">"ref"</span>: <span class="st">"Practitioner/01HX..."</span> }, <span class="pk">"role"</span>: <span class="st">"surgeon"</span> }
+  ],
+  <span class="pk">"performedDateTime"</span>: <span class="st">"2026-05-17T08:30:00Z"</span>,
+  <span class="pk">"bodySite"</span>: <span class="st">"right stifle"</span>
+}</code></pre>
+</section>
+
+<section id="immunization">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>Immunization</h2>
+<p>A vaccination event. Key differentiator from a Procedure: <code>nextDueDate</code> drives reminder generation in clinic management systems — rabies boosters, annual DHPP, equine 5-way, etc.</p>
+
+<h3>Common Vaccine Codes</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>code</th><th>Vaccine</th><th>Species</th></tr></thead>
+<tbody>
+<tr><td>rabies-1yr</td><td>Rabies 1-year (Imrab 1)</td><td>Dog, cat</td></tr>
+<tr><td>rabies-3yr</td><td>Rabies 3-year (Imrab 3)</td><td>Dog, cat</td></tr>
+<tr><td>dhpp</td><td>Distemper, Hepatitis, Parvo, Parainfluenza (core dog)</td><td>Dog</td></tr>
+<tr><td>fvrcp</td><td>Feline Viral Rhinotracheitis, Calicivirus, Panleukopenia (core cat)</td><td>Cat</td></tr>
+<tr><td>felv</td><td>Feline Leukemia Virus (non-core cat)</td><td>Cat</td></tr>
+<tr><td>equine-5way</td><td>EEE/WEE/VEE, Tetanus, Influenza, Rhinopneumonitis</td><td>Horse</td></tr>
+<tr><td>bvd</td><td>Bovine Viral Diarrhea (with IBR, BPI, BRSV)</td><td>Cattle</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="code-label">POST /v1/Immunization <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"Immunization"</span>,
+  <span class="pk">"status"</span>: <span class="st">"completed"</span>,
+  <span class="pk">"vaccineCode"</span>: { <span class="pk">"code"</span>: <span class="st">"rabies-3yr"</span>, <span class="pk">"display"</span>: <span class="st">"Rabies 3 Year (Imrab 3)"</span> },
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+  <span class="pk">"occurrenceDateTime"</span>: <span class="st">"2026-05-17T10:00:00Z"</span>,
+  <span class="pk">"lotNumber"</span>: <span class="st">"LOT-2026-A"</span>,
+  <span class="pk">"expirationDate"</span>: <span class="st">"2027-05-17"</span>,
+  <span class="pk">"nextDueDate"</span>: <span class="st">"2029-05-17"</span>,   <span class="cm">// 3 years later — drives reminder</span>
+  <span class="pk">"route"</span>: <span class="st">"subcutaneous"</span>,
+  <span class="pk">"site"</span>: <span class="st">"right-thoracic-limb"</span>
+}</code></pre>
+</section>
+
+<section id="medication-dispense">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>MedicationDispense</h2>
+<p>Pharmacy fulfillment of a MedicationRequest — records that the drug was physically dispensed (sent home with the owner or transferred to the farm). Always links back to the originating MedicationRequest via <code>authorizingPrescription</code>.</p>
+</section>
+
+<section id="medication-administration">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>MedicationAdministration</h2>
+<p>Records that a drug was actually given to an animal (or herd). This is distinct from MedicationRequest (the order) and MedicationDispense (dispensing). The key vet-specific feature is <strong>herd administration</strong>: when <code>subject</code> is a Group, <code>memberCompletion[]</code> tracks the status per animal.</p>
+
+<h3>Herd Administration</h3>
+<div class="code-label">POST /v1/MedicationAdministration — group treatment with withdrawal <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"MedicationAdministration"</span>,
+  <span class="pk">"status"</span>: <span class="st">"completed"</span>,
+  <span class="pk">"medication"</span>: { <span class="pk">"name"</span>: <span class="st">"Penicillin G 300,000 IU/mL"</span>, <span class="pk">"form"</span>: <span class="st">"injectable"</span> },
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Group/01HX..."</span> },  <span class="cm">// ← targets the whole herd</span>
+  <span class="pk">"performer"</span>: [{ <span class="pk">"ref"</span>: <span class="st">"Practitioner/01HX..."</span> }],
+  <span class="pk">"effectiveDateTime"</span>: <span class="st">"2026-05-17T07:00:00Z"</span>,
+  <span class="pk">"withdrawalEnds"</span>: {          <span class="cm">// Computed end dates for regulatory records</span>
+    <span class="pk">"meat"</span>: <span class="st">"2026-06-01"</span>,
+    <span class="pk">"milk"</span>: <span class="st">"2026-05-18"</span>
+  },
+  <span class="pk">"memberCompletion"</span>: [        <span class="cm">// Per-animal tracking within the group record</span>
+    { <span class="pk">"animal"</span>: <span class="st">"Animal/cow-101"</span>, <span class="pk">"status"</span>: <span class="st">"completed"</span>, <span class="pk">"effectiveDateTime"</span>: <span class="st">"2026-05-17T07:01:00Z"</span> },
+    { <span class="pk">"animal"</span>: <span class="st">"Animal/cow-102"</span>, <span class="pk">"status"</span>: <span class="st">"completed"</span>, <span class="pk">"effectiveDateTime"</span>: <span class="st">"2026-05-17T07:04:00Z"</span> },
+    { <span class="pk">"animal"</span>: <span class="st">"Animal/cow-103"</span>, <span class="pk">"status"</span>: <span class="st">"refused"</span> }   <span class="cm">// This one kicked</span>
+  ]
+}</code></pre>
+
+<div class="callout callout-vet">
+  <span class="icon">📋</span>
+  <div>FDA regulations (21 CFR 530) require food animal withdrawal records to be kept for 2 years. <code>withdrawalEnds</code> stores the computed calendar dates — not just the number of hours — so they're immediately queryable. A farm management system can run <code>GET /v1/MedicationAdministration?subject=Group/herd-1</code> and compute which animals are still in withdrawal today.</div>
+</div>
+</section>
+
+<section id="appointment">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>Appointment</h2>
+<p>A booked visit. References Animal as <code>subject</code> and Practitioners as participants. Can reference a Slot from the scheduling system.</p>
+</section>
+
+<section id="schedule-slot">
+<h2><span class="badge badge-green" style="margin-right:.5rem;font-size:.85rem">M1</span>Schedule &amp; Slot</h2>
+<p><strong>Schedule</strong> represents a practitioner's or room's calendar for a planning horizon. <strong>Slot</strong> is a time block within that Schedule. Appointments consume Slots. This three-resource model matches how clinic scheduling actually works: first you define when Dr. Kim is available (Schedule), the system creates free Slot blocks, and Appointment bookings mark those Slots as busy.</p>
+</section>
+
+<!-- ═══════════════════ M2 RESOURCES ═══════════════════════════════════════ -->
+
+<section id="insurance-claim">
+<h2><span class="badge badge-purple" style="margin-right:.5rem;font-size:.85rem">M2</span>InsuranceClaim</h2>
+<p>Pet insurance claim supporting the two dominant US workflows: <strong>Trupanion VetDirectPay</strong> (pre-authorization at time of service, insurer pays clinic directly) and <strong>post-service reimbursement</strong> (owner pays clinic, then claims from insurer — Nationwide, Pets Best, Hartville, ASPCA).</p>
+
+<div class="callout callout-vet">
+  <span class="icon">💳</span>
+  <div>
+    <strong>VetDirectPay (pre-auth):</strong> Owner presents at clinic → clinic submits pre-auth request with estimated cost → Trupanion responds with an approved amount → clinic performs treatment → Trupanion pays clinic directly. The owner only pays the deductible/co-pay.<br><br>
+    <strong>Post-service reimbursement:</strong> Owner pays the full invoice → submits a claim to their insurer with the invoice → insurer reimburses owner. More common among US pet insurers.
+  </div>
+</div>
+
+<h3>InsuranceClaim Sub-Objects</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Sub-object</th><th>Populated when</th><th>Key fields</th></tr></thead>
+<tbody>
+<tr><td>preAuth</td><td>claimType = "pre-auth"</td><td>estimatedAmount, status, authNumber, approvedAmount, expiresAt</td></tr>
+<tr><td>submission</td><td>Post-service claim submitted</td><td>submittedAt, claimedAmount, invoiceNumber, paymentType</td></tr>
+<tr><td>adjudication</td><td>Insurer has processed the claim</td><td>outcome, approvedAmount, deductibleApplied, paidAmount, eobNumber</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>VetDirectPay Pre-Auth Flow</h3>
+<div class="code-label">1. Clinic submits pre-auth <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"resourceType"</span>: <span class="st">"InsuranceClaim"</span>,
+  <span class="pk">"status"</span>: <span class="st">"active"</span>,
+  <span class="pk">"claimType"</span>: <span class="st">"pre-auth"</span>,
+  <span class="pk">"subject"</span>: { <span class="pk">"ref"</span>: <span class="st">"Animal/01HX..."</span> },
+  <span class="pk">"insurer"</span>: { <span class="pk">"ref"</span>: <span class="st">"Organization/trupanion"</span> },
+  <span class="pk">"policyNumber"</span>: <span class="st">"TRU-8827364"</span>,
+  <span class="pk">"item"</span>: [
+    { <span class="pk">"sequence"</span>: <span class="nm">1</span>, <span class="pk">"code"</span>: { <span class="pk">"code"</span>: <span class="st">"surgery"</span>, <span class="pk">"display"</span>: <span class="st">"TPLO"</span> }, <span class="pk">"net"</span>: <span class="nm">4200.00</span> },
+    { <span class="pk">"sequence"</span>: <span class="nm">2</span>, <span class="pk">"code"</span>: { <span class="pk">"code"</span>: <span class="st">"anesthesia"</span> }, <span class="pk">"net"</span>: <span class="nm">350.00</span> }
+  ],
+  <span class="pk">"totalAmount"</span>: <span class="nm">4550.00</span>,
+  <span class="pk">"preAuth"</span>: {
+    <span class="pk">"requestedAt"</span>: <span class="st">"2026-05-17T09:00:00Z"</span>,
+    <span class="pk">"estimatedAmount"</span>: <span class="nm">4550.00</span>,
+    <span class="pk">"status"</span>: <span class="st">"pending"</span>
+  }
+}</code></pre>
+
+<div class="code-label">2. Insurer approves — update claim with auth number <span class="lang-badge">json</span></div>
+<pre><code><span class="cm">// PUT /v1/InsuranceClaim/{id} — add approval to preAuth block</span>
+<span class="pk">"preAuth"</span>: {
+  <span class="pk">"status"</span>: <span class="st">"approved"</span>,
+  <span class="pk">"authNumber"</span>: <span class="st">"AUTH-20260517-001"</span>,
+  <span class="pk">"approvedAmount"</span>: <span class="nm">4300.00</span>,
+  <span class="pk">"expiresAt"</span>: <span class="st">"2026-06-17T00:00:00Z"</span>
+}</code></pre>
+
+<div class="code-label">3. After treatment — final adjudication <span class="lang-badge">json</span></div>
+<pre><code><span class="cm">// PUT /v1/InsuranceClaim/{id} — add adjudication block</span>
+<span class="pk">"adjudication"</span>: {
+  <span class="pk">"adjudicatedAt"</span>: <span class="st">"2026-05-25T14:00:00Z"</span>,
+  <span class="pk">"outcome"</span>: <span class="st">"approved"</span>,
+  <span class="pk">"paidAmount"</span>: <span class="nm">4200.00</span>,
+  <span class="pk">"deductibleApplied"</span>: <span class="nm">100.00</span>,
+  <span class="pk">"eobNumber"</span>: <span class="st">"EOB-TRU-2026-009988"</span>
+}</code></pre>
+</section>
+
+<!-- ── Microchip Lookup ─────────────────────────────────────────────────────── -->
+<section id="microchip-lookup">
+<h2>$lookup-microchip Operation</h2>
+<p>The system operation <code>POST /v1/$lookup-microchip</code> implements a two-step federated microchip lookup:</p>
+<ol>
+  <li><strong>Local search</strong> — searches the VHIR server's own Animal table for a matching identifier. If found, returns the <code>Animal/</code> reference.</li>
+  <li><strong>Broker fallback</strong> — for ISO 15-digit chips not found locally, returns the AAHA <code>petmicrochiplookup.org</code> broker URL so the caller can perform the registry lookup. Owner PII is never returned — only the registry pointer.</li>
+</ol>
+
+<div class="callout callout-info">
+  <span class="icon">ℹ️</span>
+  <div>This is a <em>system operation</em> (like FHIR's $everything), not a resource CRUD endpoint. It starts with <code>$</code> in the URL. Escape the dollar sign in bash with <code>\$</code> or single quotes.</div>
+</div>
+
+<div class="code-label">Found locally <span class="lang-badge">json</span></div>
+<pre><code><span class="cm">// POST /v1/$lookup-microchip</span>
+{ <span class="pk">"chipId"</span>: <span class="st">"956000004287442"</span> }
+
+<span class="cm">// Response</span>
+{
+  <span class="pk">"found"</span>: <span class="kw">true</span>,
+  <span class="pk">"localAnimal"</span>: <span class="st">"Animal/01HX7BKZM0ABCDEF123456789"</span>
+}</code></pre>
+
+<div class="code-label">Not found locally — broker response <span class="lang-badge">json</span></div>
+<pre><code>{
+  <span class="pk">"found"</span>: <span class="kw">false</span>,
+  <span class="pk">"broker"</span>: <span class="st">"https://petmicrochiplookup.org"</span>,
+  <span class="pk">"registryContact"</span>: {
+    <span class="pk">"system"</span>: <span class="st">"url"</span>,
+    <span class="pk">"value"</span>: <span class="st">"https://petmicrochiplookup.org"</span>
+  }
+}</code></pre>
+</section>
+
+<!-- ── Walkthroughs ─────────────────────────────────────────────────────────── -->
+<section id="walkthrough-visit">
+<h2>Walkthrough: Companion Animal GP Visit</h2>
+<p>A complete workflow from registration to diagnosis and prescription — the typical small animal clinic visit.</p>
+<div class="code-label">walkthroughs/companion-visit.sh <span class="lang-badge">bash</span></div>
+<pre><code><span class="cm"># 1. Create owner</span>
+OWNER=$(curl -s -X POST $BASE/Owner -d <span class="st">'{"resourceType":"Owner","name":{"given":"John","family":"Smith"},...}'</span>)
+OWNER_ID=$(echo $OWNER | jq -r '.id')
+
+<span class="cm"># 2. Create animal linked to owner</span>
+ANIMAL=$(curl -s -X POST $BASE/Animal -d <span class="st">"{...\"owners\":[{\"ref\":\"Owner/$OWNER_ID\",\"role\":\"primary\"}]}"</span>)
+ANIMAL_ID=$(echo $ANIMAL | jq -r '.id')
+
+<span class="cm"># 3. Create encounter</span>
+ENC=$(curl -s -X POST $BASE/Encounter -d <span class="st">"{...\"subject\":{\"ref\":\"Animal/$ANIMAL_ID\"}}"</span>)
+
+<span class="cm"># 4. Record vitals as Observation</span>
+<span class="cm"># 5. Post diagnosis as Condition</span>
+<span class="cm"># 6. Write prescription as MedicationRequest</span>
+<span class="cm"># 7. Search all records for the animal</span>
+curl <span class="st">"$BASE/Condition?subject=Animal/$ANIMAL_ID"</span>
+curl <span class="st">"$BASE/MedicationRequest?subject=Animal/$ANIMAL_ID"</span>
+curl <span class="st">"$BASE/Observation?encounter=Encounter/$ENC_ID"</span></code></pre>
+<p>Run the full script: <code>bash docs/walkthroughs/companion-visit.sh</code></p>
+</section>
+
+<section id="walkthrough-herd">
+<h2>Walkthrough: Herd Treatment with Withdrawal</h2>
+<p>Demonstrates the core food-animal VHIR workflow: create a cattle herd, prescribe penicillin, record administration against the Group with per-animal completion, and verify withdrawal dates are tracked.</p>
+<div class="code-label">Key steps — herd-treatment.sh <span class="lang-badge">bash</span></div>
+<pre><code><span class="cm"># Create 3 cattle with USDA 840 EIDs</span>
+COW1=$(curl -s -X POST $BASE/Animal -d <span class="st">'{"species":"bos-taurus","identifiers":[{"type":"usda-840","value":"840000012340001"}]}'</span>)
+
+<span class="cm"># Group them</span>
+GROUP=$(curl -s -X POST $BASE/Group -d <span class="st">"{\"name\":\"Pen 4\",\"productionPurpose\":\"dairy\",\"members\":[...]}"</span>)
+
+<span class="cm"># Prescribe with withdrawal periods</span>
+RX=$(curl -s -X POST $BASE/MedicationRequest \
+  -d <span class="st">"{\"withdrawal\":{\"milkHours\":36,\"meatHours\":720},...}"</span>)
+
+<span class="cm"># Administer to the group</span>
+curl -X POST $BASE/MedicationAdministration -d <span class="st">"{
+  \"subject\":{\"ref\":\"Group/$GROUP_ID\"},
+  \"withdrawalEnds\":{\"milk\":\"2026-05-18\",\"meat\":\"2026-07-16\"},
+  \"memberCompletion\":[
+    {\"animal\":\"Animal/$COW1_ID\",\"status\":\"completed\"},
+    {\"animal\":\"Animal/$COW2_ID\",\"status\":\"refused\"}
+  ]
+}"</span></code></pre>
+<p>Run: <code>bash docs/walkthroughs/herd-treatment.sh</code></p>
+</section>
+
+<section id="walkthrough-insurance">
+<h2>Walkthrough: Pet Insurance Claim (Trupanion VetDirectPay)</h2>
+<p>Full lifecycle: pre-auth request → insurer approval → post-surgery adjudication and payment.</p>
+<div class="code-label">Key steps — insurance-claim.sh <span class="lang-badge">bash</span></div>
+<pre><code><span class="cm"># Create insurer Organization</span>
+INSURER=$(curl -X POST $BASE/Organization -d <span class="st">'{"name":"Trupanion","type":"insurer"}'</span>)
+
+<span class="cm"># Submit pre-auth for TPLO surgery</span>
+CLAIM=$(curl -X POST $BASE/InsuranceClaim -d <span class="st">"{
+  \"claimType\":\"pre-auth\",
+  \"insurer\":{\"ref\":\"Organization/$INSURER_ID\"},
+  \"policyNumber\":\"TRU-8827364\",
+  \"totalAmount\":4800.00,
+  \"preAuth\":{\"estimatedAmount\":4800.00,\"status\":\"pending\"}
+}"</span>)
+
+<span class="cm"># Update with approval</span>
+curl -X PUT $BASE/InsuranceClaim/$CLAIM_ID -d <span class="st">"{
+  ...\"preAuth\":{\"status\":\"approved\",\"authNumber\":\"AUTH-001\",\"approvedAmount\":4300.00}
+}"</span>
+
+<span class="cm"># Post-surgery adjudication</span>
+curl -X PUT $BASE/InsuranceClaim/$CLAIM_ID -d <span class="st">"{
+  ...\"adjudication\":{\"outcome\":\"approved\",\"paidAmount\":4200.00}
+}"</span></code></pre>
+<p>Run: <code>bash docs/walkthroughs/insurance-claim.sh</code></p>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────────────────────────────── -->
+<hr>
+<p style="color:var(--text-muted);font-size:.8rem;text-align:center">
+  VHIR v0.1.0 · Apache 2.0 (code) · CC-BY-4.0 (spec text) ·
+  <a href="https://github.com/vhir/vhir">github.com/vhir/vhir</a>
+</p>
+
+</main>
+
+<script>
+// Highlight active nav link based on scroll position
+const sections = document.querySelectorAll('section[id], h2[id]');
+const navLinks = document.querySelectorAll('nav#sidebar a[href^="#"]');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`nav#sidebar a[href="#${entry.target.id}"]`);
+      if (link) {
+        link.classList.add('active');
+        link.scrollIntoView({ block: 'nearest' });
+      }
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
