@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from sqlalchemy import Table, func, select
+from sqlalchemy import Table, func, or_, select
 from sqlalchemy.sql import Select
 
 # Per-resource search parameter definitions.
@@ -156,7 +156,7 @@ _DEFAULT_LIMIT = 20
 _MAX_LIMIT = 200
 
 
-def build_query(table: Table, raw_params: dict[str, Any]) -> tuple[Select, Select]:
+def build_query(table: Table, raw_params: dict[str, Any]) -> tuple[Select[Any], Select[Any]]:
     """Return (data_query, count_query) from raw query parameters."""
     resource_type = table.name.replace("_", " ").title().replace(" ", "")
     # Normalize table name to resource type
@@ -249,8 +249,7 @@ def build_query(table: Table, raw_params: dict[str, Any]) -> tuple[Select, Selec
     return stmt, count_stmt
 
 
-def _or_combine(conds: list):
-    from sqlalchemy import or_
+def _or_combine(conds: list[Any]) -> Any:
     if len(conds) == 1:
         return conds[0]
     return or_(*conds)

@@ -9,6 +9,7 @@ A production deployment would swap the broker backend via dependency injection.
 from __future__ import annotations
 
 import re
+from typing import Any
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from pydantic import BaseModel
@@ -29,8 +30,8 @@ class MicrochipLookupRequest(BaseModel):
 class MicrochipLookupResponse(BaseModel):
     found: bool
     localAnimal: str | None = None
-    registry: dict | None = None
-    registryContact: dict | None = None
+    registry: dict[str, Any] | None = None
+    registryContact: dict[str, Any] | None = None
     lastUpdated: str | None = None
     broker: str | None = None
 

@@ -1,6 +1,7 @@
 """VHIR-SMART: OAuth2 scope enforcement and dev-token mode."""
 from __future__ import annotations
 
+from collections.abc import Callable, Coroutine
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
@@ -28,7 +29,7 @@ def issue_dev_token(subject: str = "dev-user", role: str = "veterinarian", org_i
         "iat": datetime.now(tz=UTC),
         "exp": datetime.now(tz=UTC) + timedelta(minutes=settings.access_token_expire_minutes),
     }
-    return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+    return str(jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm))
 
 
 class TokenPayload:
@@ -77,7 +78,7 @@ async def get_current_token(
     return TokenPayload(data)
 
 
-def require_scope(resource_type: str, action: str):
+def require_scope(resource_type: str, action: str) -> Callable[..., Coroutine[Any, Any, TokenPayload]]:
     """FastAPI dependency factory that enforces a scope."""
     async def _check(token: TokenPayload = Depends(get_current_token)) -> TokenPayload:
         if not token.can(resource_type, action):

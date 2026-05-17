@@ -1,7 +1,10 @@
 """Resource routers for M1/M2 types: Group, Location, Device, DeviceMetric, Procedure,
 Immunization, MedicationDispense, MedicationAdministration, Appointment, Schedule, Slot,
 InsuranceClaim."""
+from typing import Any, cast
+
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from vhir_server.api.base import bundle_response, check_if_match, resource_response
@@ -24,14 +27,14 @@ from vhir_server.storage.database import get_db
 from vhir_server.storage.repository import ResourceRepository, VersionConflictError
 
 
-def _make_router(resource_type: str, prefix: str, create_model_cls, tag: str):
+def _make_router(resource_type: str, prefix: str, create_model_cls: type[Any], tag: str) -> APIRouter:
     """Build a standard CRUD+search router for a resource type."""
     router = APIRouter(prefix=prefix, tags=[tag])
     RT = resource_type
 
     @router.post("", status_code=status.HTTP_201_CREATED)
     async def _create(body: create_model_cls, db: AsyncSession = Depends(get_db), _t: TokenPayload = Depends(require_scope(RT, "write"))) -> Response:  # type: ignore[valid-type]
-        return resource_response(await ResourceRepository(RT, db).create(body.model_dump(mode="json", by_alias=True, exclude_none=True)), 201)
+        return resource_response(await ResourceRepository(RT, db).create(cast(BaseModel, body).model_dump(mode="json", by_alias=True, exclude_none=True)), 201)
 
     @router.get("/{rid}")
     async def _read(rid: str, db: AsyncSession = Depends(get_db), _t: TokenPayload = Depends(require_scope(RT, "read"))) -> Response:
@@ -47,7 +50,7 @@ def _make_router(resource_type: str, prefix: str, create_model_cls, tag: str):
         if ex:
             check_if_match(request, ex["meta"]["version"])
         try:
-            r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
+            r = await repo.update(rid, cast(BaseModel, body).model_dump(mode="json", by_alias=True, exclude_none=True))
         except VersionConflictError as e:
             raise HTTPException(412, str(e)) from e
         if r is None:

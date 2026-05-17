@@ -79,7 +79,7 @@ class ResourceRepository:
             self._table.c.deleted == False,  # noqa: E712
         )
         row = (await self._db.execute(stmt)).one_or_none()
-        return row._mapping["body"] if row else None  # type: ignore[union-attr]
+        return row._mapping["body"] if row else None
 
     async def update(self, resource_id: str, body: dict[str, Any], if_match: int | None = None) -> dict[str, Any] | None:
         existing = await self.read(resource_id)
@@ -123,7 +123,7 @@ class ResourceRepository:
         stmt, count_stmt = build_query(self._table, params)
         rows = (await self._db.execute(stmt)).fetchall()
         total_row = (await self._db.execute(count_stmt)).scalar()
-        entries = [r._mapping["body"] for r in rows]  # type: ignore[union-attr]
+        entries = [r._mapping["body"] for r in rows]
         return entries, total_row or 0
 
     async def _record_history(self, resource_id: str, version: int, body: dict[str, Any], operation: str) -> None:

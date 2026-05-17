@@ -1,4 +1,5 @@
 """VHIR Reference Server entry point."""
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, status
@@ -38,7 +39,7 @@ from vhir_server.storage.tables import metadata
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     async with engine.begin() as conn:
         await conn.run_sync(metadata.create_all)
     yield
@@ -105,7 +106,7 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
 
 
 @app.get("/")
-async def root() -> dict:
+async def root() -> dict[str, str]:
     return {
         "name": "VHIR Reference Server",
         "version": "0.1.0",
