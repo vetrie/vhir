@@ -1,0 +1,139 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint & type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install all workspace deps
+        run: uv sync --all-packages --dev
+
+      - name: ruff lint — server
+        run: uv run --package vhir-server ruff check server/vhir_server
+
+      - name: ruff lint — ezyvet adapter
+        run: uv run --package vhir-adapter-ezyvet ruff check adapters/ezyvet/vhir_adapter_ezyvet
+
+      - name: ruff lint — python sdk
+        run: uv run --package vhir-sdk ruff check sdk/python/vhir_sdk sdk/python/tests
+
+      - name: mypy — server
+        run: uv run --package vhir-server mypy server/vhir_server
+
+      - name: mypy — ezyvet adapter
+        run: uv run --package vhir-adapter-ezyvet mypy adapters/ezyvet/vhir_adapter_ezyvet
+
+      - name: mypy — python sdk
+        run: uv run --package vhir-sdk mypy sdk/python/vhir_sdk
+
+  test-server:
+    name: Test — server (≥80% coverage)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: vhir
+          POSTGRES_PASSWORD: vhir
+          POSTGRES_DB: vhir_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql+asyncpg://vhir:vhir@localhost:5432/vhir_test
+      VHIR_JWT_SECRET: ci-secret-not-for-production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install server deps
+        run: uv sync --package vhir-server --dev
+
+      - name: Run migrations
+        run: uv run --package vhir-server alembic -c server/alembic.ini upgrade head
+
+      - name: pytest — server
+        run: uv run --package vhir-server pytest server/tests --cov=vhir_server --cov-report=term-missing --cov-fail-under=80
+
+  test-ezyvet:
+    name: Test — ezyvet adapter (≥80% coverage)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install adapter deps
+        run: uv sync --package vhir-adapter-ezyvet --dev
+
+      - name: pytest — ezyvet adapter
+        run: uv run --package vhir-adapter-ezyvet pytest adapters/ezyvet/tests --cov=vhir_adapter_ezyvet --cov-report=term-missing --cov-fail-under=80
+
+  test-sdk:
+    name: Test — Python SDK (≥80% coverage)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install SDK deps
+        run: uv sync --package vhir-sdk --dev
+
+      - name: pytest — python sdk
+        run: uv run --package vhir-sdk pytest sdk/python/tests --cov=vhir_sdk --cov-report=term-missing --cov-fail-under=80
+
+  publish-sdk:
+    name: Publish SDK to PyPI
+    runs-on: ubuntu-latest
+    needs: [lint, test-sdk]
+    if: startsWith(github.ref, 'refs/tags/sdk-v')
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Build SDK wheel
+        run: uv build --package vhir-sdk
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
