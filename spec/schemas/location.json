@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/location.json",
+  "title": "Location",
+  "description": "A physical or logical place — exam room, pen, barn, pasture, or external facility.",
+  "type": "object",
+  "required": ["resourceType", "name"],
+  "properties": {
+    "resourceType": { "const": "Location" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "name": { "type": "string" },
+    "type": {
+      "type": "string",
+      "description": "Category of location (e.g. 'exam-room', 'pen', 'barn', 'pasture', 'ward')"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["instance", "kind"],
+      "default": "instance"
+    },
+    "description": { "type": "string" },
+    "address": { "$ref": "common.json#/$defs/Address" },
+    "managingOrganization": { "$ref": "common.json#/$defs/Reference" },
+    "partOf": { "$ref": "common.json#/$defs/Reference" },
+    "operationalStatus": {
+      "type": "string",
+      "enum": ["C", "H", "I", "K", "O", "U"],
+      "description": "HL7 v2 operational status: C=closed, H=housekeeping, I=isolated, K=contaminated, O=occupied, U=unoccupied"
+    },
+    "active": { "type": "boolean", "default": true },
+    "telecom": {
+      "type": "array",
+      "items": { "$ref": "common.json#/$defs/Telecom" }
+    },
+    "extensions": { "type": "object" }
+  }
+}

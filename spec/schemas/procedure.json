@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/procedure.json",
+  "title": "Procedure",
+  "description": "A clinical procedure performed on an animal (surgery, dental, imaging, etc.).",
+  "type": "object",
+  "required": ["resourceType", "status", "code", "subject"],
+  "properties": {
+    "resourceType": { "const": "Procedure" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "status": {
+      "type": "string",
+      "enum": ["preparation", "in-progress", "not-done", "on-hold", "stopped", "completed", "entered-in-error", "unknown"]
+    },
+    "code": { "$ref": "common.json#/$defs/Coding" },
+    "subject": { "$ref": "common.json#/$defs/Reference" },
+    "encounter": { "$ref": "common.json#/$defs/Reference" },
+    "performer": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["practitioner"],
+        "properties": {
+          "practitioner": { "$ref": "common.json#/$defs/Reference" },
+          "role": { "type": "string" }
+        }
+      }
+    },
+    "performedDateTime": { "type": "string", "format": "date-time" },
+    "performedPeriod": { "$ref": "common.json#/$defs/Period" },
+    "bodySite": { "type": "string" },
+    "outcome": { "type": "string" },
+    "followUp": { "type": "string" },
+    "note": { "type": "string" },
+    "extensions": { "type": "object" }
+  }
+}

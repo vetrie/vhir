@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/slot.json",
+  "title": "Slot",
+  "description": "A specific bookable time window within a Schedule.",
+  "type": "object",
+  "required": ["resourceType", "schedule", "status", "start", "end"],
+  "properties": {
+    "resourceType": { "const": "Slot" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "schedule": { "$ref": "common.json#/$defs/Reference" },
+    "status": {
+      "type": "string",
+      "enum": ["busy", "free", "busy-unavailable", "busy-tentative", "entered-in-error"]
+    },
+    "start": { "type": "string", "format": "date-time" },
+    "end": { "type": "string", "format": "date-time" },
+    "serviceType": {
+      "type": "array",
+      "items": { "$ref": "common.json#/$defs/Coding" }
+    },
+    "comment": { "type": "string" },
+    "overbooked": { "type": "boolean", "default": false },
+    "extensions": { "type": "object" }
+  }
+}

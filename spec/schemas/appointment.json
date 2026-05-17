@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/appointment.json",
+  "title": "Appointment",
+  "description": "A booked time slot for a clinical visit or procedure.",
+  "type": "object",
+  "required": ["resourceType", "status", "subject"],
+  "properties": {
+    "resourceType": { "const": "Appointment" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "pending", "booked", "arrived", "fulfilled", "cancelled", "noshow", "entered-in-error", "checked-in", "waitlist"]
+    },
+    "serviceType": {
+      "type": "array",
+      "items": { "$ref": "common.json#/$defs/Coding" }
+    },
+    "subject": { "$ref": "common.json#/$defs/Reference" },
+    "practitioners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["actor"],
+        "properties": {
+          "actor": { "$ref": "common.json#/$defs/Reference" },
+          "role": { "type": "string" },
+          "status": { "type": "string", "enum": ["accepted", "declined", "tentative", "needs-action"], "default": "accepted" }
+        }
+      }
+    },
+    "start": { "type": "string", "format": "date-time" },
+    "end": { "type": "string", "format": "date-time" },
+    "slot": { "$ref": "common.json#/$defs/Reference" },
+    "comment": { "type": "string" },
+    "priority": { "type": "integer", "minimum": 0, "default": 0 },
+    "cancelationReason": { "type": "string" },
+    "extensions": { "type": "object" }
+  }
+}

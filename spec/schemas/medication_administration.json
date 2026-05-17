@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/medication_administration.json",
+  "title": "MedicationAdministration",
+  "description": "Record of a drug dose given to an animal or herd — supports bulk herd treatment with per-member completion tracking.",
+  "type": "object",
+  "required": ["resourceType", "status", "medication", "subject"],
+  "properties": {
+    "resourceType": { "const": "MedicationAdministration" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "status": {
+      "type": "string",
+      "enum": ["in-progress", "not-done", "on-hold", "completed", "entered-in-error", "stopped", "unknown"]
+    },
+    "medication": {
+      "type": "object",
+      "description": "Drug administered.",
+      "properties": {
+        "name":   { "type": "string" },
+        "code":   { "type": "string" },
+        "system": { "type": "string" },
+        "form":   { "type": "string" },
+        "brand":  { "type": "string" }
+      }
+    },
+    "subject": { "$ref": "common.json#/$defs/Reference" },
+    "encounter": { "$ref": "common.json#/$defs/Reference" },
+    "performer": {
+      "type": "array",
+      "items": { "$ref": "common.json#/$defs/Reference" }
+    },
+    "effectiveDateTime": { "type": "string", "format": "date-time" },
+    "effectivePeriod": { "$ref": "common.json#/$defs/Period" },
+    "dosage": {
+      "type": "object",
+      "properties": {
+        "text":     { "type": "string" },
+        "route":    { "type": "string" },
+        "doseQuantity": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "number" },
+            "unit":  { "type": "string" }
+          }
+        },
+        "frequency": { "type": "string" },
+        "duration":  { "type": "string" }
+      }
+    },
+    "withdrawalEnds": {
+      "type": "object",
+      "description": "Withdrawal period end dates for food animals.",
+      "properties": {
+        "meat": { "type": "string", "format": "date" },
+        "milk": { "type": "string", "format": "date" },
+        "eggs": { "type": "string", "format": "date" }
+      }
+    },
+    "memberCompletion": {
+      "type": "array",
+      "description": "Per-animal completion records for herd treatment.",
+      "items": {
+        "type": "object",
+        "required": ["animal", "status"],
+        "properties": {
+          "animal":            { "type": "string", "description": "Animal/id" },
+          "status":            { "type": "string", "enum": ["completed", "not-done", "in-progress"] },
+          "effectiveDateTime": { "type": "string", "format": "date-time" },
+          "note":              { "type": "string" }
+        }
+      }
+    },
+    "note": { "type": "string" },
+    "extensions": { "type": "object" }
+  }
+}

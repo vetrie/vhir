@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/device_metric.json",
+  "title": "DeviceMetric",
+  "description": "A measurement capability or channel exposed by a Device (e.g. heart-rate, SpO2, temperature).",
+  "type": "object",
+  "required": ["resourceType", "device", "type", "category"],
+  "properties": {
+    "resourceType": { "const": "DeviceMetric" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "device": { "$ref": "common.json#/$defs/Reference" },
+    "type": { "$ref": "common.json#/$defs/Coding" },
+    "unit": { "$ref": "common.json#/$defs/Coding" },
+    "operationalStatus": {
+      "type": "string",
+      "enum": ["on", "off", "standby", "entered-in-error"]
+    },
+    "category": {
+      "type": "string",
+      "enum": ["measurement", "setting", "calculation", "unspecified"]
+    },
+    "extensions": { "type": "object" }
+  }
+}

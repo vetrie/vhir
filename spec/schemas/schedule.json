@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/schedule.json",
+  "title": "Schedule",
+  "description": "A practitioner or resource availability window from which Slots are carved.",
+  "type": "object",
+  "required": ["resourceType"],
+  "properties": {
+    "resourceType": { "const": "Schedule" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "actor": {
+      "type": "array",
+      "description": "Practitioners, locations, or devices whose availability this schedule represents.",
+      "items": { "$ref": "common.json#/$defs/Reference" }
+    },
+    "planningHorizon": { "$ref": "common.json#/$defs/Period" },
+    "active": { "type": "boolean", "default": true },
+    "comment": { "type": "string" },
+    "serviceType": {
+      "type": "array",
+      "items": { "$ref": "common.json#/$defs/Coding" }
+    },
+    "extensions": { "type": "object" }
+  }
+}

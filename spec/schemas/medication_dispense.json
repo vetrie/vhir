@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://vhir.dev/schemas/medication_dispense.json",
+  "title": "MedicationDispense",
+  "description": "Dispensing event — drug prepared and handed over to owner or administered in clinic.",
+  "type": "object",
+  "required": ["resourceType", "status", "medication", "subject"],
+  "properties": {
+    "resourceType": { "const": "MedicationDispense" },
+    "id": { "type": "string" },
+    "meta": { "$ref": "common.json#/$defs/Meta" },
+    "status": {
+      "type": "string",
+      "enum": ["preparation", "in-progress", "cancelled", "on-hold", "completed", "entered-in-error", "stopped", "declined", "unknown"]
+    },
+    "medication": {
+      "type": "object",
+      "description": "Drug dispensed.",
+      "properties": {
+        "name":   { "type": "string" },
+        "code":   { "type": "string" },
+        "system": { "type": "string" },
+        "form":   { "type": "string" },
+        "brand":  { "type": "string" }
+      }
+    },
+    "subject": { "$ref": "common.json#/$defs/Reference" },
+    "authorizingPrescription": { "$ref": "common.json#/$defs/Reference" },
+    "quantity": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "number" },
+        "unit":  { "type": "string" }
+      }
+    },
+    "daysSupply": { "type": "integer", "minimum": 0 },
+    "whenPrepared": { "type": "string", "format": "date-time" },
+    "whenHandedOver": { "type": "string", "format": "date-time" },
+    "performer": { "$ref": "common.json#/$defs/Reference" },
+    "note": { "type": "string" },
+    "extensions": { "type": "object" }
+  }
+}
