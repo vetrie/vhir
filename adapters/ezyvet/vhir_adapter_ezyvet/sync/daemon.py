@@ -6,7 +6,7 @@ import json
 import logging
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from vhir_adapter_ezyvet.client import EzyVetClient
 from vhir_adapter_ezyvet.config import settings
@@ -41,7 +41,7 @@ _RESOURCE_MAP: list[tuple[str, str, Any]] = [
 def _load_cursors() -> dict[str, str]:
     if _CURSOR_FILE.exists():
         try:
-            return json.loads(_CURSOR_FILE.read_text())
+            return cast(dict[str, str], json.loads(_CURSOR_FILE.read_text()))
         except Exception:
             pass
     return {}

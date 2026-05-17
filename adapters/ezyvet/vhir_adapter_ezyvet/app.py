@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI
@@ -14,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):  # type: ignore[type-arg]
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     task = asyncio.create_task(run_poll_loop())
     yield
     task.cancel()
