@@ -1,0 +1,220 @@
+{
+  "id": "vhir-vaccine-codes",
+  "title": "VHIR Vaccine Code Value Set",
+  "description": "Veterinary vaccine codes following AAHA (American Animal Hospital Association) vaccine category names and recommendations. Category values: 'core' = recommended for all patients regardless of lifestyle; 'non-core' = recommended based on risk assessment; 'not-recommended' = insufficient evidence or risk outweighs benefit.",
+  "url": "https://vhir.dev/valuesets/vaccine-codes",
+  "version": "0.1.0",
+  "reference": "AAHA Canine Vaccination Guidelines 2022; AAFP Feline Vaccination Guidelines 2020; AAEP Equine Vaccination Guidelines",
+  "concepts": [
+    {
+      "code": "rabies-1yr",
+      "display": "Rabies (1-year)",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "core",
+        "felis-catus": "core",
+        "mustela-putorius-furo": "core"
+      },
+      "antigen": "Rabies virus",
+      "durationOfImmunity": "1 year",
+      "legallyRequired": true,
+      "notes": "Killed or recombinant vaccine; used for initial vaccination or where local law mandates 1-year product."
+    },
+    {
+      "code": "rabies-3yr",
+      "display": "Rabies (3-year)",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "core",
+        "felis-catus": "core"
+      },
+      "antigen": "Rabies virus",
+      "durationOfImmunity": "3 years",
+      "legallyRequired": true,
+      "notes": "Booster after initial series; recombinant or adjuvanted killed. Not approved for ferrets — use 1-yr product."
+    },
+    {
+      "code": "da2pp",
+      "display": "DA2PP (Canine Distemper + Adenovirus-2 + Parvovirus + Parainfluenza)",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "core"
+      },
+      "antigens": ["Canine distemper virus (CDV)", "Canine adenovirus type 2 (CAV-2)", "Canine parvovirus type 2 (CPV-2)", "Canine parainfluenza virus (CPiV)"],
+      "aliases": ["DHPP", "DA2PPC (with coronavirus)", "MLV combo"],
+      "durationOfImmunity": "3 years after completing puppy series and first adult booster",
+      "notes": "CAV-2 cross-protects against infectious canine hepatitis (CAV-1). Often labelled DHPP when marketed with older adenovirus-1 antigen names."
+    },
+    {
+      "code": "dhpp",
+      "display": "DHPP (Canine Distemper + Hepatitis + Parvovirus + Parainfluenza)",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "core"
+      },
+      "antigens": ["Canine distemper virus (CDV)", "Canine adenovirus type 1/2 (hepatitis)", "Canine parvovirus type 2 (CPV-2)", "Canine parainfluenza virus (CPiV)"],
+      "aliases": ["DA2PP"],
+      "durationOfImmunity": "3 years after completing puppy series and first adult booster",
+      "notes": "Marketing name variant of DA2PP. AAHA prefers DA2PP terminology; both refer to the same combination."
+    },
+    {
+      "code": "felv",
+      "display": "FeLV (Feline Leukemia Virus)",
+      "aahaCategoryBySpecies": {
+        "felis-catus": "core"
+      },
+      "antigen": "Feline leukemia virus (FeLV)",
+      "durationOfImmunity": "1–3 years (product-dependent)",
+      "notes": "AAFP 2020 guidelines classify FeLV as core for all kittens; reassess as non-core for strictly indoor adult cats with no exposure risk. Recombinant canarypox-vectored products available (non-adjuvanted)."
+    },
+    {
+      "code": "fvrcp",
+      "display": "FVRCP (Feline Viral Rhinotracheitis + Calicivirus + Panleukopenia)",
+      "aahaCategoryBySpecies": {
+        "felis-catus": "core"
+      },
+      "antigens": ["Feline herpesvirus-1 (FHV-1 / rhinotracheitis)", "Feline calicivirus (FCV)", "Feline panleukopenia virus (FPV)"],
+      "aliases": ["Feline distemper combo", "RCP"],
+      "durationOfImmunity": "3 years after completing kitten series and first adult booster",
+      "notes": "FPV antigen cross-protects against CPV-2 in cats. MLV preferred for kittens; killed acceptable for pregnant/immunocompromised."
+    },
+    {
+      "code": "fiv",
+      "display": "FIV (Feline Immunodeficiency Virus)",
+      "aahaCategoryBySpecies": {
+        "felis-catus": "non-core"
+      },
+      "antigen": "Feline immunodeficiency virus (FIV)",
+      "durationOfImmunity": "Annual",
+      "notes": "AAFP classifies as non-core; for cats with outdoor access or fighting risk. Important caveat: vaccination causes persistent FIV antibody test positivity — document vaccination status carefully."
+    },
+    {
+      "code": "fip",
+      "display": "FIP (Feline Infectious Peritonitis)",
+      "aahaCategoryBySpecies": {
+        "felis-catus": "not-recommended"
+      },
+      "antigen": "Feline coronavirus (mutant strain causing FIP)",
+      "durationOfImmunity": "Unclear",
+      "notes": "AAFP classifies as 'not recommended' — insufficient evidence of efficacy in field conditions; intranasal MLV vaccine approved in some markets but not widely endorsed."
+    },
+    {
+      "code": "bordetella-canine",
+      "display": "Bordetella bronchiseptica — Canine",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "non-core"
+      },
+      "antigen": "Bordetella bronchiseptica",
+      "durationOfImmunity": "1 year",
+      "routes": ["intranasal", "oral", "parenteral"],
+      "notes": "Recommended for dogs with exposure risk (boarding, grooming, dog parks, shelters). Often combined with CPiV (intranasal). AAHA considers it lifestyle-based non-core; many boarding facilities require it."
+    },
+    {
+      "code": "bordetella-feline",
+      "display": "Bordetella bronchiseptica — Feline",
+      "aahaCategoryBySpecies": {
+        "felis-catus": "non-core"
+      },
+      "antigen": "Bordetella bronchiseptica",
+      "durationOfImmunity": "1 year",
+      "routes": ["intranasal"],
+      "notes": "For cats in multi-cat environments or shelters. Intranasal route only currently available for feline label."
+    },
+    {
+      "code": "leptospirosis",
+      "display": "Leptospirosis (canine)",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "non-core"
+      },
+      "antigens": ["Leptospira interrogans serovars (canicola, icterohaemorrhagiae, grippotyphosa, pomona)"],
+      "durationOfImmunity": "1 year",
+      "notes": "AAHA 2022 considers leptospirosis non-core but recommends risk assessment for all dogs — zoonotic potential warrants consideration even in urban settings. Requires 2-dose initial series 2–4 weeks apart."
+    },
+    {
+      "code": "lyme",
+      "display": "Lyme disease (Borrelia burgdorferi) — Canine",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "non-core"
+      },
+      "antigen": "Borrelia burgdorferi",
+      "durationOfImmunity": "1 year",
+      "notes": "Recommended for dogs in tick-endemic regions or those traveling to them. Requires 2-dose initial series. OspA-based vaccines prevent transmission; OspC-based vaccines also available. AAHA classifies as non-core (lifestyle-based)."
+    },
+    {
+      "code": "canine-influenza-h3n2",
+      "display": "Canine Influenza — H3N2",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "non-core"
+      },
+      "antigen": "Canine influenza virus H3N2",
+      "durationOfImmunity": "1 year",
+      "notes": "Recommended for dogs at high social exposure risk. Initially emerged in Asia; now endemic in some US regions. Bivalent products (H3N2 + H3N8) available."
+    },
+    {
+      "code": "canine-influenza-h3n8",
+      "display": "Canine Influenza — H3N8",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "non-core"
+      },
+      "antigen": "Canine influenza virus H3N8",
+      "durationOfImmunity": "1 year",
+      "notes": "Derived from equine H3N8. Less prevalent than H3N2 but still circulating. Often administered as bivalent product."
+    },
+    {
+      "code": "canine-influenza-bivalent",
+      "display": "Canine Influenza — Bivalent (H3N2 + H3N8)",
+      "aahaCategoryBySpecies": {
+        "canis-familiaris": "non-core"
+      },
+      "antigens": ["Canine influenza virus H3N2", "Canine influenza virus H3N8"],
+      "durationOfImmunity": "1 year",
+      "notes": "Preferred product where both strains are a concern."
+    },
+    {
+      "code": "west-nile-equine",
+      "display": "West Nile Virus — Equine",
+      "aahaCategoryBySpecies": {
+        "equus-caballus": "core"
+      },
+      "antigen": "West Nile virus (Flavivirus)",
+      "durationOfImmunity": "6–12 months",
+      "notes": "AAEP classifies as core for all horses in North America. Killed or recombinant canarypox-vectored products. Semi-annual boosters recommended in high-risk (mosquito-endemic) regions."
+    },
+    {
+      "code": "eee-wee-equine",
+      "display": "Eastern/Western Equine Encephalomyelitis (EEE/WEE)",
+      "aahaCategoryBySpecies": {
+        "equus-caballus": "core"
+      },
+      "antigens": ["Eastern equine encephalitis virus (EEEV)", "Western equine encephalitis virus (WEEV)"],
+      "durationOfImmunity": "6–12 months (semi-annual in endemic areas)",
+      "notes": "AAEP core vaccine. Often combined with tetanus and West Nile in 4-way or 5-way products."
+    },
+    {
+      "code": "tetanus-equine",
+      "display": "Tetanus — Equine",
+      "aahaCategoryBySpecies": {
+        "equus-caballus": "core"
+      },
+      "antigen": "Clostridium tetani toxoid",
+      "durationOfImmunity": "1 year",
+      "notes": "AAEP core vaccine. Horses are highly susceptible to tetanus. Annual booster; booster at wound time if >6 months since last dose."
+    },
+    {
+      "code": "rabies-equine",
+      "display": "Rabies — Equine",
+      "aahaCategoryBySpecies": {
+        "equus-caballus": "core"
+      },
+      "antigen": "Rabies virus",
+      "durationOfImmunity": "1 year",
+      "notes": "AAEP core vaccine; annually. Killed products licensed for horses."
+    },
+    {
+      "code": "distemper-ferret",
+      "display": "Canine Distemper — Ferret",
+      "aahaCategoryBySpecies": {
+        "mustela-putorius-furo": "core"
+      },
+      "antigen": "Canine distemper virus (CDV)",
+      "durationOfImmunity": "1 year (annual booster after initial series)",
+      "notes": "Ferrets are highly susceptible to CDV; 100% fatal. Use recombinant canarypox-vectored or ferret-label killed product only — MLV products licensed for dogs are NOT safe in ferrets."
+    }
+  ]
+}

@@ -1,6 +1,14 @@
 [tool.uv.workspace]
 members = ["server", "adapters/ezyvet", "sdk/python"]
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["server/tests"]
+pythonpath = ["server"]
+addopts = "--cov=vhir_server --cov-report=term-missing --cov-fail-under=80 --cov-config=server/pyproject.toml"
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
