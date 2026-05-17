@@ -49,7 +49,7 @@ def _make_router(resource_type: str, prefix: str, create_model_cls, tag: str):
         try:
             r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
         except VersionConflictError as e:
-            raise HTTPException(412, str(e))
+            raise HTTPException(412, str(e)) from e
         if r is None:
             raise HTTPException(404, f"{RT}/{rid} not found")
         return resource_response(r)

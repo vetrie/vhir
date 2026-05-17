@@ -96,7 +96,7 @@ jobs:
         run: uv sync --package vhir-adapter-ezyvet --dev
 
       - name: pytest — ezyvet adapter
-        run: uv run --package vhir-adapter-ezyvet pytest adapters/ezyvet/tests --cov=vhir_adapter_ezyvet --cov-report=term-missing --cov-fail-under=80
+        run: uv run --package vhir-adapter-ezyvet pytest adapters/ezyvet/tests --cov=vhir_adapter_ezyvet --cov-report=term-missing --cov-fail-under=80 --cov-config=adapters/ezyvet/pyproject.toml
 
   test-sdk:
     name: Test — Python SDK (≥80% coverage)

@@ -46,7 +46,7 @@ async def update_owner(rid: str, body: OwnerCreate, request: Request, db: AsyncS
     try:
         r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
     except VersionConflictError as e:
-        raise HTTPException(412, str(e))
+        raise HTTPException(412, str(e)) from e
     if r is None:
         raise HTTPException(404, f"Owner/{rid} not found")
     return resource_response(r)
@@ -92,7 +92,7 @@ async def update_practitioner(rid: str, body: PractitionerCreate, request: Reque
     try:
         r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
     except VersionConflictError as e:
-        raise HTTPException(412, str(e))
+        raise HTTPException(412, str(e)) from e
     if r is None:
         raise HTTPException(404, f"Practitioner/{rid} not found")
     return resource_response(r)
@@ -138,7 +138,7 @@ async def update_practitioner_role(rid: str, body: PractitionerRoleCreate, reque
     try:
         r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
     except VersionConflictError as e:
-        raise HTTPException(412, str(e))
+        raise HTTPException(412, str(e)) from e
     if r is None:
         raise HTTPException(404, f"PractitionerRole/{rid} not found")
     return resource_response(r)
@@ -184,7 +184,7 @@ async def update_organization(rid: str, body: OrganizationCreate, request: Reque
     try:
         r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
     except VersionConflictError as e:
-        raise HTTPException(412, str(e))
+        raise HTTPException(412, str(e)) from e
     if r is None:
         raise HTTPException(404, f"Organization/{rid} not found")
     return resource_response(r)
@@ -230,7 +230,7 @@ async def update_encounter(rid: str, body: EncounterCreate, request: Request, db
     try:
         r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
     except VersionConflictError as e:
-        raise HTTPException(412, str(e))
+        raise HTTPException(412, str(e)) from e
     if r is None:
         raise HTTPException(404, f"Encounter/{rid} not found")
     return resource_response(r)
@@ -276,7 +276,7 @@ async def update_observation(rid: str, body: ObservationCreate, request: Request
     try:
         r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
     except VersionConflictError as e:
-        raise HTTPException(412, str(e))
+        raise HTTPException(412, str(e)) from e
     if r is None:
         raise HTTPException(404, f"Observation/{rid} not found")
     return resource_response(r)
@@ -322,7 +322,7 @@ async def update_condition(rid: str, body: ConditionCreate, request: Request, db
     try:
         r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
     except VersionConflictError as e:
-        raise HTTPException(412, str(e))
+        raise HTTPException(412, str(e)) from e
     if r is None:
         raise HTTPException(404, f"Condition/{rid} not found")
     return resource_response(r)
@@ -368,7 +368,7 @@ async def update_medication_request(rid: str, body: MedicationRequestCreate, req
     try:
         r = await repo.update(rid, body.model_dump(mode="json", by_alias=True, exclude_none=True))
     except VersionConflictError as e:
-        raise HTTPException(412, str(e))
+        raise HTTPException(412, str(e)) from e
     if r is None:
         raise HTTPException(404, f"MedicationRequest/{rid} not found")
     return resource_response(r)

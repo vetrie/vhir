@@ -1,7 +1,7 @@
 """VHIR-SMART: OAuth2 scope enforcement and dev-token mode."""
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from fastapi import Depends, HTTPException, status
@@ -25,8 +25,8 @@ def issue_dev_token(subject: str = "dev-user", role: str = "veterinarian", org_i
         "role": role,
         "org_id": org_id,
         "scopes": ["system/*.read", "system/*.write"],
-        "iat": datetime.now(tz=timezone.utc),
-        "exp": datetime.now(tz=timezone.utc) + timedelta(minutes=settings.access_token_expire_minutes),
+        "iat": datetime.now(tz=UTC),
+        "exp": datetime.now(tz=UTC) + timedelta(minutes=settings.access_token_expire_minutes),
     }
     return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
 
@@ -72,7 +72,7 @@ async def get_current_token(
     try:
         data = jwt.decode(creds.credentials, settings.secret_key, algorithms=[settings.algorithm])
     except JWTError as e:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Invalid token: {e}")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Invalid token: {e}") from e
 
     return TokenPayload(data)
 

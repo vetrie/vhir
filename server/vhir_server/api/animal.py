@@ -1,9 +1,7 @@
 """Animal resource router."""
 from __future__ import annotations
 
-from typing import Any
-
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from vhir_server.api.base import bundle_response, check_if_match, resource_response
@@ -58,7 +56,7 @@ async def update_animal(
     try:
         updated = await repo.update(resource_id, data)
     except VersionConflictError as e:
-        raise HTTPException(status_code=412, detail=str(e))
+        raise HTTPException(status_code=412, detail=str(e)) from e
     if updated is None:
         raise HTTPException(status_code=404, detail=f"Animal/{resource_id} not found")
     return resource_response(updated)
