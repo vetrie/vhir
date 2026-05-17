@@ -26,5 +26,21 @@ services:
       postgres:
         condition: service_healthy
 
+  ezyvet-adapter:
+    build: ../adapters/ezyvet
+    environment:
+      EZYVET_CLIENT_ID: "${EZYVET_CLIENT_ID:-}"
+      EZYVET_CLIENT_SECRET: "${EZYVET_CLIENT_SECRET:-}"
+      EZYVET_PARTNER_ID: "${EZYVET_PARTNER_ID:-}"
+      EZYVET_BASE_URL: "${EZYVET_BASE_URL:-https://api.ezyvet.com}"
+      EZYVET_VHIR_BASE_URL: "http://server:8000"
+      EZYVET_VHIR_TOKEN: "${EZYVET_VHIR_TOKEN:-dev}"
+      EZYVET_POLL_INTERVAL_SECONDS: "60"
+    ports:
+      - "8001:8001"
+    depends_on:
+      server:
+        condition: service_started
+
 volumes:
   pgdata:

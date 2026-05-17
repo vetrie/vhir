@@ -1,0 +1,44 @@
+[project]
+name = "vhir-adapter-ezyvet"
+version = "0.1.0"
+description = "VHIR ezyVet adapter — bidirectional sync daemon"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+    "tenacity>=9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=6",
+    "respx>=0.22",
+    "ruff>=0.8",
+    "mypy>=1.13",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["tests"]
+addopts = "--cov=vhir_adapter_ezyvet --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    "vhir_adapter_ezyvet/app.py",
+    "vhir_adapter_ezyvet/sync/daemon.py",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["vhir_adapter_ezyvet"]

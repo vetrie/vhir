@@ -1,0 +1,4938 @@
+openapi: 3.1.0
+info:
+  title: VHIR Reference Server
+  description: Veterinary Health Interoperability Resources — reference implementation
+  version: 0.1.0
+paths:
+  /.well-known/vhir-configuration:
+    get:
+      tags:
+      - System
+      summary: Vhir Configuration
+      operationId: vhir_configuration__well_known_vhir_configuration_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Vhir Configuration  Well Known Vhir Configuration
+                  Get
+  /v1/metadata:
+    get:
+      tags:
+      - System
+      summary: Capability Statement
+      operationId: capability_statement_v1_metadata_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Capability Statement V1 Metadata Get
+  /oauth/token:
+    post:
+      tags:
+      - System
+      summary: Dev Token
+      description: Dev-mode token endpoint. Not for production.
+      operationId: dev_token_oauth_token_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Dev Token Oauth Token Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Animal:
+    get:
+      tags:
+      - Animal
+      summary: Search Animals
+      operationId: search_animals_v1_Animal_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Animal
+      summary: Create Animal
+      operationId: create_animal_v1_Animal_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Animal/{resource_id}:
+    get:
+      tags:
+      - Animal
+      summary: Read Animal
+      operationId: read_animal_v1_Animal__resource_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Animal
+      summary: Update Animal
+      operationId: update_animal_v1_Animal__resource_id__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Animal
+      summary: Delete Animal
+      operationId: delete_animal_v1_Animal__resource_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Owner:
+    get:
+      tags:
+      - Owner
+      summary: Search Owners
+      operationId: search_owners_v1_Owner_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Owner
+      summary: Create Owner
+      operationId: create_owner_v1_Owner_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Owner/{rid}:
+    get:
+      tags:
+      - Owner
+      summary: Read Owner
+      operationId: read_owner_v1_Owner__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Owner
+      summary: Update Owner
+      operationId: update_owner_v1_Owner__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Owner
+      summary: Delete Owner
+      operationId: delete_owner_v1_Owner__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Practitioner:
+    get:
+      tags:
+      - Practitioner
+      summary: Search Practitioners
+      operationId: search_practitioners_v1_Practitioner_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Practitioner
+      summary: Create Practitioner
+      operationId: create_practitioner_v1_Practitioner_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PractitionerCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Practitioner/{rid}:
+    get:
+      tags:
+      - Practitioner
+      summary: Read Practitioner
+      operationId: read_practitioner_v1_Practitioner__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Practitioner
+      summary: Update Practitioner
+      operationId: update_practitioner_v1_Practitioner__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PractitionerCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Practitioner
+      summary: Delete Practitioner
+      operationId: delete_practitioner_v1_Practitioner__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/PractitionerRole:
+    get:
+      tags:
+      - PractitionerRole
+      summary: Search Practitioner Roles
+      operationId: search_practitioner_roles_v1_PractitionerRole_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - PractitionerRole
+      summary: Create Practitioner Role
+      operationId: create_practitioner_role_v1_PractitionerRole_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PractitionerRoleCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/PractitionerRole/{rid}:
+    get:
+      tags:
+      - PractitionerRole
+      summary: Read Practitioner Role
+      operationId: read_practitioner_role_v1_PractitionerRole__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - PractitionerRole
+      summary: Update Practitioner Role
+      operationId: update_practitioner_role_v1_PractitionerRole__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PractitionerRoleCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - PractitionerRole
+      summary: Delete Practitioner Role
+      operationId: delete_practitioner_role_v1_PractitionerRole__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Organization:
+    get:
+      tags:
+      - Organization
+      summary: Search Organizations
+      operationId: search_organizations_v1_Organization_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Organization
+      summary: Create Organization
+      operationId: create_organization_v1_Organization_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Organization/{rid}:
+    get:
+      tags:
+      - Organization
+      summary: Read Organization
+      operationId: read_organization_v1_Organization__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Organization
+      summary: Update Organization
+      operationId: update_organization_v1_Organization__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Organization
+      summary: Delete Organization
+      operationId: delete_organization_v1_Organization__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Encounter:
+    get:
+      tags:
+      - Encounter
+      summary: Search Encounters
+      operationId: search_encounters_v1_Encounter_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Encounter
+      summary: Create Encounter
+      operationId: create_encounter_v1_Encounter_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncounterCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Encounter/{rid}:
+    get:
+      tags:
+      - Encounter
+      summary: Read Encounter
+      operationId: read_encounter_v1_Encounter__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Encounter
+      summary: Update Encounter
+      operationId: update_encounter_v1_Encounter__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncounterCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Encounter
+      summary: Delete Encounter
+      operationId: delete_encounter_v1_Encounter__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Observation:
+    get:
+      tags:
+      - Observation
+      summary: Search Observations
+      operationId: search_observations_v1_Observation_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Observation
+      summary: Create Observation
+      operationId: create_observation_v1_Observation_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObservationCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Observation/{rid}:
+    get:
+      tags:
+      - Observation
+      summary: Read Observation
+      operationId: read_observation_v1_Observation__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Observation
+      summary: Update Observation
+      operationId: update_observation_v1_Observation__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObservationCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Observation
+      summary: Delete Observation
+      operationId: delete_observation_v1_Observation__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Condition:
+    get:
+      tags:
+      - Condition
+      summary: Search Conditions
+      operationId: search_conditions_v1_Condition_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Condition
+      summary: Create Condition
+      operationId: create_condition_v1_Condition_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConditionCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Condition/{rid}:
+    get:
+      tags:
+      - Condition
+      summary: Read Condition
+      operationId: read_condition_v1_Condition__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Condition
+      summary: Update Condition
+      operationId: update_condition_v1_Condition__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConditionCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Condition
+      summary: Delete Condition
+      operationId: delete_condition_v1_Condition__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/MedicationRequest:
+    get:
+      tags:
+      - MedicationRequest
+      summary: Search Medication Requests
+      operationId: search_medication_requests_v1_MedicationRequest_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - MedicationRequest
+      summary: Create Medication Request
+      operationId: create_medication_request_v1_MedicationRequest_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicationRequestCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/MedicationRequest/{rid}:
+    get:
+      tags:
+      - MedicationRequest
+      summary: Read Medication Request
+      operationId: read_medication_request_v1_MedicationRequest__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - MedicationRequest
+      summary: Update Medication Request
+      operationId: update_medication_request_v1_MedicationRequest__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicationRequestCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - MedicationRequest
+      summary: Delete Medication Request
+      operationId: delete_medication_request_v1_MedicationRequest__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Group:
+    get:
+      tags:
+      - Group
+      summary: ' Search'
+      operationId: _search_v1_Group_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Group
+      summary: ' Create'
+      operationId: _create_v1_Group_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Group/{rid}:
+    get:
+      tags:
+      - Group
+      summary: ' Read'
+      operationId: _read_v1_Group__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Group
+      summary: ' Update'
+      operationId: _update_v1_Group__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Group
+      summary: ' Delete'
+      operationId: _delete_v1_Group__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Location:
+    get:
+      tags:
+      - Location
+      summary: ' Search'
+      operationId: _search_v1_Location_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Location
+      summary: ' Create'
+      operationId: _create_v1_Location_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Location/{rid}:
+    get:
+      tags:
+      - Location
+      summary: ' Read'
+      operationId: _read_v1_Location__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Location
+      summary: ' Update'
+      operationId: _update_v1_Location__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Location
+      summary: ' Delete'
+      operationId: _delete_v1_Location__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Device:
+    get:
+      tags:
+      - Device
+      summary: ' Search'
+      operationId: _search_v1_Device_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Device
+      summary: ' Create'
+      operationId: _create_v1_Device_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Device/{rid}:
+    get:
+      tags:
+      - Device
+      summary: ' Read'
+      operationId: _read_v1_Device__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Device
+      summary: ' Update'
+      operationId: _update_v1_Device__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Device
+      summary: ' Delete'
+      operationId: _delete_v1_Device__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/DeviceMetric:
+    get:
+      tags:
+      - DeviceMetric
+      summary: ' Search'
+      operationId: _search_v1_DeviceMetric_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - DeviceMetric
+      summary: ' Create'
+      operationId: _create_v1_DeviceMetric_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceMetricCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/DeviceMetric/{rid}:
+    get:
+      tags:
+      - DeviceMetric
+      summary: ' Read'
+      operationId: _read_v1_DeviceMetric__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - DeviceMetric
+      summary: ' Update'
+      operationId: _update_v1_DeviceMetric__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceMetricCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - DeviceMetric
+      summary: ' Delete'
+      operationId: _delete_v1_DeviceMetric__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Procedure:
+    get:
+      tags:
+      - Procedure
+      summary: ' Search'
+      operationId: _search_v1_Procedure_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Procedure
+      summary: ' Create'
+      operationId: _create_v1_Procedure_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcedureCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Procedure/{rid}:
+    get:
+      tags:
+      - Procedure
+      summary: ' Read'
+      operationId: _read_v1_Procedure__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Procedure
+      summary: ' Update'
+      operationId: _update_v1_Procedure__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcedureCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Procedure
+      summary: ' Delete'
+      operationId: _delete_v1_Procedure__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Immunization:
+    get:
+      tags:
+      - Immunization
+      summary: ' Search'
+      operationId: _search_v1_Immunization_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Immunization
+      summary: ' Create'
+      operationId: _create_v1_Immunization_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImmunizationCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Immunization/{rid}:
+    get:
+      tags:
+      - Immunization
+      summary: ' Read'
+      operationId: _read_v1_Immunization__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Immunization
+      summary: ' Update'
+      operationId: _update_v1_Immunization__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImmunizationCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Immunization
+      summary: ' Delete'
+      operationId: _delete_v1_Immunization__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/MedicationDispense:
+    get:
+      tags:
+      - MedicationDispense
+      summary: ' Search'
+      operationId: _search_v1_MedicationDispense_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - MedicationDispense
+      summary: ' Create'
+      operationId: _create_v1_MedicationDispense_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicationDispenseCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/MedicationDispense/{rid}:
+    get:
+      tags:
+      - MedicationDispense
+      summary: ' Read'
+      operationId: _read_v1_MedicationDispense__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - MedicationDispense
+      summary: ' Update'
+      operationId: _update_v1_MedicationDispense__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicationDispenseCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - MedicationDispense
+      summary: ' Delete'
+      operationId: _delete_v1_MedicationDispense__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/MedicationAdministration:
+    get:
+      tags:
+      - MedicationAdministration
+      summary: ' Search'
+      operationId: _search_v1_MedicationAdministration_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - MedicationAdministration
+      summary: ' Create'
+      operationId: _create_v1_MedicationAdministration_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicationAdministrationCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/MedicationAdministration/{rid}:
+    get:
+      tags:
+      - MedicationAdministration
+      summary: ' Read'
+      operationId: _read_v1_MedicationAdministration__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - MedicationAdministration
+      summary: ' Update'
+      operationId: _update_v1_MedicationAdministration__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicationAdministrationCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - MedicationAdministration
+      summary: ' Delete'
+      operationId: _delete_v1_MedicationAdministration__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Appointment:
+    get:
+      tags:
+      - Appointment
+      summary: ' Search'
+      operationId: _search_v1_Appointment_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Appointment
+      summary: ' Create'
+      operationId: _create_v1_Appointment_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Appointment/{rid}:
+    get:
+      tags:
+      - Appointment
+      summary: ' Read'
+      operationId: _read_v1_Appointment__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Appointment
+      summary: ' Update'
+      operationId: _update_v1_Appointment__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Appointment
+      summary: ' Delete'
+      operationId: _delete_v1_Appointment__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Schedule:
+    get:
+      tags:
+      - Schedule
+      summary: ' Search'
+      operationId: _search_v1_Schedule_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Schedule
+      summary: ' Create'
+      operationId: _create_v1_Schedule_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Schedule/{rid}:
+    get:
+      tags:
+      - Schedule
+      summary: ' Read'
+      operationId: _read_v1_Schedule__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Schedule
+      summary: ' Update'
+      operationId: _update_v1_Schedule__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Schedule
+      summary: ' Delete'
+      operationId: _delete_v1_Schedule__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/Slot:
+    get:
+      tags:
+      - Slot
+      summary: ' Search'
+      operationId: _search_v1_Slot_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - Slot
+      summary: ' Create'
+      operationId: _create_v1_Slot_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlotCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/Slot/{rid}:
+    get:
+      tags:
+      - Slot
+      summary: ' Read'
+      operationId: _read_v1_Slot__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - Slot
+      summary: ' Update'
+      operationId: _update_v1_Slot__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlotCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Slot
+      summary: ' Delete'
+      operationId: _delete_v1_Slot__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/InsuranceClaim:
+    get:
+      tags:
+      - InsuranceClaim
+      summary: ' Search'
+      operationId: _search_v1_InsuranceClaim_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+    post:
+      tags:
+      - InsuranceClaim
+      summary: ' Create'
+      operationId: _create_v1_InsuranceClaim_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsuranceClaimCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /v1/InsuranceClaim/{rid}:
+    get:
+      tags:
+      - InsuranceClaim
+      summary: ' Read'
+      operationId: _read_v1_InsuranceClaim__rid__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - InsuranceClaim
+      summary: ' Update'
+      operationId: _update_v1_InsuranceClaim__rid__put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsuranceClaimCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - InsuranceClaim
+      summary: ' Delete'
+      operationId: _delete_v1_InsuranceClaim__rid__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Rid
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/$lookup-microchip:
+    post:
+      tags:
+      - System Operations
+      summary: Lookup Microchip
+      operationId: lookup_microchip_v1__lookup_microchip_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MicrochipLookupRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MicrochipLookupResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /:
+    get:
+      summary: Root
+      operationId: root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Root  Get
+components:
+  schemas:
+    Address:
+      properties:
+        line:
+          items:
+            type: string
+          type: array
+          title: Line
+        city:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: City
+        state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: State
+        postalCode:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Postalcode
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+      type: object
+      title: Address
+    AnimalCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Animal
+          title: Resourcetype
+          default: Animal
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        species:
+          type: string
+          title: Species
+        breed:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Breed
+        sex:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sex
+        neuterStatus:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Neuterstatus
+        birthDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Birthdate
+        birthDateEstimated:
+          type: boolean
+          title: Birthdateestimated
+          default: false
+        deathDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Deathdate
+        deceased:
+          type: boolean
+          title: Deceased
+          default: false
+        color:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Color
+        markings:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Markings
+        weightKg:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Weightkg
+        identifiers:
+          items:
+            $ref: '#/components/schemas/Identifier'
+          type: array
+          title: Identifiers
+        owners:
+          items:
+            $ref: '#/components/schemas/OwnerLink'
+          type: array
+          title: Owners
+        managingOrganization:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        photo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Photo
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - species
+      title: AnimalCreate
+    AppointmentCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Appointment
+          title: Resourcetype
+          default: Appointment
+        status:
+          type: string
+          title: Status
+        serviceType:
+          items:
+            $ref: '#/components/schemas/Coding'
+          type: array
+          title: Servicetype
+        subject:
+          $ref: '#/components/schemas/Reference'
+        practitioners:
+          items:
+            $ref: '#/components/schemas/AppointmentParticipant'
+          type: array
+          title: Practitioners
+        start:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Start
+        end:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: End
+        slot:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        priority:
+          type: integer
+          title: Priority
+          default: 0
+        cancelationReason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cancelationreason
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - subject
+      title: AppointmentCreate
+    AppointmentParticipant:
+      properties:
+        actor:
+          $ref: '#/components/schemas/Reference'
+        role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Role
+        status:
+          type: string
+          title: Status
+          default: accepted
+      type: object
+      required:
+      - actor
+      title: AppointmentParticipant
+    AvailableTime:
+      properties:
+        daysOfWeek:
+          items:
+            type: string
+          type: array
+          title: Daysofweek
+        availableStartTime:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Availablestarttime
+        availableEndTime:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Availableendtime
+      type: object
+      title: AvailableTime
+    ClaimAdjudication:
+      properties:
+        adjudicatedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Adjudicatedat
+        outcome:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Outcome
+        approvedAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Approvedamount
+        currency:
+          type: string
+          title: Currency
+          default: USD
+        deductibleApplied:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Deductibleapplied
+        coinsuranceApplied:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Coinsuranceapplied
+        paidAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Paidamount
+        denialReason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Denialreason
+        eobNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Eobnumber
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      type: object
+      title: ClaimAdjudication
+    ClaimDiagnosis:
+      properties:
+        condition:
+          $ref: '#/components/schemas/Reference'
+        sequence:
+          type: integer
+          title: Sequence
+          default: 1
+      type: object
+      required:
+      - condition
+      title: ClaimDiagnosis
+    ClaimItem:
+      properties:
+        sequence:
+          type: integer
+          title: Sequence
+        serviceDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Servicedate
+        code:
+          anyOf:
+          - $ref: '#/components/schemas/Coding'
+          - type: 'null'
+        quantity:
+          anyOf:
+          - $ref: '#/components/schemas/Quantity'
+          - type: 'null'
+        unitPrice:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Unitprice
+        net:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Net
+      type: object
+      required:
+      - sequence
+      title: ClaimItem
+    ClaimProcedure:
+      properties:
+        procedure:
+          $ref: '#/components/schemas/Reference'
+        sequence:
+          type: integer
+          title: Sequence
+          default: 1
+      type: object
+      required:
+      - procedure
+      title: ClaimProcedure
+    ClaimSubmission:
+      properties:
+        submittedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Submittedat
+        claimedAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Claimedamount
+        currency:
+          type: string
+          title: Currency
+          default: USD
+        invoiceNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoicenumber
+        paymentType:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Paymenttype
+      type: object
+      title: ClaimSubmission
+    Coding:
+      properties:
+        system:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: System
+        code:
+          type: string
+          title: Code
+        display:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display
+      type: object
+      required:
+      - code
+      title: Coding
+    ConditionCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Condition
+          title: Resourcetype
+          default: Condition
+        status:
+          type: string
+          title: Status
+        verificationStatus:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verificationstatus
+        code:
+          $ref: '#/components/schemas/Coding'
+        subject:
+          $ref: '#/components/schemas/Reference'
+        encounter:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        recorder:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        asserter:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        onsetDateTime:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Onsetdatetime
+        onsetDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Onsetdate
+        onsetString:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Onsetstring
+        abatementDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Abatementdate
+        recordedDate:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Recordeddate
+        severity:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Severity
+        evidence:
+          items:
+            $ref: '#/components/schemas/ConditionEvidence'
+          type: array
+          title: Evidence
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - code
+      - subject
+      title: ConditionCreate
+    ConditionEvidence:
+      properties:
+        code:
+          anyOf:
+          - $ref: '#/components/schemas/Coding'
+          - type: 'null'
+        detail:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+      type: object
+      title: ConditionEvidence
+    ControlledSubstance:
+      properties:
+        schedule:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Schedule
+        deaOrderFormNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Deaorderformnumber
+      type: object
+      title: ControlledSubstance
+    DeviceCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Device
+          title: Resourcetype
+          default: Device
+        type:
+          type: string
+          title: Type
+        status:
+          type: string
+          title: Status
+          default: active
+        identifiers:
+          items:
+            $ref: '#/components/schemas/Identifier'
+          type: array
+          title: Identifiers
+        subject:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        owner:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        manufacturer:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Manufacturer
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        serialNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Serialnumber
+        lotNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lotnumber
+        manufactureDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Manufacturedate
+        expirationDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Expirationdate
+        udi:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Udi
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - type
+      title: DeviceCreate
+    DeviceMetricCreate:
+      properties:
+        resourceType:
+          type: string
+          const: DeviceMetric
+          title: Resourcetype
+          default: DeviceMetric
+        device:
+          $ref: '#/components/schemas/Reference'
+        type:
+          $ref: '#/components/schemas/Coding'
+        unit:
+          anyOf:
+          - $ref: '#/components/schemas/Coding'
+          - type: 'null'
+        operationalStatus:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Operationalstatus
+        category:
+          type: string
+          title: Category
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - device
+      - type
+      - category
+      title: DeviceMetricCreate
+    DispenseRequest:
+      properties:
+        quantity:
+          anyOf:
+          - $ref: '#/components/schemas/DoseQuantity'
+          - type: 'null'
+        numberOfRefillsAllowed:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Numberofrefillsallowed
+        externalPharmacy:
+          type: boolean
+          title: Externalpharmacy
+          default: false
+      type: object
+      title: DispenseRequest
+    DosageInstruction:
+      properties:
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        route:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Route
+        doseQuantity:
+          anyOf:
+          - $ref: '#/components/schemas/DoseQuantity'
+          - type: 'null'
+        frequency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Frequency
+        duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Duration
+        maxDosePerDay:
+          anyOf:
+          - $ref: '#/components/schemas/DoseQuantity'
+          - type: 'null'
+      type: object
+      title: DosageInstruction
+    DoseQuantity:
+      properties:
+        value:
+          type: number
+          title: Value
+        unit:
+          type: string
+          title: Unit
+      type: object
+      required:
+      - value
+      - unit
+      title: DoseQuantity
+    EncounterAdmission:
+      properties:
+        origin:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        admitSource:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Admitsource
+        dischargeDisposition:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dischargedisposition
+      type: object
+      title: EncounterAdmission
+    EncounterCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Encounter
+          title: Resourcetype
+          default: Encounter
+        status:
+          type: string
+          title: Status
+        class:
+          type: string
+          title: Class
+        subject:
+          $ref: '#/components/schemas/Reference'
+        owner:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        serviceProvider:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        location:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        practitioners:
+          items:
+            $ref: '#/components/schemas/EncounterPractitioner'
+          type: array
+          title: Practitioners
+        period:
+          anyOf:
+          - $ref: '#/components/schemas/Period'
+          - type: 'null'
+        reasonCode:
+          items:
+            $ref: '#/components/schemas/Coding'
+          type: array
+          title: Reasoncode
+        reasonText:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reasontext
+        diagnosis:
+          items:
+            $ref: '#/components/schemas/EncounterDiagnosis'
+          type: array
+          title: Diagnosis
+        referredFrom:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        admission:
+          anyOf:
+          - $ref: '#/components/schemas/EncounterAdmission'
+          - type: 'null'
+        reportable:
+          type: boolean
+          title: Reportable
+          default: false
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - class
+      - subject
+      title: EncounterCreate
+    EncounterDiagnosis:
+      properties:
+        condition:
+          $ref: '#/components/schemas/Reference'
+        use:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Use
+        rank:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rank
+      type: object
+      required:
+      - condition
+      title: EncounterDiagnosis
+    EncounterPractitioner:
+      properties:
+        practitioner:
+          $ref: '#/components/schemas/Reference'
+        role:
+          type: string
+          title: Role
+      type: object
+      required:
+      - practitioner
+      - role
+      title: EncounterPractitioner
+    GroupCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Group
+          title: Resourcetype
+          default: Group
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        type:
+          type: string
+          title: Type
+          default: animal
+        productionPurpose:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Productionpurpose
+        premisesId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Premisesid
+        managingOrganization:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        active:
+          type: boolean
+          title: Active
+          default: true
+        quantity:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Quantity
+        members:
+          items:
+            $ref: '#/components/schemas/GroupMember'
+          type: array
+          title: Members
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      title: GroupCreate
+    GroupMember:
+      properties:
+        ref:
+          type: string
+          title: Ref
+        inactive:
+          type: boolean
+          title: Inactive
+          default: false
+        period:
+          anyOf:
+          - $ref: '#/components/schemas/Period'
+          - type: 'null'
+      type: object
+      required:
+      - ref
+      title: GroupMember
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Identifier:
+      properties:
+        type:
+          type: string
+          title: Type
+        system:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: System
+        value:
+          type: string
+          title: Value
+        issuer:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+      type: object
+      required:
+      - type
+      - value
+      title: Identifier
+    ImmunizationCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Immunization
+          title: Resourcetype
+          default: Immunization
+        status:
+          type: string
+          title: Status
+        vaccineCode:
+          $ref: '#/components/schemas/Coding'
+        subject:
+          $ref: '#/components/schemas/Reference'
+        encounter:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        occurrenceDateTime:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Occurrencedatetime
+        primarySource:
+          type: boolean
+          title: Primarysource
+          default: true
+        site:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Site
+        route:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Route
+        doseQuantity:
+          anyOf:
+          - $ref: '#/components/schemas/Quantity'
+          - type: 'null'
+        performer:
+          items:
+            $ref: '#/components/schemas/ImmunizationPerformer'
+          type: array
+          title: Performer
+        lotNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lotnumber
+        expirationDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Expirationdate
+        nextDueDate:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Nextduedate
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - vaccineCode
+      - subject
+      title: ImmunizationCreate
+    ImmunizationPerformer:
+      properties:
+        practitioner:
+          $ref: '#/components/schemas/Reference'
+        role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Role
+      type: object
+      required:
+      - practitioner
+      title: ImmunizationPerformer
+    InsuranceClaimCreate:
+      properties:
+        resourceType:
+          type: string
+          const: InsuranceClaim
+          title: Resourcetype
+          default: InsuranceClaim
+        status:
+          type: string
+          title: Status
+        type:
+          type: string
+          title: Type
+          default: professional
+        subject:
+          $ref: '#/components/schemas/Reference'
+        encounter:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        insurer:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        policyNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Policynumber
+        groupNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Groupnumber
+        claimType:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Claimtype
+        priority:
+          type: string
+          title: Priority
+          default: normal
+        diagnosis:
+          items:
+            $ref: '#/components/schemas/ClaimDiagnosis'
+          type: array
+          title: Diagnosis
+        procedure:
+          items:
+            $ref: '#/components/schemas/ClaimProcedure'
+          type: array
+          title: Procedure
+        item:
+          items:
+            $ref: '#/components/schemas/ClaimItem'
+          type: array
+          title: Item
+        totalAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Totalamount
+        currency:
+          type: string
+          title: Currency
+          default: USD
+        preAuth:
+          anyOf:
+          - $ref: '#/components/schemas/PreAuthorization'
+          - type: 'null'
+        submission:
+          anyOf:
+          - $ref: '#/components/schemas/ClaimSubmission'
+          - type: 'null'
+        adjudication:
+          anyOf:
+          - $ref: '#/components/schemas/ClaimAdjudication'
+          - type: 'null'
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - subject
+      title: InsuranceClaimCreate
+    LocationCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Location
+          title: Resourcetype
+          default: Location
+        name:
+          type: string
+          title: Name
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        mode:
+          type: string
+          title: Mode
+          default: instance
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/Address'
+          - type: 'null'
+        managingOrganization:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        partOf:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        operationalStatus:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Operationalstatus
+        active:
+          type: boolean
+          title: Active
+          default: true
+        telecom:
+          items:
+            $ref: '#/components/schemas/Telecom'
+          type: array
+          title: Telecom
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - name
+      title: LocationCreate
+    MedicationAdministrationCreate:
+      properties:
+        resourceType:
+          type: string
+          const: MedicationAdministration
+          title: Resourcetype
+          default: MedicationAdministration
+        status:
+          type: string
+          title: Status
+        medication:
+          $ref: '#/components/schemas/MedicationInfo'
+        subject:
+          $ref: '#/components/schemas/Reference'
+        encounter:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        performer:
+          items:
+            $ref: '#/components/schemas/Reference'
+          type: array
+          title: Performer
+        effectiveDateTime:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Effectivedatetime
+        effectivePeriod:
+          anyOf:
+          - $ref: '#/components/schemas/Period'
+          - type: 'null'
+        dosage:
+          anyOf:
+          - $ref: '#/components/schemas/DosageInstruction'
+          - type: 'null'
+        withdrawalEnds:
+          anyOf:
+          - $ref: '#/components/schemas/WithdrawalEnds'
+          - type: 'null'
+        memberCompletion:
+          items:
+            $ref: '#/components/schemas/MemberCompletion'
+          type: array
+          title: Membercompletion
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - medication
+      - subject
+      title: MedicationAdministrationCreate
+    MedicationDispenseCreate:
+      properties:
+        resourceType:
+          type: string
+          const: MedicationDispense
+          title: Resourcetype
+          default: MedicationDispense
+        status:
+          type: string
+          title: Status
+        medication:
+          $ref: '#/components/schemas/MedicationInfo'
+        subject:
+          $ref: '#/components/schemas/Reference'
+        authorizingPrescription:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        quantity:
+          anyOf:
+          - $ref: '#/components/schemas/DoseQuantity'
+          - type: 'null'
+        daysSupply:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Dayssupply
+        whenPrepared:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Whenprepared
+        whenHandedOver:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Whenhandedover
+        performer:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - medication
+      - subject
+      title: MedicationDispenseCreate
+    MedicationInfo:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Code
+        system:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: System
+        form:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Form
+        brand:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand
+      type: object
+      title: MedicationInfo
+    MedicationRequestCreate:
+      properties:
+        resourceType:
+          type: string
+          const: MedicationRequest
+          title: Resourcetype
+          default: MedicationRequest
+        status:
+          type: string
+          title: Status
+        intent:
+          type: string
+          title: Intent
+        medication:
+          $ref: '#/components/schemas/MedicationInfo'
+        subject:
+          $ref: '#/components/schemas/Reference'
+        encounter:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        requester:
+          $ref: '#/components/schemas/Reference'
+        dispenser:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        dosageInstruction:
+          items:
+            $ref: '#/components/schemas/DosageInstruction'
+          type: array
+          title: Dosageinstruction
+        dispenseRequest:
+          anyOf:
+          - $ref: '#/components/schemas/DispenseRequest'
+          - type: 'null'
+        controlled:
+          anyOf:
+          - $ref: '#/components/schemas/ControlledSubstance'
+          - type: 'null'
+        vfd:
+          type: boolean
+          title: Vfd
+          default: false
+        withdrawal:
+          anyOf:
+          - $ref: '#/components/schemas/WithdrawalPeriod'
+          - type: 'null'
+        extraLabel:
+          type: boolean
+          title: Extralabel
+          default: false
+        authoredOn:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Authoredon
+        expiresOn:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Expireson
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - intent
+      - medication
+      - subject
+      - requester
+      title: MedicationRequestCreate
+    MemberCompletion:
+      properties:
+        animal:
+          type: string
+          title: Animal
+        status:
+          type: string
+          title: Status
+        effectiveDateTime:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Effectivedatetime
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+      type: object
+      required:
+      - animal
+      - status
+      title: MemberCompletion
+    MicrochipLookupRequest:
+      properties:
+        chipId:
+          type: string
+          title: Chipid
+      type: object
+      required:
+      - chipId
+      title: MicrochipLookupRequest
+    MicrochipLookupResponse:
+      properties:
+        found:
+          type: boolean
+          title: Found
+        localAnimal:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Localanimal
+        registry:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Registry
+        registryContact:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Registrycontact
+        lastUpdated:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastupdated
+        broker:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Broker
+      type: object
+      required:
+      - found
+      title: MicrochipLookupResponse
+    ObservationComponent:
+      properties:
+        code:
+          $ref: '#/components/schemas/Coding'
+        valueQuantity:
+          anyOf:
+          - $ref: '#/components/schemas/Quantity'
+          - type: 'null'
+        valueString:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Valuestring
+        valueCoding:
+          anyOf:
+          - $ref: '#/components/schemas/Coding'
+          - type: 'null'
+      type: object
+      required:
+      - code
+      title: ObservationComponent
+    ObservationCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Observation
+          title: Resourcetype
+          default: Observation
+        status:
+          type: string
+          title: Status
+        category:
+          items:
+            type: string
+          type: array
+          title: Category
+        code:
+          $ref: '#/components/schemas/Coding'
+        subject:
+          $ref: '#/components/schemas/Reference'
+        encounter:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        device:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        performer:
+          items:
+            $ref: '#/components/schemas/Reference'
+          type: array
+          title: Performer
+        effectiveDateTime:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Effectivedatetime
+        effectivePeriod:
+          anyOf:
+          - $ref: '#/components/schemas/Period'
+          - type: 'null'
+        issued:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Issued
+        valueQuantity:
+          anyOf:
+          - $ref: '#/components/schemas/Quantity'
+          - type: 'null'
+        valueString:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Valuestring
+        valueBoolean:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Valueboolean
+        valueInteger:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Valueinteger
+        valueCoding:
+          anyOf:
+          - $ref: '#/components/schemas/Coding'
+          - type: 'null'
+        component:
+          items:
+            $ref: '#/components/schemas/ObservationComponent'
+          type: array
+          title: Component
+        sampledData:
+          anyOf:
+          - $ref: '#/components/schemas/SampledData'
+          - type: 'null'
+        referenceRange:
+          items:
+            $ref: '#/components/schemas/ReferenceRange'
+          type: array
+          title: Referencerange
+        interpretation:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Interpretation
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - code
+      - subject
+      title: ObservationCreate
+    OrganizationCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Organization
+          title: Resourcetype
+          default: Organization
+        name:
+          type: string
+          title: Name
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        identifiers:
+          items:
+            $ref: '#/components/schemas/Identifier'
+          type: array
+          title: Identifiers
+        telecom:
+          items:
+            $ref: '#/components/schemas/Telecom'
+          type: array
+          title: Telecom
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/Address'
+          - type: 'null'
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timezone
+        partOf:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        active:
+          type: boolean
+          title: Active
+          default: true
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - name
+      title: OrganizationCreate
+    OwnerCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Owner
+          title: Resourcetype
+          default: Owner
+        name:
+          anyOf:
+          - $ref: '#/components/schemas/OwnerName'
+          - type: 'null'
+        ownerType:
+          type: string
+          title: Ownertype
+          default: individual
+        telecom:
+          items:
+            $ref: '#/components/schemas/Telecom'
+          type: array
+          title: Telecom
+        address:
+          anyOf:
+          - $ref: '#/components/schemas/Address'
+          - type: 'null'
+        identifiers:
+          items:
+            $ref: '#/components/schemas/Identifier'
+          type: array
+          title: Identifiers
+        preferredLanguage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Preferredlanguage
+        communicationPreferences:
+          additionalProperties: true
+          type: object
+          title: Communicationpreferences
+        managingOrganization:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        active:
+          type: boolean
+          title: Active
+          default: true
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      title: OwnerCreate
+    OwnerLink:
+      properties:
+        ref:
+          type: string
+          title: Ref
+        role:
+          type: string
+          title: Role
+        grantedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Grantedat
+      type: object
+      required:
+      - ref
+      - role
+      title: OwnerLink
+    OwnerName:
+      properties:
+        given:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Given
+        family:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Family
+        full:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Full
+      type: object
+      title: OwnerName
+    Period:
+      properties:
+        start:
+          anyOf:
+          - type: string
+            format: date
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Start
+        end:
+          anyOf:
+          - type: string
+            format: date
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: End
+      type: object
+      title: Period
+    PractitionerCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Practitioner
+          title: Resourcetype
+          default: Practitioner
+        name:
+          anyOf:
+          - $ref: '#/components/schemas/PractitionerName'
+          - type: 'null'
+        telecom:
+          items:
+            $ref: '#/components/schemas/Telecom'
+          type: array
+          title: Telecom
+        qualifications:
+          items:
+            $ref: '#/components/schemas/Qualification'
+          type: array
+          title: Qualifications
+        deaNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Deanumber
+        npiNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Npinumber
+        active:
+          type: boolean
+          title: Active
+          default: true
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      title: PractitionerCreate
+    PractitionerName:
+      properties:
+        given:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Given
+        family:
+          type: string
+          title: Family
+        prefix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prefix
+        suffix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Suffix
+      type: object
+      required:
+      - family
+      title: PractitionerName
+    PractitionerRoleCreate:
+      properties:
+        resourceType:
+          type: string
+          const: PractitionerRole
+          title: Resourcetype
+          default: PractitionerRole
+        practitioner:
+          $ref: '#/components/schemas/Reference'
+        organization:
+          $ref: '#/components/schemas/Reference'
+        role:
+          type: string
+          title: Role
+        specialties:
+          items:
+            type: string
+          type: array
+          title: Specialties
+        permissions:
+          items:
+            type: string
+          type: array
+          title: Permissions
+        denyPermissions:
+          items:
+            type: string
+          type: array
+          title: Denypermissions
+        period:
+          anyOf:
+          - $ref: '#/components/schemas/Period'
+          - type: 'null'
+        availableTime:
+          items:
+            $ref: '#/components/schemas/AvailableTime'
+          type: array
+          title: Availabletime
+        active:
+          type: boolean
+          title: Active
+          default: true
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - practitioner
+      - organization
+      - role
+      title: PractitionerRoleCreate
+    PreAuthorization:
+      properties:
+        requestedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Requestedat
+        estimatedAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Estimatedamount
+        currency:
+          type: string
+          title: Currency
+          default: USD
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+        authNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authnumber
+        respondedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Respondedat
+        approvedAmount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Approvedamount
+        expiresAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expiresat
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      type: object
+      title: PreAuthorization
+    ProcedureCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Procedure
+          title: Resourcetype
+          default: Procedure
+        status:
+          type: string
+          title: Status
+        code:
+          $ref: '#/components/schemas/Coding'
+        subject:
+          $ref: '#/components/schemas/Reference'
+        encounter:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        performer:
+          items:
+            $ref: '#/components/schemas/ProcedurePerformer'
+          type: array
+          title: Performer
+        performedDateTime:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Performeddatetime
+        performedPeriod:
+          anyOf:
+          - $ref: '#/components/schemas/Period'
+          - type: 'null'
+        bodySite:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bodysite
+        outcome:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Outcome
+        followUp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Followup
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - status
+      - code
+      - subject
+      title: ProcedureCreate
+    ProcedurePerformer:
+      properties:
+        practitioner:
+          $ref: '#/components/schemas/Reference'
+        role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Role
+      type: object
+      required:
+      - practitioner
+      title: ProcedurePerformer
+    Qualification:
+      properties:
+        code:
+          type: string
+          title: Code
+        display:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display
+        licenseNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Licensenumber
+        jurisdiction:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Jurisdiction
+        issuer:
+          anyOf:
+          - $ref: '#/components/schemas/Reference'
+          - type: 'null'
+        period:
+          anyOf:
+          - $ref: '#/components/schemas/Period'
+          - type: 'null'
+      type: object
+      required:
+      - code
+      title: Qualification
+    Quantity:
+      properties:
+        value:
+          type: number
+          title: Value
+        unit:
+          type: string
+          title: Unit
+        system:
+          type: string
+          title: System
+          default: http://unitsofmeasure.org
+        code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Code
+      type: object
+      required:
+      - value
+      - unit
+      title: Quantity
+    Reference:
+      properties:
+        ref:
+          type: string
+          title: Ref
+          description: ResourceType/id
+        display:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display
+      type: object
+      required:
+      - ref
+      title: Reference
+    ReferenceRange:
+      properties:
+        low:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Low
+        high:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: High
+        unit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Unit
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        appliesTo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Appliesto
+      type: object
+      title: ReferenceRange
+    SampledData:
+      properties:
+        origin:
+          $ref: '#/components/schemas/Quantity'
+        periodMs:
+          type: number
+          title: Periodms
+        factor:
+          type: number
+          title: Factor
+          default: 1.0
+        dimensions:
+          type: integer
+          title: Dimensions
+          default: 1
+        data:
+          type: string
+          title: Data
+      type: object
+      required:
+      - origin
+      - periodMs
+      - data
+      title: SampledData
+    ScheduleCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Schedule
+          title: Resourcetype
+          default: Schedule
+        actor:
+          items:
+            $ref: '#/components/schemas/Reference'
+          type: array
+          title: Actor
+        planningHorizon:
+          anyOf:
+          - $ref: '#/components/schemas/Period'
+          - type: 'null'
+        active:
+          type: boolean
+          title: Active
+          default: true
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        serviceType:
+          items:
+            $ref: '#/components/schemas/Coding'
+          type: array
+          title: Servicetype
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      title: ScheduleCreate
+    SlotCreate:
+      properties:
+        resourceType:
+          type: string
+          const: Slot
+          title: Resourcetype
+          default: Slot
+        schedule:
+          $ref: '#/components/schemas/Reference'
+        status:
+          type: string
+          title: Status
+        start:
+          type: string
+          format: date-time
+          title: Start
+        end:
+          type: string
+          format: date-time
+          title: End
+        serviceType:
+          items:
+            $ref: '#/components/schemas/Coding'
+          type: array
+          title: Servicetype
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        overbooked:
+          type: boolean
+          title: Overbooked
+          default: false
+        extensions:
+          additionalProperties: true
+          type: object
+          title: Extensions
+      type: object
+      required:
+      - schedule
+      - status
+      - start
+      - end
+      title: SlotCreate
+    Telecom:
+      properties:
+        system:
+          type: string
+          title: System
+        value:
+          type: string
+          title: Value
+        use:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Use
+        preferred:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Preferred
+      type: object
+      required:
+      - system
+      - value
+      title: Telecom
+    TokenRequest:
+      properties:
+        grant_type:
+          type: string
+          title: Grant Type
+          default: dev
+        subject:
+          type: string
+          title: Subject
+          default: dev-user
+        role:
+          type: string
+          title: Role
+          default: veterinarian
+        org_id:
+          type: string
+          title: Org Id
+          default: dev-org
+      type: object
+      title: TokenRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    WithdrawalEnds:
+      properties:
+        meat:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Meat
+        milk:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Milk
+        eggs:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Eggs
+      type: object
+      title: WithdrawalEnds
+    WithdrawalPeriod:
+      properties:
+        milkHours:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Milkhours
+        meatHours:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Meathours
+        eggsHours:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Eggshours
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      type: object
+      title: WithdrawalPeriod
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
