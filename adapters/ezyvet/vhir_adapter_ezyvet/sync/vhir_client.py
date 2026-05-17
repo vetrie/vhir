@@ -16,7 +16,7 @@ class VHIRClient:
         self._token = token or settings.vhir_token
         self._http: httpx.AsyncClient | None = None
 
-    async def __aenter__(self) -> "VHIRClient":
+    async def __aenter__(self) -> VHIRClient:
         self._http = httpx.AsyncClient(
             base_url=self._base_url,
             timeout=httpx.Timeout(30.0),

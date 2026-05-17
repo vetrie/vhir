@@ -6,7 +6,6 @@ from typing import Any
 from sqlalchemy import Table, func, select
 from sqlalchemy.sql import Select
 
-
 # Per-resource search parameter definitions.
 # Format: {param_name: (kind, jsonb_path)}
 # kind: "string" | "token" | "date" | "reference"

@@ -11,13 +11,13 @@ from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Request, 
 from vhir_adapter_ezyvet.config import settings
 from vhir_adapter_ezyvet.mappings import (
     animal_to_vhir,
-    contact_to_vhir,
-    encounter_to_vhir,
-    clinical_note_to_vhir,
-    prescription_to_medication_request,
-    dispense_item_to_medication_dispense,
-    vaccination_to_vhir,
     appointment_to_vhir,
+    clinical_note_to_vhir,
+    contact_to_vhir,
+    dispense_item_to_medication_dispense,
+    encounter_to_vhir,
+    prescription_to_medication_request,
+    vaccination_to_vhir,
 )
 from vhir_adapter_ezyvet.sync.vhir_client import VHIRClient
 

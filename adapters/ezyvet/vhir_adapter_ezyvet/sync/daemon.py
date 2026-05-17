@@ -4,7 +4,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -12,13 +12,13 @@ from vhir_adapter_ezyvet.client import EzyVetClient
 from vhir_adapter_ezyvet.config import settings
 from vhir_adapter_ezyvet.mappings import (
     animal_to_vhir,
-    contact_to_vhir,
-    encounter_to_vhir,
-    clinical_note_to_vhir,
-    prescription_to_medication_request,
-    dispense_item_to_medication_dispense,
-    vaccination_to_vhir,
     appointment_to_vhir,
+    clinical_note_to_vhir,
+    contact_to_vhir,
+    dispense_item_to_medication_dispense,
+    encounter_to_vhir,
+    prescription_to_medication_request,
+    vaccination_to_vhir,
 )
 from vhir_adapter_ezyvet.sync.vhir_client import VHIRClient
 
@@ -52,7 +52,7 @@ def _save_cursors(cursors: dict[str, str]) -> None:
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 async def _sync_resource(

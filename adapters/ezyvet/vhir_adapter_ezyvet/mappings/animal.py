@@ -1,6 +1,7 @@
 """ezyVet Animal ↔ VHIR Animal mapping."""
 from __future__ import annotations
 
+import contextlib
 from typing import Any
 
 _SPECIES_MAP: dict[str, str] = {
@@ -65,10 +66,8 @@ def animal_to_vhir(ez: dict[str, Any]) -> dict[str, Any]:
 
     weight_raw = f.get("weight")
     weight_kg: float | None = None
-    try:
+    with contextlib.suppress(TypeError, ValueError):
         weight_kg = float(weight_raw) if weight_raw not in (None, "", "0") else None
-    except (TypeError, ValueError):
-        pass
 
     return {
         "resourceType": "Animal",

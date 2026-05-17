@@ -31,8 +31,8 @@ from vhir_server.api.resources import (
     practitioner_router,
 )
 from vhir_server.api.system import router as system_router
-from vhir_server.registry.microchip import microchip_router
 from vhir_server.config import settings
+from vhir_server.registry.microchip import microchip_router
 from vhir_server.storage.database import engine
 from vhir_server.storage.tables import metadata
 

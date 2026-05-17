@@ -1,14 +1,13 @@
 """System-level endpoints: /metadata (capability statement), /oauth/token (dev mode)."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from vhir_server.auth.smart import TokenPayload, get_current_token, issue_dev_token
+from vhir_server.auth.smart import issue_dev_token
 from vhir_server.config import settings
 
 router = APIRouter(tags=["System"])
@@ -46,7 +45,7 @@ async def capability_statement() -> dict[str, Any]:
     return {
         "resourceType": "CapabilityStatement",
         "status": "active",
-        "date": datetime.now(tz=timezone.utc).date().isoformat(),
+        "date": datetime.now(tz=UTC).date().isoformat(),
         "kind": "instance",
         "software": {"name": "VHIR Reference Server", "version": "0.1.0"},
         "implementation": {"description": "VHIR reference implementation", "url": settings.server_base_url},

@@ -5,9 +5,7 @@ import json
 from typing import Any
 
 from fastapi import HTTPException, Request, Response, status
-from fastapi.responses import JSONResponse
 
-from vhir_server.config import settings
 from vhir_server.core.models import Bundle, BundleEntry
 
 VHIR_MEDIA_TYPE = "application/vhir+json"

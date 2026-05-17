@@ -1,16 +1,14 @@
 """Generic CRUD repository for VHIR resources backed by Postgres JSONB."""
 from __future__ import annotations
 
-import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
-from ulid import ULID
-from sqlalchemy import Table, delete, insert, select, update
+from sqlalchemy import Table, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from ulid import ULID
 
 from vhir_server.storage import tables
-
 
 _TABLE_MAP: dict[str, Table] = {
     "Animal":                    tables.animal,
@@ -44,7 +42,7 @@ def new_id() -> str:
 
 
 def _now() -> datetime:
-    return datetime.now(tz=timezone.utc)
+    return datetime.now(tz=UTC)
 
 
 def _embed_meta(body: dict[str, Any], resource_id: str, version: int) -> dict[str, Any]:

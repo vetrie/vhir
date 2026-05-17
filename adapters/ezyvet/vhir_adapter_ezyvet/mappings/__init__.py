@@ -4,8 +4,8 @@ from vhir_adapter_ezyvet.mappings.appointment import appointment_to_vhir, slot_t
 from vhir_adapter_ezyvet.mappings.encounter import encounter_to_vhir
 from vhir_adapter_ezyvet.mappings.immunization import vaccination_to_vhir
 from vhir_adapter_ezyvet.mappings.medication import (
-    prescription_to_medication_request,
     dispense_item_to_medication_dispense,
+    prescription_to_medication_request,
 )
 from vhir_adapter_ezyvet.mappings.observation import clinical_note_to_vhir
 from vhir_adapter_ezyvet.mappings.owner import contact_to_vhir, vhir_to_contact

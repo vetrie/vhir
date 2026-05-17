@@ -1,6 +1,7 @@
 """ezyVet Product/Prescription ↔ VHIR MedicationRequest + MedicationDispense mapping."""
 from __future__ import annotations
 
+import contextlib
 from typing import Any
 
 
@@ -18,10 +19,8 @@ def prescription_to_medication_request(ez: dict[str, Any]) -> dict[str, Any]:
 
     qty_raw = f.get("quantity") or f.get("dispensed_quantity")
     qty: float | None = None
-    try:
+    with contextlib.suppress(TypeError, ValueError):
         qty = float(qty_raw) if qty_raw not in (None, "") else None
-    except (TypeError, ValueError):
-        pass
 
     unit = f.get("unit") or f.get("dispensing_unit") or "unit"
 
@@ -72,10 +71,8 @@ def dispense_item_to_medication_dispense(ez: dict[str, Any]) -> dict[str, Any]:
 
     qty_raw = f.get("quantity") or f.get("dispensed_quantity")
     qty: float | None = None
-    try:
+    with contextlib.suppress(TypeError, ValueError):
         qty = float(qty_raw) if qty_raw not in (None, "") else None
-    except (TypeError, ValueError):
-        pass
 
     unit = f.get("unit") or "unit"
     lot = f.get("batch_number") or f.get("lot_number") or None
@@ -86,10 +83,8 @@ def dispense_item_to_medication_dispense(ez: dict[str, Any]) -> dict[str, Any]:
         f.get("withholding_period") or f.get("withdrawal_period_days")
     )
     withdrawal_days: int | None = None
-    try:
+    with contextlib.suppress(TypeError, ValueError):
         withdrawal_days = int(withdrawal_days_raw) if withdrawal_days_raw else None
-    except (TypeError, ValueError):
-        pass
 
     return {
         "resourceType": "MedicationDispense",

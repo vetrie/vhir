@@ -81,7 +81,7 @@ class EzyVetClient:
         self._token_cache = _TokenCache()
         self._http: httpx.AsyncClient | None = None
 
-    async def __aenter__(self) -> "EzyVetClient":
+    async def __aenter__(self) -> EzyVetClient:
         self._http = httpx.AsyncClient(
             base_url=self._base_url,
             timeout=httpx.Timeout(30.0),

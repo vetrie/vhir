@@ -1,6 +1,7 @@
 """ezyVet Appointment ↔ VHIR Appointment + Slot mapping."""
 from __future__ import annotations
 
+import contextlib
 from typing import Any
 
 _STATUS_MAP: dict[str, str] = {
@@ -52,10 +53,8 @@ def appointment_to_vhir(ez: dict[str, Any]) -> dict[str, Any]:
     start = _isodatetime(f.get("start_at") or f.get("date"))
     end = _isodatetime(f.get("end_at") or f.get("end_date"))
     duration_mins: int | None = None
-    try:
+    with contextlib.suppress(TypeError, ValueError):
         duration_mins = int(f.get("duration", 0) or 0) or None
-    except (TypeError, ValueError):
-        pass
 
     return {
         "resourceType": "Appointment",
