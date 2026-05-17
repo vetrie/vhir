@@ -35,9 +35,9 @@ addopts = "--cov=vhir_adapter_ezyvet --cov-report=term-missing --cov-fail-under=
 
 [tool.coverage.run]
 omit = [
-    "tests/*",
-    "vhir_adapter_ezyvet/app.py",
-    "vhir_adapter_ezyvet/sync/daemon.py",
+    "*/tests/*",
+    "*/vhir_adapter_ezyvet/app.py",
+    "*/vhir_adapter_ezyvet/sync/daemon.py",
 ]
 
 [tool.hatch.build.targets.wheel]

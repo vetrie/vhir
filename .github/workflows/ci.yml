@@ -58,7 +58,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DATABASE_URL: postgresql+asyncpg://vhir:vhir@localhost:5432/vhir_test
+      VHIR_DATABASE_URL: postgresql+asyncpg://vhir:vhir@localhost:5432/vhir_test
       VHIR_JWT_SECRET: ci-secret-not-for-production
     steps:
       - uses: actions/checkout@v4

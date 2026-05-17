@@ -43,7 +43,7 @@ testpaths = ["tests"]
 addopts = "--cov=vhir_server --cov-report=term-missing --cov-fail-under=80 --cov-config=pyproject.toml"
 
 [tool.coverage.run]
-omit = ["vhir_server/storage/migrations/*"]
+omit = ["*/vhir_server/storage/migrations/*"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["vhir_server"]
