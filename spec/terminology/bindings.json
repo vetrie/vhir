@@ -1,0 +1,200 @@
+{
+  "$schema": "https://vhir.dev/schemas/terminology-bindings",
+  "version": "0.1.0",
+  "description": "Canonical terminology bindings for VHIR resources. Maps each coded field to its preferred coding system(s) and the corresponding value set.",
+
+  "systems": [
+    {
+      "id": "aaha-diagnostic-terms",
+      "name": "AAHA Diagnostic Terms",
+      "uri": "urn:aaha:diagnostic-terms",
+      "oid": "2.16.840.1.113883.3.1950",
+      "version": "2024",
+      "publisher": "American Animal Hospital Association",
+      "url": "https://www.aaha.org/aaha-guidelines/",
+      "purpose": "Companion-animal diagnoses and problem codes; primary coding system for Condition resources in dogs, cats, ferrets, and rabbits.",
+      "licenseNote": "Freely available for non-commercial use with attribution. Commercial redistribution requires AAHA permission."
+    },
+    {
+      "id": "snomed-ct-vet",
+      "name": "SNOMED CT Veterinary Extension",
+      "uri": "http://snomed.info/sct",
+      "moduleId": "21000210109",
+      "version": "20240401",
+      "publisher": "SNOMED International / national extension owners",
+      "url": "https://www.snomed.org/snomed-ct/five-step-briefing",
+      "purpose": "Surgical, dental, diagnostic-imaging, and clinical-pathology procedure codes; secondary coding for conditions when AAHA terms are absent.",
+      "licenseNote": "Requires an active SNOMED CT affiliate license (free for most countries via SNOMED International member territories)."
+    },
+    {
+      "id": "venom",
+      "name": "VeNom Coding Project",
+      "uri": "http://venom-project.org",
+      "version": "2.0",
+      "publisher": "VeNom Coding Group (Royal Veterinary College et al.)",
+      "url": "http://venom-project.org",
+      "purpose": "Cross-species clinical terms for diagnoses and procedures; useful for multi-species practices and species not covered by AAHA (exotics, equine, food animals).",
+      "licenseNote": "Available under Creative Commons Attribution 4.0. Full code list available via the VeNom project website."
+    },
+    {
+      "id": "ucum",
+      "name": "Unified Code for Units of Measure (UCUM)",
+      "uri": "http://unitsofmeasure.org",
+      "version": "2.1",
+      "publisher": "Regenstrief Institute",
+      "url": "https://ucum.org",
+      "purpose": "Units for all quantity fields: observation values, dose quantities, volumes, weights, and durations.",
+      "licenseNote": "Free to use; copyright Regenstrief Institute. Redistribution requires attribution."
+    },
+    {
+      "id": "ndf-rt",
+      "name": "National Drug File – Reference Terminology (NDF-RT)",
+      "uri": "http://hl7.org/fhir/ndfrt",
+      "oid": "2.16.840.1.113883.6.209",
+      "version": "2018-02-05",
+      "publisher": "US Department of Veterans Affairs",
+      "url": "https://www.nlm.nih.gov/research/umls/sourcereleasedocs/current/NDFRT/",
+      "purpose": "Drug classification and pharmacological class codes for MedicationRequest and MedicationAdministration; used in lieu of RxNorm where full drug identity is not required.",
+      "licenseNote": "Public domain (US government work). No license required."
+    },
+    {
+      "id": "vhir-vaccine-codes",
+      "name": "VHIR Vaccine Code Value Set",
+      "uri": "https://vhir.dev/codesystems/vaccine-codes",
+      "version": "0.1.0",
+      "publisher": "VHIR Project",
+      "url": "https://vhir.dev/valuesets/vaccine-codes",
+      "purpose": "Veterinary vaccine identifiers following AAHA/AAFP/AAEP vaccine category names. Defined in spec/valuesets/vaccine_codes.json.",
+      "licenseNote": "Apache-2.0 / CC-BY-4.0 (VHIR project license)."
+    },
+    {
+      "id": "loinc",
+      "name": "LOINC",
+      "uri": "http://loinc.org",
+      "version": "2.77",
+      "publisher": "Regenstrief Institute",
+      "url": "https://loinc.org",
+      "purpose": "Optional secondary system for Observation codes when a LOINC term exists for the measured analyte (e.g. laboratory panels with human-medicine equivalents).",
+      "licenseNote": "Free to use with attribution. Redistribution of the full LOINC database requires a LOINC license."
+    }
+  ],
+
+  "bindings": [
+    {
+      "resource": "Condition",
+      "field": "code",
+      "description": "Primary diagnosis or clinical finding",
+      "strength": "preferred",
+      "preferredSystem": "aaha-diagnostic-terms",
+      "fallbackSystems": ["venom", "snomed-ct-vet"],
+      "valueSet": "https://vhir.dev/valuesets/aaha-diagnostic-terms",
+      "notes": "Use AAHA Diagnostic Terms for companion animals (dogs, cats, ferrets). Fall back to VeNom for exotics, equine, or food-animal species not covered by AAHA. SNOMED CT-VET is an acceptable alternative for any species."
+    },
+    {
+      "resource": "Procedure",
+      "field": "code",
+      "description": "Clinical procedure performed",
+      "strength": "preferred",
+      "preferredSystem": "snomed-ct-vet",
+      "fallbackSystems": ["venom"],
+      "valueSet": "https://vhir.dev/valuesets/snomed-ct-vet-procedures",
+      "notes": "SNOMED CT-VET is the preferred system for surgical, dental, imaging, and clinical-pathology procedures. VeNom provides a lighter-weight alternative for practices that lack SNOMED CT access."
+    },
+    {
+      "resource": "Observation",
+      "field": "code",
+      "description": "What was measured or observed",
+      "strength": "preferred",
+      "preferredSystem": "vhir-vaccine-codes",
+      "fallbackSystems": ["loinc"],
+      "valueSet": "https://vhir.dev/valuesets/vhir-vitals",
+      "notes": "Use the VHIR vitals catalog for vital signs, body condition scores, and wearable telemetry. Use LOINC for laboratory panels where a veterinary LOINC code exists."
+    },
+    {
+      "resource": "Observation",
+      "field": "valueQuantity.system",
+      "description": "Unit of measure for a quantitative result",
+      "strength": "required",
+      "preferredSystem": "ucum",
+      "fallbackSystems": [],
+      "valueSet": "https://vhir.dev/valuesets/ucum-units",
+      "notes": "UCUM codes are required for all machine-processable quantity values. Include the human-readable unit string in valueQuantity.unit alongside the UCUM code."
+    },
+    {
+      "resource": "Observation",
+      "field": "component[].valueQuantity.system",
+      "description": "Unit of measure for sub-observation components",
+      "strength": "required",
+      "preferredSystem": "ucum",
+      "fallbackSystems": [],
+      "valueSet": "https://vhir.dev/valuesets/ucum-units",
+      "notes": "Same requirement as the top-level valueQuantity.system."
+    },
+    {
+      "resource": "MedicationRequest",
+      "field": "medication.system",
+      "description": "Drug classification / pharmacological class",
+      "strength": "example",
+      "preferredSystem": "ndf-rt",
+      "fallbackSystems": [],
+      "valueSet": "https://vhir.dev/valuesets/ndf-rt-drug-classes",
+      "notes": "NDF-RT pharmacological class codes are used when a structured drug classification is desired. The medication.name free-text field is always accepted; the system+code pair is optional but recommended for analytics."
+    },
+    {
+      "resource": "MedicationRequest",
+      "field": "dosageInstruction[].doseQuantity.system",
+      "description": "Unit of measure for dose",
+      "strength": "required",
+      "preferredSystem": "ucum",
+      "fallbackSystems": [],
+      "valueSet": "https://vhir.dev/valuesets/ucum-units",
+      "notes": "UCUM required for dose quantities (mg, mL, IU, etc.)."
+    },
+    {
+      "resource": "MedicationAdministration",
+      "field": "medication.system",
+      "description": "Drug administered",
+      "strength": "example",
+      "preferredSystem": "ndf-rt",
+      "fallbackSystems": [],
+      "valueSet": "https://vhir.dev/valuesets/ndf-rt-drug-classes",
+      "notes": "Same binding as MedicationRequest.medication.system."
+    },
+    {
+      "resource": "MedicationDispense",
+      "field": "medication.system",
+      "description": "Drug dispensed",
+      "strength": "example",
+      "preferredSystem": "ndf-rt",
+      "fallbackSystems": [],
+      "valueSet": "https://vhir.dev/valuesets/ndf-rt-drug-classes",
+      "notes": "Same binding as MedicationRequest.medication.system."
+    },
+    {
+      "resource": "Immunization",
+      "field": "vaccineCode",
+      "description": "Vaccine administered",
+      "strength": "preferred",
+      "preferredSystem": "vhir-vaccine-codes",
+      "fallbackSystems": [],
+      "valueSet": "https://vhir.dev/valuesets/vaccine-codes",
+      "notes": "Use the VHIR vaccine code value set (spec/valuesets/vaccine_codes.json) which follows AAHA, AAFP, and AAEP vaccine category names."
+    },
+    {
+      "resource": "Immunization",
+      "field": "doseQuantity.system",
+      "description": "Unit of measure for vaccine dose",
+      "strength": "required",
+      "preferredSystem": "ucum",
+      "fallbackSystems": [],
+      "valueSet": "https://vhir.dev/valuesets/ucum-units",
+      "notes": "Typical values: mL for injectable vaccines."
+    }
+  ],
+
+  "bindingStrengths": {
+    "required": "Implementations MUST use a code from the specified value set. No other codes are permitted.",
+    "preferred": "Implementations SHOULD use a code from the specified value set. Deviation must be documented.",
+    "example": "Implementations MAY use a code from the specified value set. Free text is also acceptable."
+  }
+}
