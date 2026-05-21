@@ -2,7 +2,7 @@ FROM python:3.12-slim
 
 WORKDIR /app
 COPY pyproject.toml .
-RUN pip install --no-cache-dir uv && uv pip install --system -e ".[dev]"
+RUN pip install --no-cache-dir uv && uv pip install --system -e .
 COPY vhir_server/ vhir_server/
 
 EXPOSE 8000
