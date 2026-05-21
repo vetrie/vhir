@@ -1,10 +1,14 @@
 """VHIR Reference Server entry point."""
+import logging
+import uuid
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+
+logger = logging.getLogger(__name__)
 
 from vhir_server.api.animal import router as animal_router
 from vhir_server.api.m1_resources import (
@@ -99,9 +103,11 @@ app.include_router(microchip_router,                prefix=prefix)
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    error_id = uuid.uuid4().hex
+    logger.exception("Unhandled error %s on %s %s", error_id, request.method, request.url.path)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={"error": "Internal server error", "detail": str(exc)},
+        content={"error": "Internal server error", "errorId": error_id},
     )
 
 
