@@ -15,6 +15,7 @@ from fastapi import APIRouter, Body, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from vhir_server.auth.smart import TokenPayload, require_scope
 from vhir_server.storage.database import get_db
 from vhir_server.storage.repository import ResourceRepository
 
@@ -40,6 +41,7 @@ class MicrochipLookupResponse(BaseModel):
 async def lookup_microchip(
     body: MicrochipLookupRequest = Body(...),
     db: AsyncSession = Depends(get_db),
+    _token: TokenPayload = Depends(require_scope("Animal", "read")),
 ) -> MicrochipLookupResponse:
     chip_id = body.chipId.strip()
 
