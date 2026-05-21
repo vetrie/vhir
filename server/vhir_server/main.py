@@ -8,8 +8,6 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-logger = logging.getLogger(__name__)
-
 from vhir_server.api.animal import router as animal_router
 from vhir_server.api.m1_resources import (
     appointment_router,
@@ -40,6 +38,8 @@ from vhir_server.config import settings
 from vhir_server.registry.microchip import microchip_router
 from vhir_server.storage.database import engine
 from vhir_server.storage.tables import metadata
+
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
