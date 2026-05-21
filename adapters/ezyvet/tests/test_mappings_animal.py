@@ -26,7 +26,7 @@ def test_animal_to_vhir_basic_fields():
     result = animal_to_vhir(_ez_animal())
     assert result["resourceType"] == "Animal"
     assert result["name"] == "Buddy"
-    assert result["species"] == "canine"
+    assert result["species"] == "canis-familiaris"
     assert result["breed"] == "Labrador"
     assert result["sex"] == "male"
     assert result["birthDate"] == "2018-06-15"
@@ -71,7 +71,7 @@ def test_animal_to_vhir_unix_timestamp_birthdate():
 def test_vhir_to_animal_roundtrip():
     vhir = {
         "name": "Max",
-        "species": "feline",
+        "species": "felis-catus",
         "sex": "spayed-female",
         "birthDate": "2020-03-01",
         "breed": "Siamese",

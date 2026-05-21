@@ -5,20 +5,20 @@ import contextlib
 from typing import Any
 
 _SPECIES_MAP: dict[str, str] = {
-    "canine": "canine",
-    "feline": "feline",
-    "equine": "equine",
-    "bovine": "bovine",
-    "ovine": "ovine",
-    "caprine": "caprine",
-    "porcine": "porcine",
-    "avian": "avian",
-    "rabbit": "lagomorph",
-    "lagomorph": "lagomorph",
-    "reptile": "reptile",
-    "fish": "fish",
-    "exotic": "exotic",
-    "other": "other",
+    "canine":    "canis-familiaris",
+    "feline":    "felis-catus",
+    "equine":    "equus-caballus",
+    "bovine":    "bos-taurus",
+    "ovine":     "ovis-aries",
+    "caprine":   "capra-hircus",
+    "porcine":   "sus-scrofa",
+    "avian":     "gallus-gallus",
+    "rabbit":    "oryctolagus-cuniculus",
+    "lagomorph": "oryctolagus-cuniculus",
+    "reptile":   "unknown",
+    "fish":      "unknown",
+    "exotic":    "unknown",
+    "other":     "unknown",
 }
 
 _SEX_MAP: dict[str, str] = {
