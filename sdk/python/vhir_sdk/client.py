@@ -169,18 +169,16 @@ class VhirClient:
         page_size: int = 20,
     ) -> AsyncIterator[dict[str, Any]]:
         """Async generator that yields individual resource dicts across all pages."""
-        cursor: str | None = None
+        offset = 0
         while True:
-            query: dict[str, Any] = {"_count": page_size, **(params or {})}
-            if cursor:
-                query["_cursor"] = cursor
+            query: dict[str, Any] = {"_count": page_size, "_offset": offset, **(params or {})}
             bundle = await self._get(f"/v1/{resource_type}", params=query)
             entries: list[dict[str, Any]] = bundle.get("entry", [])
             for entry in entries:
                 yield entry.get("resource", entry)
-            cursor = bundle.get("next_cursor") or bundle.get("cursor")
-            if not cursor or not entries:
+            if len(entries) < page_size:
                 break
+            offset += page_size
 
     async def create(self, resource_type: str, data: dict[str, Any]) -> dict[str, Any]:
         result: dict[str, Any] = await self._post(f"/v1/{resource_type}", data)

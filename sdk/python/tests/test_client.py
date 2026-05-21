@@ -206,8 +206,8 @@ async def test_search_single_page(mock_api):
     assert results[0]["id"] == ANIMAL_FIXTURE["id"]
 
 
-async def test_search_pagination_follows_cursor(mock_api):
-    page1 = {"entry": [{"resource": {**ANIMAL_FIXTURE, "id": "ID1"}}], "next_cursor": "cur1"}
+async def test_search_pagination_follows_offset(mock_api):
+    page1 = {"entry": [{"resource": {**ANIMAL_FIXTURE, "id": "ID1"}}]}
     page2 = {"entry": [{"resource": {**ANIMAL_FIXTURE, "id": "ID2"}}]}
 
     call_count = 0
@@ -215,13 +215,13 @@ async def test_search_pagination_follows_cursor(mock_api):
     def side_effect(request: httpx.Request) -> httpx.Response:
         nonlocal call_count
         call_count += 1
-        if "_cursor" not in str(request.url):
+        if "_offset=0" in str(request.url) or "_offset" not in str(request.url):
             return httpx.Response(200, json=page1)
         return httpx.Response(200, json=page2)
 
     mock_api.get("/v1/Animal").mock(side_effect=side_effect)
     async with VhirClient(BASE_URL, token=TOKEN) as client:
-        results = await collect(client.search_animals())
+        results = await collect(client.search_animals(page_size=1))
     assert len(results) == 2
     assert call_count == 2
 
