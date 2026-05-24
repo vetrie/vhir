@@ -1,4 +1,6 @@
 """VHIR Reference Server entry point."""
+import logging
+import uuid
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
@@ -36,6 +38,8 @@ from vhir_server.config import settings
 from vhir_server.registry.microchip import microchip_router
 from vhir_server.storage.database import engine
 from vhir_server.storage.tables import metadata
+
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -99,9 +103,11 @@ app.include_router(microchip_router,                prefix=prefix)
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    error_id = uuid.uuid4().hex
+    logger.exception("Unhandled error %s on %s %s", error_id, request.method, request.url.path)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={"error": "Internal server error", "detail": str(exc)},
+        content={"error": "Internal server error", "errorId": error_id},
     )
 
 
