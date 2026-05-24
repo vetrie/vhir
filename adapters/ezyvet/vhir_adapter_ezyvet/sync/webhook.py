@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import logging
+from collections import OrderedDict
 from typing import Any
 
 from fastapi import APIRouter, BackgroundTasks, Header, HTTPException, Request, status
@@ -38,7 +39,9 @@ _HANDLER: dict[str, tuple[str, Any]] = {
 }
 
 # Tracks recently processed event IDs to handle deduplication.
-_SEEN_EVENTS: set[str] = set()
+# OrderedDict used as an LRU set: oldest entries are evicted on overflow
+# so dedup works across a rolling window rather than clearing all at once.
+_SEEN_EVENTS: OrderedDict[str, None] = OrderedDict()
 _MAX_SEEN = 10_000
 
 
@@ -61,8 +64,8 @@ async def _process_event(event: dict[str, Any]) -> None:
         return
     if event_id:
         if len(_SEEN_EVENTS) >= _MAX_SEEN:
-            _SEEN_EVENTS.clear()
-        _SEEN_EVENTS.add(event_id)
+            _SEEN_EVENTS.popitem(last=False)  # evict oldest entry
+        _SEEN_EVENTS[event_id] = None
 
     resource_type = str(event.get("resource_type", "")).lower()
     resource = event.get("resource", {})
