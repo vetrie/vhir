@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     dev_token_mode: bool = True  # Disable in production
     server_base_url: str = "http://localhost:8000"
     api_version: str = "v1"
+    cors_origins: list[str] = []
 
     @property
     def api_prefix(self) -> str:
