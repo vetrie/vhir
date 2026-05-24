@@ -59,7 +59,7 @@ jobs:
           --health-retries 5
     env:
       VHIR_DATABASE_URL: postgresql+asyncpg://vhir:vhir@localhost:5432/vhir_test
-      VHIR_JWT_SECRET: ci-secret-not-for-production
+      VHIR_SECRET_KEY: ci-secret-not-for-production
     steps:
       - uses: actions/checkout@v4
 
