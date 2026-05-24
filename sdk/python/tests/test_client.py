@@ -206,22 +206,31 @@ async def test_search_single_page(mock_api):
     assert results[0]["id"] == ANIMAL_FIXTURE["id"]
 
 
-async def test_search_pagination_follows_cursor(mock_api):
-    page1 = {"entry": [{"resource": {**ANIMAL_FIXTURE, "id": "ID1"}}], "next_cursor": "cur1"}
-    page2 = {"entry": [{"resource": {**ANIMAL_FIXTURE, "id": "ID2"}}]}
+async def test_search_pagination_follows_offset(mock_api):
+    # page_size=2: first call returns a full page (2 entries) → loop continues;
+    # second call (offset=2) returns empty → loop stops. Verifies offset is advanced.
+    page1 = {
+        "entry": [
+            {"resource": {**ANIMAL_FIXTURE, "id": "ID1"}},
+            {"resource": {**ANIMAL_FIXTURE, "id": "ID2"}},
+        ]
+    }
+    page_end: dict = {"entry": []}
 
     call_count = 0
 
     def side_effect(request: httpx.Request) -> httpx.Response:
         nonlocal call_count
         call_count += 1
-        if "_cursor" not in str(request.url):
+        if "_offset=0" in str(request.url) or "_offset" not in str(request.url):
             return httpx.Response(200, json=page1)
-        return httpx.Response(200, json=page2)
+        return httpx.Response(200, json=page_end)
 
     mock_api.get("/v1/Animal").mock(side_effect=side_effect)
     async with VhirClient(BASE_URL, token=TOKEN) as client:
-        results = await collect(client.search_animals())
+        # Use search() directly so page_size is passed to the method, not forwarded
+        # as a query parameter (search_animals uses **params which can't control page_size)
+        results = await collect(client.search("Animal", page_size=2))
     assert len(results) == 2
     assert call_count == 2
 
